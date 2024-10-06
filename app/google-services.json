@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "589743616563",
+    "project_id": "footfit-store",
+    "storage_bucket": "footfit-store.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589743616563:android:dd4b161331448eb8d9a946",
+        "android_client_info": {
+          "package_name": "com.example.footfitstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589743616563-1t5rdk98mlm2rgvah64kcs16dnerdeoj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.footfitstore",
+            "certificate_hash": "2bf160bb7cc4f040708343e9223647e5cabe6976"
+          }
+        },
+        {
+          "client_id": "589743616563-q8gtiq23qteram2h3gv24rvbib9d1d55.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuvrEKoSWc7Bxc97rqvGlW6vJFXSUhPCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589743616563-q8gtiq23qteram2h3gv24rvbib9d1d55.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
