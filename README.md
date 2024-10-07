@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/5ecaadbb-31d1-412c-8c5e-c55bece49efe)# SE114_FootFitStore
+# SE114_FootFitStore
 SE114 Final Project
 Cách run project
 -  Truy cập vào filebase: https://console.firebase.google.com/project/footfit-store/overview
