@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailLogin, passwordLogin;
     private Button btnLogin;
     private SignInButton btnGoogleSignIn;
-    private TextView tvRegister;
+    private TextView tvRegister,tvRecovery;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
         tvRegister = findViewById(R.id.tvRegister);
+        tvRecovery = findViewById(R.id.tvRecovery);
 
         // Button listeners
         btnLogin.setOnClickListener(v -> loginUser());
@@ -61,6 +62,9 @@ public class LoginActivity extends AppCompatActivity {
 
         tvRegister.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        });
+        tvRecovery.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
         });
     }
 

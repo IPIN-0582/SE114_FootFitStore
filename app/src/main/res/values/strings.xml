@@ -1,4 +1,28 @@
 <resources>
     <string name="app_name">FootFitStore</string>
     <string name="default_web_client_id">589743616563-1t5rdk98mlm2rgvah64kcs16dnerdeoj.apps.googleusercontent.com</string>
+    <string name="hello_again">
+        Hello Again!
+    </string>
+    <string name="fill_your_d">
+        Fill your details or continue with\nsocial media
+    </string>
+    <string name="email_addre">
+        Email Address
+    </string>
+    <string name="password">
+        Password
+    </string>
+    <string name="btn_Sign_in">
+        Sign In
+    </string>
+    <string name="btn_Sign_google">
+        Sign in with Google
+    </string>
+    <string name="new_user_cr">
+        New User? Create Account
+    </string>
+    <string name="recovery_password">
+        Recovery Password?
+    </string>
 </resources>

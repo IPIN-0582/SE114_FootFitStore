@@ -48,6 +48,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     // Sign with google
     implementation 'com.google.android.gms:play-services-auth:21.2.0'
-    // Sign with facebook
-    // implementation 'com.facebook.android:facebook-android-sdk:16.0.1'
 }
