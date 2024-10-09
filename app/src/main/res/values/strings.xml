@@ -25,4 +25,10 @@
     <string name="recovery_password">
         Recovery Password?
     </string>
+    <string name="forgot_pass">
+        Forgot Password
+    </string>
+    <string name="enter_your_">
+        Enter Your Email Account To Reset Your Password
+    </string>
 </resources>
