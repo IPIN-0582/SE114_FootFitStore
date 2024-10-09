@@ -5,6 +5,15 @@
         Hello Again!
     </string>
     <string name="fill_your_d">
-Fill your details or continue with\nsocial media
-</string>
+        Fill your details or continue with\nsocial media
+    </string>
+    <string name="email_addre">
+        Email Address
+    </string>
+    <string name="password">
+        Password
+    </string>
+    <string name="btn_Sign_in">
+        Sign In
+    </string>
 </resources>
