@@ -22,4 +22,7 @@
     <string name="new_user_cr">
         New User? Create Account
     </string>
+    <string name="recovery_password">
+        Recovery Password?
+    </string>
 </resources>
