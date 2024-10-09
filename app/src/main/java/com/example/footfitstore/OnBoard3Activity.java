@@ -13,13 +13,16 @@ import androidx.core.view.WindowInsetsCompat;
 public class OnBoard3Activity extends AppCompatActivity {
 
     Button btnOnboard3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_board3);
+
         initializeComponent();
 
     }
+
     private void initializeComponent() {
 
         btnOnboard3 =findViewById(R.id.btnOnboard3);
