@@ -5,7 +5,7 @@
         Hello Again!
     </string>
     <string name="fill_your_d">
-        Fill your details or continue with\nsocial media
+        Fill Your Details Or Continue With\nSocial Media
     </string>
     <string name="email_addre">
         Email Address
@@ -30,5 +30,14 @@
     </string>
     <string name="enter_your_">
         Enter Your Email Account To Reset Your Password
+    </string>
+    <string name="register_ac">
+        Register Account
+    </string>
+    <string name="your_name">
+        Your Name
+    </string>
+    <string name="already_hav">
+        Already Have Account? Log In
     </string>
 </resources>
