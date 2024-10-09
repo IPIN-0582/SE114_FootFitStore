@@ -125,21 +125,24 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btnGoogleSignIn"
-        android:layout_width="match_parent"
+        android:layout_width="335dp"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Sign in with Google"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        tools:layout_editor_absoluteX="0dp" />
+        android:text="@string/btn_Sign_google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <TextView
         android:id="@+id/tvRegister"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="No account? Register here"
+        android:layout_marginTop="204dp"
+        android:fontFamily="@font/raleway_medium"
+        android:text="@string/new_user_cr"
         android:textAlignment="center"
-        android:textColor="@color/black2B2B2B"
-        app:layout_constraintTop_toBottomOf="@+id/btnGoogleSignIn"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGoogleSignIn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
