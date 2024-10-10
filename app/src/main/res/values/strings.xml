@@ -40,4 +40,13 @@
     <string name="already_hav">
         Already Have Account? Log In
     </string>
+    <string name="check_your_">
+        Check your email
+    </string>
+    <string name="we_have_sen">
+        We Have Send Password Recovery Code In Your Email
+    </string>
+    <string name="submit">
+        OK
+    </string>
 </resources>
