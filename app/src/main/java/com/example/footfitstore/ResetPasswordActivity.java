@@ -53,19 +53,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                        AlertDialog.Builder builder=new AlertDialog.Builder(this,R.style.CustomAlertDialog);
                         final View customLayout = getLayoutInflater().inflate(R.layout.reset_password_dialog,null);
                         builder.setView(customLayout);
                         Button positiveButton = customLayout.findViewById(R.id.pos_button);
                         AlertDialog alertDialog=builder.create();
-
                         positiveButton.setOnClickListener(v->{
                             startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                             alertDialog.cancel();
                         });
                         builder.show();
-                        //Toast.makeText(ResetPasswordActivity.this, "Password reset email sent.", Toast.LENGTH_SHORT).show();
-                        // Sau khi gửi email thành công, bạn có thể điều hướng người dùng trở lại màn hình login
                     } else {
                         Toast.makeText(ResetPasswordActivity.this, "Failed to send reset email.", Toast.LENGTH_SHORT).show();
                     }
