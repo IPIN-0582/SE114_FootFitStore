@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="btn_back" type="id"/>
+    <item name="tv_profile_title" type="id"/>
+    <item name="img_profile_picture" type="id"/>
+    <item name="btn_edit_profile_picture" type="id"/>
+    <item name="tv_name_label" type="id"/>
+    <item name="et_name" type="id"/>
+    <item name="tv_email_label" type="id"/>
+    <item name="et_email" type="id"/>
+    <item name="tv_password_label" type="id"/>
+    <item name="et_password" type="id"/>
+    <item name="tv_recovery_password" type="id"/>
+    <item name="btn_save" type="id"/>
+</resources>
