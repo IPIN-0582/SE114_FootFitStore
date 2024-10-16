@@ -15,6 +15,15 @@
         android:theme="@style/Theme.FootFitStore"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".ProductDetailActivity2"
+            android:exported="false" />
+        <activity
             android:name=".ResetPasswordActivity"
             android:exported="false" />
         <activity
