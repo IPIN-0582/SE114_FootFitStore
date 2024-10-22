@@ -12,4 +12,22 @@
     <item name="et_password" type="id"/>
     <item name="tv_recovery_password" type="id"/>
     <item name="btn_save" type="id"/>
+    <!-- IDs for ProfileActivity components -->
+    <item name="btn_back_profile" type="id"/>
+    <item name="btn_done" type="id" />
+    <item name="tv_change_picture" type="id" />
+    <item name="tv_full_name" type="id" />
+    <item name="tv_first_name_label" type="id" />
+    <item name="et_first_name" type="id" />
+    <item name="tv_last_name_label" type="id" />
+    <item name="et_last_name" type="id" />
+    <item name="tv_address_label" type="id"/>
+    <item name="et_address" type="id"/>
+    <item name="tv_gender_label" type="id"/>
+    <item name="rg_gender" type="id"/>
+    <item name="rb_male" type="id"/>
+    <item name="rb_female" type="id"/>
+    <item name="tv_mobile_number_label" type="id" />
+    <item name="et_mobile_number" type="id" />
+
 </resources>

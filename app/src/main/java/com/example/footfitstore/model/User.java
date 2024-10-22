@@ -1,48 +1,40 @@
 package com.example.footfitstore.model;
 
+import java.util.List;
+
 public class User {
 
-    public String uid;
-    public String username;
-    public String name;
-    public String email;
-    public String address;
-    public String phone;
-    public int gender;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String address;
+    private String mobileNumber;
+    private int gender;
+    private List<Cart> cartList;
 
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String uid, String username, String email) {
-        this.uid = uid;
-        this.username = username;
+    public User( String email) {
         this.email = email;
     }
 
-    public String getUid() {
-        return uid;
+    public String getFirstname() {
+        return firstName;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setFirstname(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLastname() {
+        return lastName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setLastname(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -62,11 +54,11 @@ public class User {
     }
 
     public String getPhone() {
-        return phone;
+        return mobileNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public int getGender() {
@@ -75,5 +67,13 @@ public class User {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public List<Cart> getCartList() {
+        return cartList;
+    }
+
+    public void setCartList(List<Cart> cartList) {
+        this.cartList = cartList;
     }
 }

@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String uid = firebaseUser.getUid();
                             // Lưu thông tin người dùng vào Firebase Realtime Database
-                            User user = new User(uid,username, email); // Tạo đối tượng người dùng
+                            User user = new User(email); // Tạo đối tượng người dùng
                             databaseReference.child(uid).setValue(user)
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
