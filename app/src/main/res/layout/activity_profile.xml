@@ -75,11 +75,11 @@
         android:layout_marginTop="30dp"/>
 
     <!-- Name EditText -->
-    <EditText
+    <TextView
         android:id="@+id/et_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TUYEN VU TRU"
+        android:hint="enter username"
         android:fontFamily="@font/raleway_bold"
         android:background="@drawable/edittext_login"
         android:padding="12dp"
@@ -107,7 +107,7 @@
         android:layout_marginTop="16dp"/>
 
     <!-- Email EditText -->
-    <EditText
+    <TextView
         android:id="@+id/et_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -169,21 +169,5 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"/>
 
-    <!-- Save Button -->
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Save Now"
-        android:fontFamily="@font/raleway_bold"
-        android:textColor="@android:color/white"
-        android:background="@drawable/bg_btn_secondary"
-        android:backgroundTint="@color/primaryColor"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_recovery_password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
