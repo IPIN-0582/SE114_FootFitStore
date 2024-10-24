@@ -1,4 +1,4 @@
-package com.example.footfitstore;
+package com.example.footfitstore.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.footfitstore.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
             }
         });
 

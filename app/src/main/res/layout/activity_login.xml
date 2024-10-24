@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <TextView
         android:id="@+id/hello_again"
@@ -46,8 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="224dp"
         android:fontFamily="@font/raleway_medium"
         android:gravity="top"
         android:lineSpacingExtra="1sp"
@@ -55,7 +54,7 @@
         android:textAppearance="@style/email_addre"
         android:translationY="-0.61sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.024"
+        app:layout_constraintHorizontal_bias="0.017"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,7 +62,6 @@
         android:id="@+id/emailLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="256dp"
         android:background="@drawable/edittext_login"
         android:hint="Email"
@@ -73,7 +71,7 @@
         android:paddingRight="57dp"
         android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.388"
+        app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -84,8 +82,7 @@
         android:layout_height="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="344dp"
+        android:layout_marginTop="348dp"
         android:fontFamily="@font/raleway_medium"
         android:gravity="top"
         android:lineSpacingExtra="1sp"
@@ -101,7 +98,6 @@
         android:id="@+id/passwordLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="376dp"
         android:background="@drawable/edittext_login"
         android:hint="Password"
@@ -111,25 +107,23 @@
         android:paddingRight="57dp"
         android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.388"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/tvRecovery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="452dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="450dp"
         android:fontFamily="@font/raleway_medium"
         android:gravity="top"
         android:lineSpacingExtra="1sp"
         android:text="@string/recovery_password"
-
         android:textAppearance="@style/password"
+
         android:translationY="-0.61sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -138,7 +132,7 @@
         android:id="@+id/btnLogin"
         android:layout_width="335dp"
         android:layout_height="50dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="45dp"
         android:background="@drawable/button_shape"
         android:fontFamily="@font/raleway_bold"
         android:text="@string/btn_Sign_in"
@@ -146,48 +140,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordLogin" />
 
-    <LinearLayout
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/btnGoogleSignIn"
         android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="560dp"
-        android:background="@drawable/bg_btn_secondary"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="12dp"
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/btn_Sign_google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/google_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/googlelogo" />
-
-        <TextView
-            android:id="@+id/google_sign_in_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:fontFamily="@font/raleway_semibold"
-            android:paddingStart="8dp"
-            android:text="@string/btn_Sign_google"
-            android:textAppearance="@style/sign_up_wit"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <TextView
         android:id="@+id/tvRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="800dp"
+        android:layout_marginTop="204dp"
         android:fontFamily="@font/raleway_medium"
         android:text="@string/new_user_cr"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGoogleSignIn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
