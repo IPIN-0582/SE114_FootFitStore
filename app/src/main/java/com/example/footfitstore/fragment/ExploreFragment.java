@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.adapter.BannerAdapter;
+import com.example.footfitstore.adapter.SearchShoeAdapter;
 import com.example.footfitstore.adapter.ShoeAdapter;
 import com.example.footfitstore.model.Shoe;
 import com.google.android.material.textfield.TextInputEditText;
@@ -47,6 +48,7 @@ public class ExploreFragment extends Fragment {
     private ShoeAdapter  popularShoeAdapter;
     private ShoeAdapter  allShoeAdapter;
     private BannerAdapter bannerAdapter;
+    private SearchShoeAdapter searchResultsAdapter;
 
     private final List<Shoe> popularshoeList = new ArrayList<>();
     private final List<String> bannerList = new ArrayList<>();
@@ -89,6 +91,12 @@ public class ExploreFragment extends Fragment {
         bannerAdapter = new BannerAdapter(bannerList);
         bannerRecyclerView.setAdapter(bannerAdapter);
 
+        // Khởi tạo RecyclerView cho search Result
+        searchResultsRecyclerView = view.findViewById(R.id.searchResultsRecyclerView);
+        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchResultsAdapter = new SearchShoeAdapter(searchResultsList, getContext());
+        searchResultsRecyclerView.setAdapter(searchResultsAdapter);
+
         bannerReference = FirebaseDatabase.getInstance().getReference("BannerEvent");
         allshoesReference = FirebaseDatabase.getInstance().getReference("Shoes");
 
@@ -99,9 +107,59 @@ public class ExploreFragment extends Fragment {
             // Chuyển đổi sang CartFragment
         });
 
+        // Lắng nghe sự thay đổi trong thanh tìm kiếm
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Không cần xử lý nội dung trong phương thức này
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String searchText = s.toString().toLowerCase();
+
+                // Nếu người dùng xóa hết nội dung, ẩn RecyclerView
+                if (searchText.isEmpty()) {
+                    searchResultsRecyclerView.setVisibility(View.GONE);
+                } else {
+                    // Lọc giày dựa trên từ khóa tìm kiếm
+                    filterShoes(searchText);
+                    // Hiển thị lại RecyclerView nếu có kết quả tìm kiếm
+                    if (!searchResultsList.isEmpty()) {
+                        searchResultsRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Không cần xử lý nội dung trong phương thức này
+            }
+        });
+
         // Lấy dữ liệu từ Firebase
         loadDataFromFirebase();
         return view;
+    }
+
+    private void filterShoes(String query) {
+        searchResultsList.clear();
+        // Duyệt qua danh sách tất cả giày và thêm giày phù hợp với từ khóa vào searchResultsList
+        for (Shoe shoe : allshoesList) {
+            if (shoe.getTitle().toLowerCase().contains(query)) {
+                searchResultsList.add(shoe);
+            }
+        }
+
+        // Cập nhật kết quả tìm kiếm trong RecyclerView
+        searchResultsAdapter.notifyDataSetChanged();
+
+        // Hiển thị hoặc ẩn RecyclerView dựa trên có kết quả tìm kiếm hay không
+        if (searchResultsList.isEmpty()) {
+            searchResultsRecyclerView.setVisibility(View.GONE);
+        } else {
+            searchResultsRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void loadDataFromFirebase() {
