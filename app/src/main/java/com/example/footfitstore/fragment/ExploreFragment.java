@@ -8,17 +8,20 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.SearchShoeAdapter;
 import com.example.footfitstore.adapter.ShoeAdapter;
@@ -105,6 +108,18 @@ public class ExploreFragment extends Fragment {
 
         btnCart.setOnClickListener(v -> {
             // Chuyển đổi sang CartFragment
+            CartFragment cartFragment = new CartFragment();
+
+            // Sử dụng FragmentManager để thay thế fragment hiện tại bằng CartFragment
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame, cartFragment)  // R.id.main_frame là ID của FrameLayout trong MainActivity
+                    .addToBackStack(null)  // Nếu muốn cho phép quay lại
+                    .commit();
+
+            // Cập nhật BottomNavigationView
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_cart);  // Cập nhật trạng thái bottom nav
+            }
         });
 
         // Lắng nghe sự thay đổi trong thanh tìm kiếm

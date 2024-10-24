@@ -15,6 +15,15 @@
         android:theme="@style/Theme.FootFitStore"
         tools:targetApi="31">
         <activity
+            android:name=".fragment.FavouriteFragment"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".fragment.ExploreFragment"
+            android:exported="false" />
+        <activity
             android:name=".activity.EditProfileActivity"
             android:exported="false" />
         <activity
@@ -47,7 +56,6 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

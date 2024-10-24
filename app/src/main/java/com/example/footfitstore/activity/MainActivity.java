@@ -12,7 +12,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.fragment.CartFragment;
 import com.example.footfitstore.fragment.ExploreFragment;
+import com.example.footfitstore.fragment.FavouriteFragment;
 import com.example.footfitstore.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -35,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.nav_explore) {
                     setFragment(new ExploreFragment());
                     return true;
-//                } else if (item.getItemId() == R.id.nav_favourite) {
-//                    setFragment(new FavouriteFragment());
-//                    return true;
-//                } else if (item.getItemId() == R.id.nav_cart) {
-//                    setFragment(new CartFragment());
-//                    return true;
+                } else if (item.getItemId() == R.id.nav_favourite) {
+                    setFragment(new FavouriteFragment());
+                    return true;
+                } else if (item.getItemId() == R.id.nav_cart) {
+                    setFragment(new CartFragment());
+                    return true;
 //                } else if (item.getItemId() == R.id.nav_notifications) {
 //                    setFragment(new NotificationsFragment());
 //                    return true;
@@ -53,8 +55,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Set default fragment là ExploreFragment nếu không có yêu cầu đặc biệt
-        setFragment(new ExploreFragment());
+
+        // Kiểm tra intent để mở CartFragment nếu cần
+        Intent intent = getIntent();
+        if (intent != null && "cart".equals(intent.getStringExtra("openFragment"))) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_cart);  // Đặt mục nav_cart được chọn
+            bottomNavigationView.getMenu().performIdentifierAction(R.id.nav_cart, 0);  // Kích hoạt sự kiện để chuyển sang CartFragment
+        } else {
+            // Set default fragment là ExploreFragment nếu không có yêu cầu đặc biệt
+            setFragment(new ExploreFragment());
+        }
     }
 
     private void setFragment(Fragment fragment) {
@@ -63,4 +73,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    public void setSelectedNavItem(int itemId) {
+        bottomNavigationView.setSelectedItemId(itemId);  // Thay đổi trạng thái của BottomNavigationView
+    }
 }

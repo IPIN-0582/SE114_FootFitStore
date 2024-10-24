@@ -2,9 +2,13 @@ package com.example.footfitstore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,6 +97,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Xử lý sự kiện cho nút Back
         btnBack.setOnClickListener(v -> {
             finish(); // Quay lại màn hình trước đó
+        });
+
+        btnCart.setOnClickListener(v -> {
+            Intent intentCart = new Intent(ProductDetailActivity.this, MainActivity.class);
+            intentCart.putExtra("openFragment", "cart");
+            startActivity(intentCart);
+            finish();  // Đóng ProductDetailActivity
         });
 
         // Xử lý sự kiện thêm vào giỏ hàng
