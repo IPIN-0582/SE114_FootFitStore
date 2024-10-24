@@ -1,4 +1,4 @@
-package com.example.footfitstore;
+package com.example.footfitstore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.footfitstore.R;
 import com.example.footfitstore.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -81,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(RegisterActivity.this, ProfileActivity.class));
+                                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                                             finish();
                                         } else {
                                             Toast.makeText(RegisterActivity.this, "Failed to save user info", Toast.LENGTH_SHORT).show();

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ProfileActivity">
+
+        <!-- Back button -->
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_back_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Back button"/>
+
+
+        <!-- Profile Title -->
+        <TextView
+            android:id="@+id/tv_profile_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textStyle="bold"
+            android:fontFamily="@font/raleway_bold"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="23dp"/>
+
+        <!-- Profile Image -->
+
+        <!-- Edit Profile Image Button -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile_picture"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/onboard1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_title" />
+
+        <ImageView
+            android:id="@+id/btn_edit_profile_picture"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_pencil_edit"
+            android:contentDescription="Edit Profile Picture"
+            android:src="@drawable/ic_pencil_edit"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_profile_picture"
+            app:layout_constraintEnd_toEndOf="@id/img_profile_picture" />
+
+        <!-- Name Label -->
+        <TextView
+            android:id="@+id/tv_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Name"
+            android:fontFamily="@font/raleway_bold"
+            android:textColor="@color/textSecondary"
+            android:textSize="17sp"
+            app:layout_constraintHorizontal_bias=".05"
+            app:layout_constraintTop_toBottomOf="@id/img_profile_picture"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="30dp"/>
+
+        <!-- Name EditText -->
+        <TextView
+            android:id="@+id/et_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="enter username"
+            android:fontFamily="@font/raleway_bold"
+            android:background="@drawable/edittext_login"
+            android:padding="12dp"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Email Label -->
+        <TextView
+            android:id="@+id/tv_email_label"
+            android:layout_width="wrap_content"
+            app:layout_constraintHorizontal_bias=".05"
+            android:fontFamily="@font/raleway_bold"
+            android:layout_height="wrap_content"
+            android:text="Email Address"
+            android:textColor="@color/textSecondary"
+            android:textSize="17sp"
+            app:layout_constraintTop_toBottomOf="@id/et_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Email EditText -->
+        <TextView
+            android:id="@+id/et_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="emmanueloyiboke@gmail.com"
+            android:background="@drawable/edittext_login"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/raleway_bold"
+            app:layout_constraintTop_toBottomOf="@id/tv_email_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Password Label -->
+        <TextView
+            android:id="@+id/tv_password_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textColor="@color/textSecondary"
+            android:textSize="17sp"
+            app:layout_constraintHorizontal_bias=".05"
+            android:fontFamily="@font/raleway_bold"
+            app:layout_constraintTop_toBottomOf="@id/et_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Password EditText -->
+        <TextView
+            android:id="@+id/et_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/textSecondary"
+            android:text="********"
+            android:background="@drawable/edittext_login"
+            android:padding="12dp"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_password_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Recovery Password Label -->
+        <TextView
+            android:id="@+id/tv_recovery_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recovery Password"
+            android:textColor="@color/textSecondary"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/et_password"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_edit_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="22dp"
+            android:background="@color/whiteFFFFFF"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

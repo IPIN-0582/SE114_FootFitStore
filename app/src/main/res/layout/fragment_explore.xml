@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.ExploreFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main"
+        tools:context=".activity.MainActivity">
+
+        <!-- ScrollView wrapper for the entire content to enable scrolling -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/whiteF7F7F9">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:background="@color/whiteF7F7F9">
+                    <!-- Menu Button (Icon ở bên trái) -->
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu"
+                        android:background="?android:attr/selectableItemBackground" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <!-- Tiêu đề "Explore" -->
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Explore"
+                        android:textSize="30sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <!-- Space giữa tiêu đề và biểu tượng giỏ hàng -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <!-- Cart Button -->
+                    <ImageButton
+                        android:id="@+id/btnCart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:src="@drawable/ic_cart_black" />
+
+                </LinearLayout>
+
+                <!-- Search Bar with filter button -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/searchBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/search_background">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/searchEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Looking for shoes"
+                            android:background="@null"
+                            android:inputType="text"
+                            android:drawableStart="@drawable/ic_search"
+                            android:paddingStart="12dp"
+                            android:drawablePadding="8dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <ImageButton
+                        android:id="@+id/filterButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Filter"
+                        android:src="@drawable/ic_fillter"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searchResultsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_shoe" />
+
+                <!-- Category Selection -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/categoryChips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="16dp"
+                    app:singleSelection="true"
+                    app:chipSpacing="8dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipAllShoes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="All Shoes" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipOutdoor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Outdoor" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipTennis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tennis" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <!-- Popular Shoes Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/popularShoesLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Popular Shoes"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black2B2B2B"/>
+
+                    <TextView
+                        android:id="@+id/seeAllPopular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="See all"
+                        android:textColor="?attr/colorPrimary" />
+                </LinearLayout>
+
+                <!-- Popular Shoes Cards -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popularShoesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    tools:listitem="@layout/item_shoe" />
+
+                <!-- New Arrivals Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/newArrivalsLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="New Arrivals"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black2B2B2B"/>
+
+                    <TextView
+                        android:id="@+id/seeAllNewArrivals"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="See all"
+                        android:textColor="?attr/colorPrimary" />
+                </LinearLayout>
+
+                <!-- New Arrivals Cards -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bannerRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="16dp"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/item_new_arrival_banner" />
+
+                <!-- All Shoes Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/allShoes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="All Shoes"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black2B2B2B"/>
+                </LinearLayout>
+
+                <!-- All Shoes Cards -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/allShoesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:listitem="@layout/item_new_arrival_banner" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

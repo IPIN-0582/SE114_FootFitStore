@@ -4,11 +4,9 @@ public class Cart {
 
     private String productId;   // ID sản phẩm
     private String productName; // Tên sản phẩm (giày)
-    private String productSize; // Kích thước giày
-    private String productColor; // Màu sắc giày
+    private String size; // Kích thước giày
     private int quantity;       // Số lượng sản phẩm
     private double price;       // Giá sản phẩm
-    private String imageUrl;
 
     public String getProductId() {
         return productId;
@@ -26,20 +24,12 @@ public class Cart {
         this.productName = productName;
     }
 
-    public String getProductSize() {
-        return productSize;
+    public String getSize() {
+        return size;
     }
 
-    public void setProductSize(String productSize) {
-        this.productSize = productSize;
-    }
-
-    public String getProductColor() {
-        return productColor;
-    }
-
-    public void setProductColor(String productColor) {
-        this.productColor = productColor;
+    public void setProductSize(String size) {
+        this.size = size;
     }
 
     public int getQuantity() {
@@ -58,11 +48,4 @@ public class Cart {
         this.price = price;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 }

@@ -1,17 +1,17 @@
-package com.example.footfitstore;
+package com.example.footfitstore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.footfitstore.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private EditText emailLogin, passwordLogin;
     private Button btnLogin;
-    //private SignInButton btnGoogleSignIn;
+    private SignInButton btnGoogleSignIn;
     private TextView tvRegister,tvRecovery;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         emailLogin = findViewById(R.id.emailLogin);
         passwordLogin = findViewById(R.id.passwordLogin);
         btnLogin = findViewById(R.id.btnLogin);
-        LinearLayout btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
         tvRegister = findViewById(R.id.tvRegister);
         tvRecovery = findViewById(R.id.tvRecovery);
 
@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
