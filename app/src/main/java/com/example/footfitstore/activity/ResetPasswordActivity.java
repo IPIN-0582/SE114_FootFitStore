@@ -2,10 +2,12 @@ package com.example.footfitstore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.footfitstore.R;
@@ -44,10 +46,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Thêm hiển thị dialog việc gửi mail thành công
-                        Toast.makeText(ResetPasswordActivity.this, "Password reset email sent.", Toast.LENGTH_SHORT).show();
-                        // Sau khi gửi email thành công, bạn có thể điều hướng người dùng trở lại màn hình login
-                        startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                        AlertDialog.Builder builder=new AlertDialog.Builder(this,R.style.CustomAlertDialog);
+                        final View customLayout = getLayoutInflater().inflate(R.layout.reset_password_dialog,null);
+                        builder.setView(customLayout);
+                        Button positiveButton = customLayout.findViewById(R.id.pos_button);
+                        AlertDialog alertDialog=builder.create();
+                        positiveButton.setOnClickListener(v->{
+                            startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                            alertDialog.cancel();
+                        });
+                        builder.show();
                     } else {
                         Toast.makeText(ResetPasswordActivity.this, "Failed to send reset email.", Toast.LENGTH_SHORT).show();
                     }
