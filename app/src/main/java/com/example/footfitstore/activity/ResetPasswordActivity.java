@@ -52,7 +52,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         Button positiveButton = customLayout.findViewById(R.id.pos_button);
                         AlertDialog alertDialog=builder.create();
                         positiveButton.setOnClickListener(v->{
-                            startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                            //startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                            super.onBackPressed();
                             alertDialog.cancel();
                         });
                         builder.show();

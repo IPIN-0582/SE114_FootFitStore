@@ -59,7 +59,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
+                //startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
+                EditProfileActivity.super.onBackPressed();
             }
         });
 
