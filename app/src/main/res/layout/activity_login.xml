@@ -114,16 +114,17 @@
     <TextView
         android:id="@+id/tvRecovery"
         android:layout_width="160dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="452dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="@font/raleway_medium"
         android:gravity="top"
         android:lineSpacingExtra="1sp"
         android:text="@string/recovery_password"
-        android:textAppearance="@style/password"
 
+        android:textAppearance="@style/password"
         android:translationY="-0.61sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -132,7 +133,7 @@
         android:id="@+id/btnLogin"
         android:layout_width="335dp"
         android:layout_height="50dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="52dp"
         android:background="@drawable/button_shape"
         android:fontFamily="@font/raleway_bold"
         android:text="@string/btn_Sign_in"
@@ -140,16 +141,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordLogin" />
 
-    <com.google.android.gms.common.SignInButton
+    <LinearLayout
         android:id="@+id/btnGoogleSignIn"
         android:layout_width="335dp"
-
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/btn_Sign_google"
+        android:layout_marginTop="552dp"
+        android:background="@drawable/bg_btn_secondary"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/google_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/googlelogo" />
+
+        <TextView
+            android:id="@+id/google_sign_in_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:paddingStart="8dp"
+            android:text="@string/btn_Sign_google"
+            android:textAppearance="@style/sign_up_wit"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvRegister"
