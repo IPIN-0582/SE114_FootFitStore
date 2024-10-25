@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private EditText emailLogin, passwordLogin;
     private Button btnLogin;
-    private SignInButton btnGoogleSignIn;
+    //private SignInButton btnGoogleSignIn;
     private TextView tvRegister,tvRecovery;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -53,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         emailLogin = findViewById(R.id.emailLogin);
         passwordLogin = findViewById(R.id.passwordLogin);
         btnLogin = findViewById(R.id.btnLogin);
-        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
+        LinearLayout btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
         tvRegister = findViewById(R.id.tvRegister);
         tvRecovery = findViewById(R.id.tvRecovery);
 
