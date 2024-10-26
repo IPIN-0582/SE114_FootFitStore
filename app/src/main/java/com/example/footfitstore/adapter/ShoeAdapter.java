@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,9 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.activity.ProductDetailActivity;
 import com.example.footfitstore.model.Shoe;
 import com.example.footfitstore.fragment.ExploreFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -26,20 +30,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.internal.http2.Http2Connection;
+
 public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder> {
     private List<Shoe> popularShoesList;  // Danh sách giày phổ biến
     private List<Shoe> allShoesList;      // Danh sách tất cả giày
     private Context context;
     private String viewType;  // Cờ để xác định loại dữ liệu (popular hay all)
     private ExploreFragment exploreFragment;
-
+    private BottomSheetListener listener;
+    //Tạo interface cho Size Pick Listener
+    public interface BottomSheetListener{
+        void showBottomSheetDialog(Shoe shoe);
+    }
     // Constructor mới với cờ viewType
-    public ShoeAdapter(Context context, List<Shoe> popularShoesList, List<Shoe> allShoesList, String viewType, ExploreFragment exploreFragment) {
+    public ShoeAdapter(Context context, List<Shoe> popularShoesList, List<Shoe> allShoesList, String viewType, ExploreFragment exploreFragment,BottomSheetListener listener) {
         this.context = context;
         this.popularShoesList = popularShoesList;
         this.allShoesList = allShoesList;
         this.viewType = viewType;
         this.exploreFragment = exploreFragment;
+        this.listener=listener;
     }
     public ShoeAdapter(Context context, List<Shoe> popularShoesList, List<Shoe> allShoesList, String viewType) {
         this.context = context;
@@ -93,6 +104,13 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
             intent.putExtra("productId", shoe.getProductId()); // Truyền productId vào Intent
             context.startActivity(intent);
         });
+
+        holder.btnAddCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.showBottomSheetDialog(shoe);
+            }
+        });
     }
 
     @Override
@@ -110,13 +128,14 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         ImageView itemImageView, heartIcon;
         TextView titleTextView, priceTextView;
-
+        ImageButton btnAddCart;
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemImageView = itemView.findViewById(R.id.itemImage);
             titleTextView = itemView.findViewById(R.id.itemTitle);
             priceTextView = itemView.findViewById(R.id.itemPrice);
             heartIcon = itemView.findViewById(R.id.heartIcon);
+            btnAddCart=itemView.findViewById(R.id.addToCartButton);
         }
     }
 

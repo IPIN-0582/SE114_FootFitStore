@@ -18,14 +18,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.MainActivity;
+import com.example.footfitstore.activity.ProductDetailActivity;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.SearchShoeAdapter;
 import com.example.footfitstore.adapter.ShoeAdapter;
+import com.example.footfitstore.adapter.SizeAdapter;
 import com.example.footfitstore.model.Shoe;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,20 +39,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-public class ExploreFragment extends Fragment {
+public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheetListener {
 
     private RecyclerView popularShoesRecyclerView;
     private RecyclerView bannerRecyclerView;
     private RecyclerView allShoesRecyclerView;
     private RecyclerView searchResultsRecyclerView;
     private ImageButton btnCart;
-
+    RecyclerView recyclerView;
     private ShoeAdapter  popularShoeAdapter;
     private ShoeAdapter  allShoeAdapter;
     private BannerAdapter bannerAdapter;
@@ -57,10 +65,14 @@ public class ExploreFragment extends Fragment {
     private final List<String> bannerList = new ArrayList<>();
     private final List<Shoe> allshoesList = new ArrayList<>();
     private final List<Shoe> searchResultsList = new ArrayList<>();
-
     private DatabaseReference bannerReference;
     private DatabaseReference allshoesReference;
-
+    //Overide hàm showBottomSheetDialog
+    public void showBottomSheetDialog(Shoe shoe) {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).showBottomSheetDialog(shoe);
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -79,8 +91,8 @@ public class ExploreFragment extends Fragment {
         allShoesRecyclerView.setLayoutManager(gridLayoutManager);
 
         // Dùng cùng một adapter cho cả hai RecyclerView nhưng với cờ viewType khác nhau
-        popularShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "popular",this);
-        allShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "all",this);
+        popularShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "popular",this,(ShoeAdapter.BottomSheetListener) this);
+        allShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "all",this,(ShoeAdapter.BottomSheetListener) this);
 
         popularShoesRecyclerView.setAdapter(popularShoeAdapter);  // Gắn adapter cho giày phổ biến
         allShoesRecyclerView.setAdapter(allShoeAdapter);  // Gắn adapter cho tất cả giày
@@ -285,4 +297,5 @@ public class ExploreFragment extends Fragment {
             allShoeAdapter.notifyDataSetChanged();
         }
     }
+
 }
