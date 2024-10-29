@@ -1,6 +1,7 @@
 package com.example.footfitstore.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.ProductDetailActivity;
 import com.example.footfitstore.model.Shoe;
 import com.squareup.picasso.Picasso;
 
@@ -43,6 +45,13 @@ public class SearchShoeAdapter extends RecyclerView.Adapter<SearchShoeAdapter.Se
 
         // Tải ảnh sản phẩm từ Firebase hoặc URL
         Picasso.get().load(shoe.getPicUrl().get(0)).into(holder.ivShoeImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            // Tạo Intent để điều hướng đến ProductDetailActivity
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", shoe.getProductId()); // Truyền productId vào Intent
+            context.startActivity(intent);
+        });
     }
 
     @Override
