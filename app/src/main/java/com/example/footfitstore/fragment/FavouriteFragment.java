@@ -83,6 +83,13 @@ public class FavouriteFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDataFromFirebase();  // Tải lại dữ liệu để cập nhật trạng thái yêu thích mới nhất
+    }
+
+
     private void loadDataFromFirebase() {
         // Lấy UID của người dùng hiện tại
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

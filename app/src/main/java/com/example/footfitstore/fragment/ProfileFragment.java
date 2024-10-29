@@ -24,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import android.widget.Toast;
 
@@ -33,7 +36,7 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference mDatabase;
     private TextView recoveryPassword, etEmail, etUsername;
     private ImageButton btnEditProfile;
-    private ImageView btnBack;
+    private ImageView btnBack, imgProfilePicture;
 
     @Nullable
     @Override
@@ -51,6 +54,7 @@ public class ProfileFragment extends Fragment {
         recoveryPassword = view.findViewById(R.id.tv_recovery_password);
         btnEditProfile = view.findViewById(R.id.btn_edit_profile);
         btnBack = view.findViewById(R.id.btn_back);
+        imgProfilePicture = view.findViewById(R.id.img_profile_picture);
 
         initializeComponent();
 
@@ -69,6 +73,11 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializeComponent(); // Gọi lại hàm này để làm mới dữ liệu
+    }
 
     private void initializeComponent() {
         FirebaseUser user = mAuth.getCurrentUser();
@@ -77,19 +86,29 @@ public class ProfileFragment extends Fragment {
             etEmail.setText(user.getEmail());
             String userUid = user.getUid();
 
-            // Fetch data from Firebase Realtime Database and set to Username
+            // Lấy và hiển thị ảnh đại diện từ Firebase Database
             mDatabase.child("Users").child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Get the user's first and last name from the database
+                    // Lấy tên và hiển thị
                     String usernameTextview = dataSnapshot.child("firstName").getValue(String.class)
                             + " " + dataSnapshot.child("lastName").getValue(String.class);
                     etUsername.setText(usernameTextview);
+
+                    // Lấy URL ảnh đại diện từ Database
+                    String avatarUrl = dataSnapshot.child("avatarUrl").getValue(String.class);
+                    if (avatarUrl != null) {
+                        // Sử dụng Picasso để tải ảnh từ URL
+                        Picasso.get().load(avatarUrl).placeholder(R.drawable.onboard1).into(imgProfilePicture);
+                    } else {
+                        // Hiển thị ảnh mặc định nếu không có URL
+                        imgProfilePicture.setImageResource(R.drawable.onboard1);
+                    }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle the error when data cannot be retrieved
+                    // Xử lý lỗi khi không thể truy cập dữ liệu
                     Toast.makeText(getActivity(), "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             });

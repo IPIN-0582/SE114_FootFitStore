@@ -101,7 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         btnCart.setOnClickListener(v -> {
             Intent intentCart = new Intent(ProductDetailActivity.this, MainActivity.class);
-            intentCart.putExtra("openFragment", "cart");
+            intentCart.putExtra("openFragment", "cart"); // Chuyển thông điệp mở CartFragment
             startActivity(intentCart);
             finish();  // Đóng ProductDetailActivity
         });

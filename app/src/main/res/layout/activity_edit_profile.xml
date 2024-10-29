@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity"
+    tools:context=".activity.EditProfileActivity"
     android:background="@android:color/white">
 
     <!-- Back button -->
@@ -39,39 +39,40 @@
         android:id="@+id/img_profile_picture"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:contentDescription="Profile Picture"
         android:src="@drawable/onboard1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_back" />
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/btn_edit_profile_picture"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/bg_pencil_edit"
+        android:contentDescription="Edit Profile Picture"
+        android:src="@drawable/ic_pencil_edit"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_profile_picture"
+        app:layout_constraintEnd_toEndOf="@id/img_profile_picture" />
 
     <!-- Change Profile Picture Text -->
-    <TextView
-        android:id="@+id/tv_change_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Profile Picture"
-        android:textSize="14sp"
-        android:textColor="@android:color/holo_blue_dark"
-        app:layout_constraintTop_toBottomOf="@+id/img_profile_picture"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
 
     <!-- Full Name Text -->
     <TextView
         android:id="@+id/tv_full_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:text="Emmanuel Oyiboke"
         android:textSize="23sp"
         android:textStyle="bold"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/tv_change_picture"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/black2B2B2B"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_profile_picture" />
 
     <!-- First Name Label and Input -->
     <TextView

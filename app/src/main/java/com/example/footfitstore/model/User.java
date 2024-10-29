@@ -10,6 +10,7 @@ public class User {
     private String address;
     private String mobileNumber;
     private int gender;
+    private String avatarUrl;
     private List<Cart> cartList;
 
 
@@ -59,6 +60,14 @@ public class User {
 
     public void setPhone(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public int getGender() {

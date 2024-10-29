@@ -194,6 +194,11 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         loadDataFromFirebase();
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDataFromFirebase();  // Tải lại dữ liệu để cập nhật trạng thái yêu thích mới nhất
+    }
 
     private void filterShoes(String query) {
         searchResultsList.clear();
