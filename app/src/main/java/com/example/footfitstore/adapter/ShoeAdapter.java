@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.activity.ProductDetailActivity;
+import com.example.footfitstore.fragment.FavouriteFragment;
 import com.example.footfitstore.model.Shoe;
 import com.example.footfitstore.fragment.ExploreFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -39,6 +40,7 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
     private String viewType;  // Cờ để xác định loại dữ liệu (popular hay all)
     private ExploreFragment exploreFragment;
     private BottomSheetListener listener;
+    private FavouriteFragment favouriteFragment;
     //Tạo interface cho Size Pick Listener
     public interface BottomSheetListener{
         void showBottomSheetDialog(Shoe shoe);
@@ -50,6 +52,15 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
         this.allShoesList = allShoesList;
         this.viewType = viewType;
         this.exploreFragment = exploreFragment;
+        this.listener=listener;
+    }
+    //Constructor mới cho FavouriteFragment
+    public ShoeAdapter(Context context, List<Shoe> popularShoesList, List<Shoe> allShoesList, String viewType, FavouriteFragment favouriteFragment,BottomSheetListener listener) {
+        this.context = context;
+        this.popularShoesList = popularShoesList;
+        this.allShoesList = allShoesList;
+        this.viewType = viewType;
+        this.favouriteFragment = favouriteFragment;
         this.listener=listener;
     }
     public ShoeAdapter(Context context, List<Shoe> popularShoesList, List<Shoe> allShoesList, String viewType) {
@@ -68,7 +79,6 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Shoe shoe;
-
         // Dựa vào viewType để quyết định bind dữ liệu từ danh sách nào
         if (viewType.equals("popular")) {
             shoe = popularShoesList.get(position);
@@ -104,11 +114,13 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
             intent.putExtra("productId", shoe.getProductId()); // Truyền productId vào Intent
             context.startActivity(intent);
         });
-
+        //Xử lý sự kiện click nút thêm
         holder.btnAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.showBottomSheetDialog(shoe);
+                if (listener != null) {
+                    listener.showBottomSheetDialog(shoe);
+                }
             }
         });
     }
