@@ -2,24 +2,31 @@ package com.example.footfitstore.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.footfitstore.Api.CreateOrder;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.MainActivity;
+import com.example.footfitstore.activity.PaymentActivity;
 import com.example.footfitstore.adapter.CartAdapter;
 import com.example.footfitstore.model.Cart;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,8 +35,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class CartFragment extends Fragment {
 
@@ -86,11 +100,11 @@ public class CartFragment extends Fragment {
             if (cartList.isEmpty()) {
                 Toast.makeText(getContext(), "Your cart is empty", Toast.LENGTH_SHORT).show();
             } else {
-                // Handle the checkout process
-                Toast.makeText(getContext(), "Proceeding to checkout", Toast.LENGTH_SHORT).show();
+               Intent intent = new Intent(getActivity(), PaymentActivity.class);
+               intent.putExtra("total",totalPrice);
+               startActivity(intent);
             }
         });
-
         return view;
     }
 
@@ -120,4 +134,5 @@ public class CartFragment extends Fragment {
             }
         });
     }
+
 }

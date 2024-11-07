@@ -32,12 +32,15 @@ android {
 apply plugin: 'com.android.application'
 
 dependencies {
-
+    implementation (libs.okhttp)
+    implementation (libs.commons.codec)
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.firebase.database
+    implementation fileTree(dir: '/Users/phanducminh/AndroidStudioProjects/SE114_FootFitStore/ZaloLib', include: ['*.aar', '*.jar'], exclude: [''])
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -54,4 +57,5 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }

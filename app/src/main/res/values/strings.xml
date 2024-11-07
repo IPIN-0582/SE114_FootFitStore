@@ -50,4 +50,11 @@
         OK
     </string>
     <string name="Size">Size: </string>
+    <string name="Success">Your Payment Is Successful</string>
+    <string name="back_to_shopping">Back to Shopping</string>
+    <string name="ct_info">Contact Information</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="payment_method">Payment Method</string>
 </resources>
