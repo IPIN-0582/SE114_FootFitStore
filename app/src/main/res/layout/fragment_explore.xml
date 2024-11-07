@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ExploreFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main"
@@ -31,8 +29,8 @@
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:background="@color/whiteF7F7F9">
+                    android:layout_marginTop="20dp"
+                    android:padding="16dp">
                     <!-- Menu Button (Icon ở bên trái) -->
                     <ImageButton
                         android:id="@+id/btnMenu"
@@ -51,9 +49,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Explore"
-                        android:textSize="30sp"
                         android:textColor="@color/black"
-                        android:textStyle="bold" />
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="20dp"
+                        />
 
                     <!-- Space giữa tiêu đề và biểu tượng giỏ hàng -->
                     <View
@@ -80,25 +80,17 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="16dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/searchBar"
+                    <EditText
+                        android:id="@+id/searchEditText"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/search_background">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/searchEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Looking for shoes"
-                            android:background="@null"
-                            android:inputType="text"
-                            android:drawableStart="@drawable/ic_search"
-                            android:paddingStart="12dp"
-                            android:drawablePadding="8dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                        android:background="@drawable/search_background"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawablePadding="8dp"
+                        android:hint="Looking for shoes"
+                        android:inputType="text"
+                        android:paddingStart="26dp" />
 
                     <ImageButton
                         android:id="@+id/filterButton"
@@ -119,33 +111,34 @@
                     tools:listitem="@layout/item_shoe" />
 
                 <!-- Category Selection -->
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/categoryChips"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginHorizontal="16dp"
-                    app:singleSelection="true"
-                    app:chipSpacing="8dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipAllShoes"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/categoryLabel"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="All Shoes" />
+                        android:layout_weight="1"
+                        android:text="Select category"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/black2B2B2B"/>
+                </LinearLayout>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipOutdoor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Outdoor" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipTennis"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tennis" />
-                </com.google.android.material.chip.ChipGroup>
+                <!-- Category Shoes Cards -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categoryRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    tools:listitem="@layout/item_category" />
 
                 <!-- Popular Shoes Section -->
                 <LinearLayout
@@ -178,7 +171,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popularShoesRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp"
+                    android:layout_height="216dp"
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:paddingHorizontal="16dp"
@@ -250,7 +243,7 @@
                     android:paddingHorizontal="16dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
-                    tools:listitem="@layout/item_new_arrival_banner" />
+                    tools:listitem="@layout/item_shoe" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -92,7 +92,19 @@ public class CartFragment extends Fragment {
         }
 
         btnBack.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), MainActivity.class));
+            // Chuyển đổi sang ExploreFragment
+            ExploreFragment exploreFragment = new  ExploreFragment();
+
+            // Sử dụng FragmentManager để thay thế fragment hiện tại bằng ExploreFragment
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame, exploreFragment)  // R.id.main_frame là ID của FrameLayout trong MainActivity
+                    .addToBackStack(null)  // Nếu muốn cho phép quay lại
+                    .commit();
+
+            // Cập nhật BottomNavigationView
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);  // Cập nhật trạng thái bottom nav
+            }
         });
 
         // Handle checkout button click
