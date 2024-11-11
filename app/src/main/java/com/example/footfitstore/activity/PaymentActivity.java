@@ -251,26 +251,21 @@ public class PaymentActivity extends AppCompatActivity {
                     cartItem.put("quantity",cart.getQuantity());
                     cartItem.put("size",cart.getSize());
                     orderRef.child(currentOrder).child(productKey).setValue(cartItem);
+                    DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                            .getReference("Users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("cart")
+                            .child(productKey);
+                    cartRef.removeValue();
                 }
+                cartList.clear();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-        for (Cart cart:cartList)
-        {
-            String productKey = cart.getProductId() + "_" + cart.getSize();
-            DatabaseReference cartRef = FirebaseDatabase.getInstance()
-                    .getReference("Users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child("cart")
-                    .child(productKey);
-            cartRef.removeValue();
-        }
-        cartList.clear();
         AlertDialog.Builder builder=new AlertDialog.Builder(PaymentActivity.this,R.style.CustomAlertDialog);
         final View customLayout = getLayoutInflater().inflate(R.layout.payment_success,null);
         builder.setView(customLayout);
