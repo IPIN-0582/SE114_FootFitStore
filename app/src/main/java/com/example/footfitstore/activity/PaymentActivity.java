@@ -221,19 +221,44 @@ public class PaymentActivity extends AppCompatActivity {
     }
     private void paymentSuccess()
     {
-        String formattedDateTime="";
-        LocalDateTime currentDateTime;
-        DateTimeFormatter formatter;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            currentDateTime = LocalDateTime.now();
-            formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            formattedDateTime= currentDateTime.format(formatter);
-        }
-        DatabaseReference orderPref = FirebaseDatabase.getInstance()
-                .getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+
+        String userUid = mAuth.getCurrentUser().getUid();
+        DatabaseReference orderRef=mDatabase.child("Users")
+                .child(userUid)
                 .child("order");
-        orderPref.child("orderTime").setValue(formattedDateTime);
+
+        orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long childrenCount = snapshot.getChildrenCount();
+                String currentOrder = "order_" + childrenCount;
+                String formattedDateTime="";
+                LocalDateTime currentDateTime;
+                DateTimeFormatter formatter;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    currentDateTime = LocalDateTime.now();
+                    formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    formattedDateTime= currentDateTime.format(formatter);
+                }
+                orderRef.child(currentOrder).child("orderTime").setValue(formattedDateTime);
+                for (Cart cart:cartList)
+                {
+                    String productKey = cart.getProductId() + "_" + cart.getSize();
+                    Map<String, Object> cartItem = new HashMap<>();
+                    cartItem.put("price",cart.getPrice());
+                    cartItem.put("productId",cart.getProductId());
+                    cartItem.put("productName",cart.getProductName());
+                    cartItem.put("quantity",cart.getQuantity());
+                    cartItem.put("size",cart.getSize());
+                    orderRef.child(currentOrder).child(productKey).setValue(cartItem);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         for (Cart cart:cartList)
         {
@@ -244,14 +269,6 @@ public class PaymentActivity extends AppCompatActivity {
                     .child("cart")
                     .child(productKey);
             cartRef.removeValue();
-
-            Map<String, Object> cartItem = new HashMap<>();
-            cartItem.put("price",cart.getPrice());
-            cartItem.put("productId",cart.getProductId());
-            cartItem.put("productName",cart.getProductName());
-            cartItem.put("quantity",cart.getQuantity());
-            cartItem.put("size",cart.getSize());
-            orderPref.child(productKey).setValue(cartItem);
         }
         cartList.clear();
         AlertDialog.Builder builder=new AlertDialog.Builder(PaymentActivity.this,R.style.CustomAlertDialog);
