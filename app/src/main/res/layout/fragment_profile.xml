@@ -4,41 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.ProfileFragment">
+    tools:context=".fragment.ProfileFragment"
+    android:background="@color/whiteF7F7F9">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ProfileActivity">
+        tools:context=".ProfileActivity"
+>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+            <LinearLayout
+                android:id="@+id/topbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="10dp">
+                <!-- Back Button -->
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_back" />
 
-        <!-- Back button -->
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_back_arrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="Back button"/>
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <!-- Product Category -->
+                <TextView
+                    android:id="@+id/tvFavourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Profile"
+                    android:textColor="@color/black2B2B2B"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
-        <!-- Profile Title -->
-        <TextView
-            android:id="@+id/tv_profile_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile"
-            android:textStyle="bold"
-            android:fontFamily="@font/raleway_bold"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="23dp"/>
-
-        <!-- Profile Image -->
+                <ImageButton
+                    android:id="@+id/btn_edit_profile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/whiteF7F7F9"
+                    android:src="@drawable/ic_edit_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    />
+            </LinearLayout>
 
         <!-- Edit Profile Image Button -->
         <de.hdodenhof.circleimageview.CircleImageView
@@ -50,7 +76,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_title" />
+            app:layout_constraintTop_toBottomOf="@id/topbar"
+            android:layout_gravity="center"/>
 
         <!-- Name Label -->
         <TextView
@@ -70,8 +97,8 @@
         <!-- Name EditText -->
         <TextView
             android:id="@+id/et_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:hint="enter username"
             android:fontFamily="@font/raleway_bold"
             android:background="@drawable/edittext_login"
@@ -102,8 +129,8 @@
         <!-- Email EditText -->
         <TextView
             android:id="@+id/et_email"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:text="emmanueloyiboke@gmail.com"
             android:background="@drawable/edittext_login"
             android:padding="12dp"
@@ -134,8 +161,8 @@
         <!-- Password EditText -->
         <TextView
             android:id="@+id/et_password"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:inputType="textPassword"
             android:textColor="@color/textSecondary"
             android:text="********"
@@ -160,20 +187,9 @@
             app:layout_constraintTop_toBottomOf="@id/et_password"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"/>
-
-        <ImageButton
-            android:id="@+id/btn_edit_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_profile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="22dp"
-            android:background="@color/whiteFFFFFF"
-            />
-
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="right"/>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -54,7 +54,7 @@ public class PaymentActivity extends AppCompatActivity {
     List<PaymentMethod> methodList=new ArrayList<>();
     PaymentAdapter paymentAdapter;
     TextView txtEmail,txtPhone,txtAddr,txtProduct,txtDelivery,txtTotal;
-    ImageButton btnEditEmail,btnEditPhone;
+    ImageButton btnEditEmail,btnEditPhone,btnBack;
     Button btnCheckout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,7 @@ public class PaymentActivity extends AppCompatActivity {
         btnEditEmail=findViewById(R.id.btn_edit_email);
         btnEditPhone=findViewById(R.id.btn_edit_phone);
         btnCheckout=findViewById(R.id.button2);
+        btnBack=findViewById(R.id.btnBack);
         spinner=findViewById(R.id.spinner);
 
         btnEditEmail.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +101,7 @@ public class PaymentActivity extends AppCompatActivity {
                 txtPhone.setFocusableInTouchMode(true);
             }
         });
+        btnBack.setOnClickListener(v -> finish());
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             userCartRef = FirebaseDatabase.getInstance()

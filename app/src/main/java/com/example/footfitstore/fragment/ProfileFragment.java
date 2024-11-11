@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment {
         etEmail = view.findViewById(R.id.et_email);
         recoveryPassword = view.findViewById(R.id.tv_recovery_password);
         btnEditProfile = view.findViewById(R.id.btn_edit_profile);
-        btnBack = view.findViewById(R.id.btn_back);
+        btnBack = view.findViewById(R.id.btnBack);
         imgProfilePicture = view.findViewById(R.id.img_profile_picture);
 
         initializeComponent();

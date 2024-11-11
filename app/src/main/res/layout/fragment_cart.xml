@@ -4,19 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.CartFragment">
+    tools:context=".fragment.CartFragment"
+    android:background="@color/whiteF7F7F9">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        >
 
         <LinearLayout
             android:id="@+id/topbar"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="10dp">
             <!-- Back Button -->
             <ImageButton
                 android:id="@+id/btnBack"
@@ -25,24 +28,33 @@
                 android:layout_gravity="start"
                 android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_back" />
+
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
             <!-- Product Category -->
             <TextView
-                android:id="@+id/tvCart"
+                android:id="@+id/tvFavourite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="Cart"
                 android:textColor="@color/black2B2B2B"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"/>
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.3" />
+                android:layout_weight="1" />
+
+            <!-- Cart Button -->
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_gravity="start"
+                android:background="?android:attr/selectableItemBackground" />
         </LinearLayout>
 
         <!-- RecyclerView to display the cart items -->
@@ -55,6 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topbar"
             android:paddingBottom="20dp"
+            android:layout_marginTop="18dp"
             tools:listitem="@layout/item_cart" />
 
         <!-- Total Cost Section -->

@@ -29,7 +29,7 @@
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:padding="16dp">
                     <!-- Menu Button (Icon ở bên trái) -->
                     <ImageButton
@@ -82,9 +82,8 @@
 
                     <EditText
                         android:id="@+id/searchEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
                         android:background="@drawable/search_background"
                         android:drawableStart="@drawable/ic_search"
                         android:drawablePadding="8dp"
@@ -92,23 +91,7 @@
                         android:inputType="text"
                         android:paddingStart="26dp" />
 
-                    <ImageButton
-                        android:id="@+id/filterButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Filter"
-                        android:src="@drawable/ic_fillter"
-                        android:layout_marginStart="8dp" />
                 </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/searchResultsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:visibility="gone"
-                    tools:listitem="@layout/item_shoe" />
 
                 <!-- Category Selection -->
                 <LinearLayout

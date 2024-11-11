@@ -1,5 +1,6 @@
 package com.example.footfitstore.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.MainActivity;
+import com.example.footfitstore.activity.SearchActivity;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.CategoryAdapter;
 import com.example.footfitstore.adapter.SearchShoeAdapter;
@@ -32,15 +34,14 @@ import java.util.*;
 
 public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheetListener {
 
-    private RecyclerView popularShoesRecyclerView, bannerRecyclerView, allShoesRecyclerView, searchResultsRecyclerView, categoryRecyclerView;
+    private RecyclerView popularShoesRecyclerView, bannerRecyclerView, allShoesRecyclerView, categoryRecyclerView;
     private ImageButton btnCart;
     private EditText searchEditText;
     private ShoeAdapter popularShoeAdapter, allShoeAdapter;
     private BannerAdapter bannerAdapter;
-    private SearchShoeAdapter searchResultsAdapter;
     private CategoryAdapter categoryAdapter;
     private List<String> categoryList = new ArrayList<>(), bannerList = new ArrayList<>();
-    private List<Shoe> popularshoeList = new ArrayList<>(), allshoesList = new ArrayList<>(), searchResultsList = new ArrayList<>();
+    private List<Shoe> popularshoeList = new ArrayList<>(), allshoesList = new ArrayList<>();
     private DatabaseReference userCartRef, bannerReference, allshoesReference;
     private String selectedSize, productId, productName;
     private double price;
@@ -60,11 +61,10 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         // Xử lý khi nhấn vào nút giỏ hàng
         btnCart.setOnClickListener(v -> openCartFragment());
 
-        // Lắng nghe sự thay đổi của văn bản trong ô tìm kiếm
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {filterShoes(s.toString().toLowerCase()); }
-            @Override public void afterTextChanged(Editable s) { }
+        // Xử lý khi nhấn vào thanh tìm kiếm
+        searchEditText.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SearchActivity.class);
+            startActivity(intent);
         });
 
         return view;
@@ -82,7 +82,6 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         popularShoesRecyclerView = view.findViewById(R.id.popularShoesRecyclerView);
         allShoesRecyclerView = view.findViewById(R.id.allShoesRecyclerView);
         bannerRecyclerView = view.findViewById(R.id.bannerRecyclerView);
-        searchResultsRecyclerView = view.findViewById(R.id.searchResultsRecyclerView);
         searchEditText = view.findViewById(R.id.searchEditText);
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
 
@@ -90,7 +89,6 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         popularShoesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         allShoesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         bannerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
@@ -99,14 +97,12 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         popularShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "popular", this, this);
         allShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "all", this, this);
         bannerAdapter = new BannerAdapter(bannerList);
-        searchResultsAdapter = new SearchShoeAdapter(searchResultsList, getContext());
         categoryAdapter = new CategoryAdapter(getContext(), categoryList);
 
         // Thiết lập adapter cho các RecyclerView
         popularShoesRecyclerView.setAdapter(popularShoeAdapter);
         allShoesRecyclerView.setAdapter(allShoeAdapter);
         bannerRecyclerView.setAdapter(bannerAdapter);
-        searchResultsRecyclerView.setAdapter(searchResultsAdapter);
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
 
@@ -193,24 +189,6 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         if (getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_cart);
         }
-    }
-
-    // Hàm lọc giày dựa trên từ khóa tìm kiếm
-    private void filterShoes(String query) {
-        searchResultsList.clear();
-        // Kiểm tra nếu chuỗi query trống thì ẩn RecyclerView
-        if (query.isEmpty()) {
-            searchResultsRecyclerView.setVisibility(View.GONE);
-        } else {
-            // Lọc giày dựa trên từ khóa tìm kiếm
-            for (Shoe shoe : allshoesList) {
-                if (shoe.getTitle().toLowerCase().contains(query)) {
-                    searchResultsList.add(shoe);
-                }
-            }
-            searchResultsRecyclerView.setVisibility(searchResultsList.isEmpty() ? View.GONE : View.VISIBLE);
-        }
-        searchResultsAdapter.notifyDataSetChanged();
     }
 
     // Hàm tải dữ liệu danh mục từ Firebase

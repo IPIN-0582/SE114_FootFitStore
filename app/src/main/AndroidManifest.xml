@@ -20,16 +20,16 @@
             android:exported="true"
             android:label="Merchant Demo"
             android:launchMode="singleTask">
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <data
-                android:host="app"
-                android:scheme="demozpdk" />
-        </intent-filter>
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".fragment.FavouriteFragment"
@@ -64,7 +64,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
@@ -73,6 +72,9 @@
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SearchActivity"
             android:exported="false" />
 
         <meta-data

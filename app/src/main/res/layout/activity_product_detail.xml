@@ -9,15 +9,17 @@
     tools:context=".activity.ProductDetailActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="16dp">
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
             <!-- Back Button -->
             <ImageButton
                 android:id="@+id/btnBack"
@@ -26,6 +28,7 @@
                 android:layout_gravity="start"
                 android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_back" />
+
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
@@ -35,10 +38,11 @@
                 android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="Men's Shoes"
                 android:textColor="@color/black2B2B2B"
-                android:textSize="20sp"
-                android:layout_marginTop="8dp"/>
+                android:textSize="20sp" />
+
             <View
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
@@ -59,38 +63,38 @@
             android:id="@+id/ivProductImage"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:scaleType="fitCenter"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:scaleType="fitCenter" />
 
         <!-- Product Name -->
         <TextView
             android:id="@+id/tvProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Nike Air Max 270 Essential"
-            android:textSize="22sp"
-            android:textStyle="bold"
             android:textColor="@color/black2B2B2B"
-            android:layout_marginTop="16dp"/>
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <!-- Product Price -->
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="$179.39"
-            android:textSize="18sp"
-            android:textStyle="bold"
             android:textColor="@color/black2B2B2B"
-            android:layout_marginTop="16dp"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <!-- Product Description -->
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The Max Air 270 Unit Delivers Unrivaled, All-Day Comfort. The Sleek, Running-Inspired Design Roots You To Everything Nike..."
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:text="The Max Air 270 Unit Delivers Unrivaled, All-Day Comfort. The Sleek, Running-Inspired Design Roots You To Everything Nike..." />
 
         <!-- Product Size Selection -->
         <androidx.recyclerview.widget.RecyclerView
@@ -100,44 +104,36 @@
             android:orientation="horizontal"
             android:padding="8dp" />
 
-        <!-- Add to Cart and Favorite Buttons -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
 
-            <!-- Khoảng cách giữa hai nút -->
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <!-- Favorite Button -->
-            <ImageButton
-                android:id="@+id/btnFavorite"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/ic_heart"
-                android:background="?android:attr/selectableItemBackground"/>
-            <!-- Khoảng cách giữa hai nút -->
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <!-- Add to Cart Button -->
-            <Button
-                android:id="@+id/btnAddToCart"
-                android:layout_width="220dp"
-                android:layout_gravity="right"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/bg_btn_secondary"
-                android:drawableRight="@drawable/ic_cart"
-                android:text="Add To Cart"
-                android:textAllCaps="false" />
-        </LinearLayout>
     </LinearLayout>
+    <!-- Add to Cart and Favorite Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2">
 
+        <!-- Favorite Button -->
+        <ImageButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:baselineAligned="false"
+            android:src="@drawable/ic_heart"
+            android:layout_marginStart="40dp"/>
+
+        <!-- Add to Cart Button -->
+        <Button
+            android:id="@+id/btnAddToCart"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginStart="70dp"
+            android:background="@drawable/bg_btn_secondary"
+            android:drawableRight="@drawable/ic_cart"
+            android:text="Add To Cart"
+            android:textAllCaps="false"
+            />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
