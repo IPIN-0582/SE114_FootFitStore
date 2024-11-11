@@ -114,7 +114,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         txtProduct.setText("Total: $" + productPrice);
         txtDelivery.setText("Total: $" + 15.0);
-        finalprice=productPrice+15.0;
+        finalprice=productPrice+15.0+100000.0;
         txtTotal.setText("Total: $"+finalprice);
         methodList.add(new PaymentMethod("ZaloPay", R.drawable.zalopay));
         methodList.add(new PaymentMethod("Cash on Delivery",R.drawable.cod));
@@ -155,17 +155,17 @@ public class PaymentActivity extends AppCompatActivity {
                                 }
                                 @Override
                                 public void onPaymentCanceled(String s, String s1) {
-                                    Toast.makeText(PaymentActivity.this,"Cancelled",Toast.LENGTH_SHORT).show();
+                                    createDialog("cancelled");
                                 }
                                 @Override
                                 public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
-                                    Toast.makeText(PaymentActivity.this,"Error",Toast.LENGTH_SHORT).show();
+                                    createDialog("error");
                                 }
                             });
                         }
 
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        createDialog("error");
                     }
                 }
                 else
@@ -247,5 +247,24 @@ public class PaymentActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
+    }
+    private void createDialog(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this, R.style.CustomAlertDialog);
+        final View customLayout;
+        if (s.equals("cancelled")) {
+            customLayout = getLayoutInflater().inflate(R.layout.payment_cancelled, null);
+        } else {
+            customLayout = getLayoutInflater().inflate(R.layout.payment_error, null);
+        }
+        builder.setView(customLayout);
+        Button positiveButton = customLayout.findViewById(R.id.pos_button);
+        AlertDialog alertDialog = builder.create();
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }
