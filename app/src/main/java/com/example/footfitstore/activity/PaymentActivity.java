@@ -34,8 +34,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
@@ -114,7 +118,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         txtProduct.setText("Total: $" + productPrice);
         txtDelivery.setText("Total: $" + 15.0);
-        finalprice=productPrice+15.0+100000.0;
+        finalprice=productPrice+15.0;
         txtTotal.setText("Total: $"+finalprice);
         methodList.add(new PaymentMethod("ZaloPay", R.drawable.zalopay));
         methodList.add(new PaymentMethod("Cash on Delivery",R.drawable.cod));
@@ -217,6 +221,20 @@ public class PaymentActivity extends AppCompatActivity {
     }
     private void paymentSuccess()
     {
+        String formattedDateTime="";
+        LocalDateTime currentDateTime;
+        DateTimeFormatter formatter;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            currentDateTime = LocalDateTime.now();
+            formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            formattedDateTime= currentDateTime.format(formatter);
+        }
+        DatabaseReference orderPref = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("order");
+        orderPref.child("orderTime").setValue(formattedDateTime);
+
         for (Cart cart:cartList)
         {
             String productKey = cart.getProductId() + "_" + cart.getSize();
@@ -226,6 +244,14 @@ public class PaymentActivity extends AppCompatActivity {
                     .child("cart")
                     .child(productKey);
             cartRef.removeValue();
+
+            Map<String, Object> cartItem = new HashMap<>();
+            cartItem.put("price",cart.getPrice());
+            cartItem.put("productId",cart.getProductId());
+            cartItem.put("productName",cart.getProductName());
+            cartItem.put("quantity",cart.getQuantity());
+            cartItem.put("size",cart.getSize());
+            orderPref.child(productKey).setValue(cartItem);
         }
         cartList.clear();
         AlertDialog.Builder builder=new AlertDialog.Builder(PaymentActivity.this,R.style.CustomAlertDialog);
