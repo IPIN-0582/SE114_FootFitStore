@@ -57,4 +57,6 @@
     <string name="phone">Phone</string>
     <string name="address">Address</string>
     <string name="payment_method">Payment Method</string>
+    <string name="Cancelled">Your Payment Has Been Cancelled</string>
+    <string name="Error">Sorry! Something Wrong Happens</string>
 </resources>
