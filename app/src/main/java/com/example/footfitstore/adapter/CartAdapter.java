@@ -3,6 +3,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,21 +23,29 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
-
+    private List<Boolean> selectedList;
     private List<Cart> cartItems;
     private Context context;
     private OnQuantityChangeListener onQuantityChangeListener;
+    private OnCheckedChangeListener onCheckedChangeListener;
 
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(int position, boolean isChecked);
+    }
     public interface OnQuantityChangeListener {
-        void onQuantityChanged(double totalPrice, int totalQuantity);
+        void onQuantityChanged(double Price, int totalQuantity);
     }
 
-    public CartAdapter(List<Cart> cartItems, Context context, OnQuantityChangeListener onQuantityChangeListener) {
+    public CartAdapter(List<Cart> cartItems, Context context, OnCheckedChangeListener onCheckedChangeListener, OnQuantityChangeListener onQuantityChangeListener) {
+        this.selectedList=new ArrayList<>(Collections.nCopies(100,false));
         this.cartItems = cartItems;
         this.context = context;
+        this.onCheckedChangeListener = onCheckedChangeListener;
         this.onQuantityChangeListener = onQuantityChangeListener;
     }
 
@@ -49,12 +59,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         Cart item = cartItems.get(position);
-
         holder.tvProductName.setText(item.getProductName());
         holder.tvProductPrice.setText("$" + item.getPrice());
         holder.tvProductQuantity.setText(String.valueOf(item.getQuantity()));
         holder.tvProductSize.setText(item.getSize());
-
+        holder.cbSelected.setOnCheckedChangeListener(null);
+        holder.cbSelected.setChecked(selectedList.get(position));
+        int positionnew= position;
+        holder.cbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                selectedList.set(positionnew, isChecked);
+                if (onCheckedChangeListener != null) {
+                    onCheckedChangeListener.onCheckedChanged(positionnew, isChecked);
+                }
+            }
+        });
         // Tải và hiển thị ảnh từ Firebase
         loadImageFromFirebase(item.getProductId(), holder.ivProductImage);
 
@@ -80,6 +100,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.btnDelete.setOnClickListener(v -> {
             cartItems.remove(position);
             notifyItemRemoved(position);
+            selectedList.set(position,false);
+            notifyItemChanged(position);
             notifyItemRangeChanged(position, cartItems.size());
             deleteProductFromFirebase(item);
             calculateTotal();
@@ -95,10 +117,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void calculateTotal() {
         double totalPrice = 0;
         int totalQuantity = 0;
-
-        for (Cart item : cartItems) {
-            totalPrice += item.getPrice() * item.getQuantity();
-            totalQuantity += item.getQuantity();
+        List<Integer> index=new ArrayList<>();
+        for (int i=0;i<selectedList.size();i++)
+        {
+            if (selectedList.get(i)) index.add(i);
+        }
+        for (Integer x: index)
+        {
+            totalPrice += cartItems.get(x).getPrice() * cartItems.get(x).getQuantity();
+            totalQuantity+=cartItems.get(x).getQuantity();
         }
 
         // Gọi lại hàm onQuantityChanged để cập nhật tổng giá và số lượng sản phẩm
@@ -136,9 +163,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         TextView tvProductName, tvProductPrice, tvProductQuantity, tvProductSize;
         ImageView ivProductImage;
         ImageButton btnIncrease, btnDecrease, btnDelete;
-
+        CheckBox cbSelected;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
+            cbSelected=itemView.findViewById(R.id.cb_selected);
             tvProductName = itemView.findViewById(R.id.item_name);
             tvProductPrice = itemView.findViewById(R.id.item_price);
             tvProductQuantity = itemView.findViewById(R.id.item_quantity);
