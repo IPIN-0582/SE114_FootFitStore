@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.EditProfileActivity;
 import com.example.footfitstore.activity.MainActivity;
+import com.example.footfitstore.activity.PaymentHistory;
 import com.example.footfitstore.activity.ResetPasswordActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView recoveryPassword, etEmail, etUsername;
     private ImageButton btnEditProfile;
     private ImageView btnBack, imgProfilePicture;
-
+    private Button button;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,7 +84,14 @@ public class ProfileFragment extends Fragment {
                 ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);  // Cập nhật trạng thái bottom nav
             }
         });
-
+        button=view.findViewById(R.id.button3);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PaymentHistory.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
     @Override

@@ -27,6 +27,7 @@ import com.example.footfitstore.activity.PaymentActivity;
 import com.example.footfitstore.adapter.CartAdapter;
 import com.example.footfitstore.model.Cart;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +39,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
@@ -56,6 +60,7 @@ public class CartFragment extends Fragment {
     private DatabaseReference userCartRef;
     private List<Cart> cartList = new ArrayList<>();
     private double totalPrice = 0;
+    //private List<Boolean> selectedList=new ArrayList<>(Collections.nCopies(1000,false));
 
     @Nullable
     @Override
@@ -70,14 +75,7 @@ public class CartFragment extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        cartAdapter = new CartAdapter(cartList, getContext(), new CartAdapter.OnQuantityChangeListener() {
-            @Override
-            public void onQuantityChanged(double totalPrice, int totalQuantity) {
-                // Cập nhật tổng giá vào TextView
-                tvTotalPrice.setText("Total: $" + totalPrice);
-            }
-        });
-        recyclerView.setAdapter(cartAdapter);
+
 
         // Get current user
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -90,7 +88,23 @@ public class CartFragment extends Fragment {
             // Load cart data from Firebase
             loadCartData();
         }
-
+        cartAdapter = new CartAdapter(cartList, getContext(), new CartAdapter.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(int position, boolean isChecked) {
+                if (isChecked) {
+                    totalPrice += cartList.get(position).getPrice() * cartList.get(position).getQuantity();
+                } else
+                    totalPrice -= cartList.get(position).getPrice() * cartList.get(position).getQuantity();
+                tvTotalPrice.setText("Total: $" + totalPrice);
+            }
+        }, new CartAdapter.OnQuantityChangeListener() {
+            @Override
+            public void onQuantityChanged(double Price, int totalQuantity) {
+                totalPrice=Price;
+                tvTotalPrice.setText("Total: $" + totalPrice);
+            }
+        });
+        recyclerView.setAdapter(cartAdapter);
         btnBack.setOnClickListener(v -> {
             // Chuyển đổi sang ExploreFragment
             ExploreFragment exploreFragment = new  ExploreFragment();
@@ -109,12 +123,46 @@ public class CartFragment extends Fragment {
 
         // Handle checkout button click
         btnCheckout.setOnClickListener(v -> {
-            if (cartList.isEmpty()) {
+            List<Boolean> selectedList = cartAdapter.getSelectedList();
+            boolean check = true;
+            for (int i=0;i<selectedList.size();i++)
+            {
+                if (selectedList.get(i)) check=false;
+            }
+            if (check) {
                 Toast.makeText(getContext(), "Your cart is empty", Toast.LENGTH_SHORT).show();
-            } else {
+            }
+             else {
                Intent intent = new Intent(getActivity(), PaymentActivity.class);
                intent.putExtra("total",totalPrice);
                startActivity(intent);
+               String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+               DatabaseReference finalOrder = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+               finalOrder.child("FinalOrder").addListenerForSingleValueEvent(new ValueEventListener() {
+                   @Override
+                   public void onDataChange(@NonNull DataSnapshot snapshot) {
+                       for (int i=0;i<cartList.size();i++)
+                       {
+                           if (selectedList.get(i))
+                           {
+                               Cart cart = cartList.get(i);
+                               String productKey = cart.getProductId() + "_" + cart.getSize();
+                               Map<String, Object> cartItem = new HashMap<>();
+                               cartItem.put("price",cart.getPrice());
+                               cartItem.put("productId",cart.getProductId());
+                               cartItem.put("productName",cart.getProductName());
+                               cartItem.put("quantity",cart.getQuantity());
+                               cartItem.put("size",cart.getSize());
+                               finalOrder.child("FinalOrder").child(productKey).setValue(cartItem);
+                           }
+                       }
+                   }
+
+                   @Override
+                   public void onCancelled(@NonNull DatabaseError error) {
+
+                   }
+               });
             }
         });
         return view;
@@ -125,19 +173,15 @@ public class CartFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 cartList.clear();
-                totalPrice = 0;
 
                 for (DataSnapshot cartSnapshot : dataSnapshot.getChildren()) {
                     Cart cart = cartSnapshot.getValue(Cart.class);
                     cartList.add(cart);
 
-                    // Calculate total price
-                    totalPrice += cart.getPrice() * cart.getQuantity();
                 }
-
                 // Update UI
                 cartAdapter.notifyDataSetChanged();
-                cartAdapter.calculateTotal();
+                //cartAdapter.calculateTotal();
             }
 
             @Override

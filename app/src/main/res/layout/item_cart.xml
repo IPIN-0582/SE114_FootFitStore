@@ -15,6 +15,13 @@
         android:padding="8dp">
 
         <!-- Item Image -->
+        <CheckBox
+            android:id="@+id/cb_selected"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+             />
+
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="60dp"
