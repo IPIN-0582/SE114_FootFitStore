@@ -105,13 +105,19 @@ public class PaymentActivity extends AppCompatActivity {
                 txtPhone.setFocusableInTouchMode(true);
             }
         });
-        btnBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearFinalList();
+                finish();
+            }
+        });
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             userCartRef = FirebaseDatabase.getInstance()
                     .getReference("Users")
                     .child(currentUser.getUid())
-                    .child("cart");
+                    .child("FinalOrder");
 
             loadCartData();
         }
@@ -241,8 +247,9 @@ public class PaymentActivity extends AppCompatActivity {
                     formattedDateTime= currentDateTime.format(formatter);
                 }
                 orderRef.child(currentOrder).child("orderTime").setValue(formattedDateTime);
-                for (Cart cart:cartList)
+                for (int i=0;i<cartList.size();i++)
                 {
+                    Cart cart = cartList.get(i);
                     String productKey = cart.getProductId() + "_" + cart.getSize();
                     Map<String, Object> cartItem = new HashMap<>();
                     cartItem.put("price",cart.getPrice());
@@ -250,7 +257,7 @@ public class PaymentActivity extends AppCompatActivity {
                     cartItem.put("productName",cart.getProductName());
                     cartItem.put("quantity",cart.getQuantity());
                     cartItem.put("size",cart.getSize());
-                    orderRef.child(currentOrder).child(productKey).setValue(cartItem);
+                    orderRef.child(currentOrder).child("carList").child(productKey).setValue(cartItem);
                     DatabaseReference cartRef = FirebaseDatabase.getInstance()
                             .getReference("Users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -259,6 +266,8 @@ public class PaymentActivity extends AppCompatActivity {
                     cartRef.removeValue();
                 }
                 cartList.clear();
+                orderRef.child(currentOrder).child("orderStatus").setValue("SUCCESS");
+                clearFinalList();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -304,5 +313,11 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+    private void clearFinalList()
+    {
+        String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference finalOrder = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("FinalOrder");
+        finalOrder.removeValue();
     }
 }

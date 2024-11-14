@@ -33,20 +33,27 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Context context;
     private OnQuantityChangeListener onQuantityChangeListener;
     private OnCheckedChangeListener onCheckedChangeListener;
-
+    private boolean checkActivity;
     public interface OnCheckedChangeListener {
         void onCheckedChanged(int position, boolean isChecked);
     }
     public interface OnQuantityChangeListener {
         void onQuantityChanged(double Price, int totalQuantity);
     }
-
+    public CartAdapter(List<Cart> cartItems,Context context, boolean checkActivity)
+    {
+        this.selectedList=new ArrayList<>(Collections.nCopies(100,false));
+        this.cartItems=cartItems;
+        this.context=context;
+        this.checkActivity=checkActivity;
+    }
     public CartAdapter(List<Cart> cartItems, Context context, OnCheckedChangeListener onCheckedChangeListener, OnQuantityChangeListener onQuantityChangeListener) {
         this.selectedList=new ArrayList<>(Collections.nCopies(100,false));
         this.cartItems = cartItems;
         this.context = context;
         this.onCheckedChangeListener = onCheckedChangeListener;
         this.onQuantityChangeListener = onQuantityChangeListener;
+        this.checkActivity=false;
     }
 
     @NonNull
@@ -65,13 +72,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.tvProductSize.setText(item.getSize());
         holder.cbSelected.setOnCheckedChangeListener(null);
         holder.cbSelected.setChecked(selectedList.get(position));
-        int positionnew= position;
+        int positionNew = position;
+        if (checkActivity)
+        {
+            holder.cbSelected.setVisibility(View.GONE);
+            holder.btnDecrease.setVisibility(View.GONE);
+            holder.btnIncrease.setVisibility(View.GONE);
+            holder.btnDelete.setVisibility(View.GONE);
+        }
         holder.cbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                selectedList.set(positionnew, isChecked);
+                selectedList.set(positionNew, isChecked);
                 if (onCheckedChangeListener != null) {
-                    onCheckedChangeListener.onCheckedChanged(positionnew, isChecked);
+                    onCheckedChangeListener.onCheckedChanged(positionNew, isChecked);
                 }
             }
         });
@@ -214,6 +228,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 Toast.makeText(context, "Failed to remove product from Firebase", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public List<Boolean> getSelectedList() {
+        return selectedList;
     }
 }
 
