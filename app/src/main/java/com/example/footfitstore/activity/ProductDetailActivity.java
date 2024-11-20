@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +37,14 @@ import java.util.Map;
 public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView ivProductImage;
-    private TextView tvProductName, tvCategory, tvPrice, tvDescription;
+    private TextView tvProductName, tvCategory, tvPrice, tvDescription, tvRating;
     private ImageButton btnFavorite;
     private ImageButton btnCart;
     private ImageButton btnBack;
     private Button btnAddToCart;
     private RecyclerView recyclerViewSizes;
     private SizeAdapter sizeAdapter;
-
+    private RatingBar ratingBar;
     private DatabaseReference productReference;
     private FirebaseUser currentUser;
     private DatabaseReference userFavoritesRef;
@@ -70,11 +71,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnCart =findViewById(R.id.btnCart);
         btnBack = findViewById(R.id.btnBack);
         recyclerViewSizes = findViewById(R.id.recyclerViewSizes);
-
+        ratingBar = findViewById(R.id.ratingProduct);
+        tvRating = findViewById(R.id.txt_rating);
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
         if (intent != null) {
             productId = intent.getStringExtra("productId");
+            getRating();
             loadProductData(productId); // Gọi phương thức để tải dữ liệu sản phẩm từ Firebase
         }
 
@@ -140,13 +143,14 @@ public class ProductDetailActivity extends AppCompatActivity {
                     String description = dataSnapshot.child("description").getValue(String.class);
                     price = dataSnapshot.child("price").getValue(Double.class);
                     String imageUrl = dataSnapshot.child("picUrl").child("0").getValue(String.class);  // Lấy URL của ảnh đầu tiên
-
+                    double productRating = dataSnapshot.child("rating").getValue(Double.class);
                     // Gán dữ liệu vào các View
                     tvProductName.setText(productName);
                     tvDescription.setText(description);
                     tvPrice.setText("$" + price);
                     tvCategory.setText("Men's Shoes");  // Giả sử là danh mục
-
+                    ratingBar.setRating((float)productRating);
+                    tvRating.setText(ratingBar.getRating()+"");
                     // Tải hình ảnh từ URL (sử dụng Picasso)
                     Picasso.get().load(imageUrl).into(ivProductImage);
 
@@ -266,5 +270,48 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+    public void getRating()
+    {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Double> allRatings = new ArrayList<>();
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    DataSnapshot ordersSnapshot = userSnapshot.child("order");
+                    for (DataSnapshot orderSnapshot : ordersSnapshot.getChildren()) {
+                        DataSnapshot reviewsSnapshot = orderSnapshot.child("review");
+                        for (DataSnapshot reviewSnapshot : reviewsSnapshot.getChildren()) {
+                            String input = reviewSnapshot.getKey();
+                            String result = input.split("_")[0];
+                            if (result.equals(productId))
+                            {
+                                Double rating = reviewSnapshot.child("rating").getValue(Double.class);
+                                if (rating != null) {
+                                    allRatings.add(rating); // Thêm rating vào danh sách
+                                }
+                            }
+                        }
+                    }
+                }
+                Double finalValue = 0.0;
+                if (!allRatings.isEmpty())
+                {
+                    for (Double rating : allRatings) {
+                        finalValue += rating;
+                    }
+                    finalValue /= allRatings.size();
+                }
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Shoes").child(productId).child("rating");
+                userRef.setValue(finalValue);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
 

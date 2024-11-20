@@ -1,10 +1,17 @@
 package com.example.footfitstore.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,9 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.model.Cart;
+import com.example.footfitstore.model.CartRating;
 import com.example.footfitstore.model.OrderHistory;
+import com.example.footfitstore.model.PaymentMethod;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.PaymentViewHolder> {
     Context context;
@@ -40,6 +59,68 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         CartAdapter cartAdapter=new CartAdapter(singleCartList,context,true);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.recyclerView.setAdapter(cartAdapter);
+        if (!orderHistoryList.get(position).getOrderStatus().equals("ARRIVED"))
+        {
+            holder.btnReviewOrder.setVisibility(View.GONE);
+        }
+        int newPos=position;
+        holder.btnReviewOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(v.getContext());
+                dialog.setContentView(R.layout.review_dialog);
+                Button button = dialog.findViewById(R.id.btnSubmitRating);
+                EditText editText=dialog.findViewById(R.id.edtFeedback);
+                RecyclerView recyclerView = dialog.findViewById(R.id.recyclerRating);
+                recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                List<CartRating> newRatingList = new ArrayList<>();
+                for (Cart cart:singleCartList)
+                {
+                    CartRating cartRating=new CartRating();
+                    cartRating.setProductName(cart.getProductName());
+                    cartRating.setPrice(cart.getPrice());
+                    cartRating.setProductId(cart.getProductId());
+                    cartRating.setQuantity(cart.getQuantity());
+                    cartRating.setSize(cart.getSize());
+                    newRatingList.add(cartRating);
+                }
+                CartRatingAdapter cartRatingAdapter=new CartRatingAdapter(v.getContext(), newRatingList);
+                recyclerView.setAdapter(cartRatingAdapter);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                                .getReference("Users")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child("order")
+                                .child("order_"+newPos).child("review");
+                        for (CartRating cart:newRatingList)
+                        {
+                            if (cart.getRating() == 0)
+                            {
+                                Toast.makeText(v.getContext(), "Please rate these product",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            String productKey = cart.getProductId() + "_" + cart.getSize();
+                            Map<String, Object> cartItem = new HashMap<>();
+                            cartItem.put("price",cart.getPrice());
+                            cartItem.put("productId",cart.getProductId());
+                            cartItem.put("productName",cart.getProductName());
+                            cartItem.put("quantity",cart.getQuantity());
+                            cartItem.put("size",cart.getSize());
+                            cartItem.put("rating",cart.getRating());
+                            cartRef.child(productKey).setValue(cartItem);
+                        }
+                        String comment = editText.getText().toString();
+                        cartRef.child("order_review").setValue(comment);
+                        changeStatus(newPos);
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     @Override
@@ -50,11 +131,22 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     static class PaymentViewHolder extends RecyclerView.ViewHolder {
         TextView txtDate,txtStatus;
         RecyclerView recyclerView;
+        Button btnReviewOrder;
         public PaymentViewHolder(@NonNull View itemView) {
             super(itemView);
             txtDate=itemView.findViewById(R.id.txt_Date);
             txtStatus=itemView.findViewById(R.id.txt_OrderStatus);
             recyclerView=itemView.findViewById(R.id.recycler);
+            btnReviewOrder=itemView.findViewById(R.id.btn_ReviewOrder);
         }
+    }
+    public void changeStatus(int newPos)
+    {
+        DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("order")
+                .child("order_"+newPos);
+        cartRef.child("orderStatus").setValue("REVIEWED");
     }
 }
