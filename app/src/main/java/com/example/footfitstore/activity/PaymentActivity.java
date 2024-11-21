@@ -11,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -276,7 +275,7 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
         AlertDialog.Builder builder=new AlertDialog.Builder(PaymentActivity.this,R.style.CustomAlertDialog);
-        final View customLayout = getLayoutInflater().inflate(R.layout.payment_success,null);
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_payment_success,null);
         builder.setView(customLayout);
         Button positiveButton = customLayout.findViewById(R.id.pos_button);
         AlertDialog alertDialog=builder.create();
@@ -299,9 +298,9 @@ public class PaymentActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this, R.style.CustomAlertDialog);
         final View customLayout;
         if (s.equals("cancelled")) {
-            customLayout = getLayoutInflater().inflate(R.layout.payment_cancelled, null);
+            customLayout = getLayoutInflater().inflate(R.layout.dialog_payment_cancelled, null);
         } else {
-            customLayout = getLayoutInflater().inflate(R.layout.payment_error, null);
+            customLayout = getLayoutInflater().inflate(R.layout.dialog_payment_error, null);
         }
         builder.setView(customLayout);
         Button positiveButton = customLayout.findViewById(R.id.pos_button);

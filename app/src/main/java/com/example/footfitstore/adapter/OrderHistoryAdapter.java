@@ -2,12 +2,9 @@ package com.example.footfitstore.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,19 +18,14 @@ import com.example.footfitstore.R;
 import com.example.footfitstore.model.Cart;
 import com.example.footfitstore.model.CartRating;
 import com.example.footfitstore.model.OrderHistory;
-import com.example.footfitstore.model.PaymentMethod;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.PaymentViewHolder> {
     Context context;
@@ -68,7 +60,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             @Override
             public void onClick(View v) {
                 Dialog dialog = new Dialog(v.getContext());
-                dialog.setContentView(R.layout.review_dialog);
+                dialog.setContentView(R.layout.dialog_review);
                 Button button = dialog.findViewById(R.id.btnSubmitRating);
                 EditText editText=dialog.findViewById(R.id.edtFeedback);
                 RecyclerView recyclerView = dialog.findViewById(R.id.recyclerRating);

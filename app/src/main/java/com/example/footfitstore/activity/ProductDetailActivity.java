@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -259,7 +260,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     cartItem.put("size", selectedSize);
 
                     userCartRef.child(cartKey).setValue(cartItem)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(ProductDetailActivity.this, "Added to cart", Toast.LENGTH_SHORT).show())
+                            .addOnSuccessListener(aVoid -> showDialog())
                             .addOnFailureListener(e -> Toast.makeText(ProductDetailActivity.this, "Failed to add to cart", Toast.LENGTH_SHORT).show());
                 }
             }
@@ -312,6 +313,17 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void showDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailActivity.this, R.style.CustomAlertDialog);
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_to_cart, null);
+        builder.setView(customLayout);
+        Button positiveButton = customLayout.findViewById(R.id.back_to_shopping);
+        AlertDialog alertDialog = builder.create();
+        positiveButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+        });
+        alertDialog.show();
+    }
 }
 

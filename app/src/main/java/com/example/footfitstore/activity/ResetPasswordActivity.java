@@ -1,6 +1,5 @@
 package com.example.footfitstore.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,7 +46,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         AlertDialog.Builder builder=new AlertDialog.Builder(this,R.style.CustomAlertDialog);
-                        final View customLayout = getLayoutInflater().inflate(R.layout.reset_password_dialog,null);
+                        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_reset_password,null);
                         builder.setView(customLayout);
                         Button positiveButton = customLayout.findViewById(R.id.pos_button);
                         AlertDialog alertDialog=builder.create();
