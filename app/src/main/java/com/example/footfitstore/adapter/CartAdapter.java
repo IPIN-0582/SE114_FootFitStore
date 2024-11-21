@@ -42,7 +42,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
     public CartAdapter(List<Cart> cartItems,Context context, boolean checkActivity)
     {
-        this.selectedList=new ArrayList<>(Collections.nCopies(100,false));
+        this.selectedList=new ArrayList<>(Collections.nCopies(cartItems.size(),false));
         this.cartItems=cartItems;
         this.context=context;
         this.checkActivity=checkActivity;
@@ -114,7 +114,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.btnDelete.setOnClickListener(v -> {
             cartItems.remove(position);
             notifyItemRemoved(position);
-            selectedList.set(position,false);
+            selectedList.remove(position);
             notifyItemChanged(position);
             notifyItemRangeChanged(position, cartItems.size());
             deleteProductFromFirebase(item);
