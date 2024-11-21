@@ -59,4 +59,5 @@
     <string name="payment_method">Payment Method</string>
     <string name="Cancelled">Your Payment Has Been Cancelled</string>
     <string name="Error">Sorry! Something Wrong Happens</string>
+    <string name="add_to_cart">Successfully Add To Cart</string>
 </resources>

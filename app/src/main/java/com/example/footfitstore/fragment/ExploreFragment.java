@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -249,7 +251,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                     Integer currentQuantity = dataSnapshot.child("quantity").getValue(Integer.class);
                     if (currentQuantity != null) {
                         userCartRef.child(cartKey).child("quantity").setValue(currentQuantity + 1)
-                                .addOnSuccessListener(aVoid -> showToast("Increased quantity in cart"))
+                                .addOnSuccessListener(aVoid -> showDialog())
                                 .addOnFailureListener(e -> showToast("Failed to update cart"));
                     }
                 } else {
@@ -260,7 +262,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                     cartItem.put("quantity", 1);
                     cartItem.put("size", selectedSize);
                     userCartRef.child(cartKey).setValue(cartItem)
-                            .addOnSuccessListener(aVoid -> showToast("Added to cart"))
+                            .addOnSuccessListener(aVoid -> showDialog())
                             .addOnFailureListener(e -> showToast("Failed to add to cart"));
                 }
             }
@@ -283,5 +285,20 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     public void updateAdapters() {
         popularShoeAdapter.notifyDataSetChanged();
         allShoeAdapter.notifyDataSetChanged();
+    }
+    private void showDialog()
+    {
+        if (getActivity() != null)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
+            final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_to_cart, null);
+            builder.setView(customLayout);
+            Button positiveButton = customLayout.findViewById(R.id.back_to_shopping);
+            AlertDialog alertDialog = builder.create();
+            positiveButton.setOnClickListener(v -> {
+                alertDialog.dismiss();
+            });
+            alertDialog.show();
+        }
     }
 }

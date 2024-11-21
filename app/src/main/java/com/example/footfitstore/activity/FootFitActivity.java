@@ -2,6 +2,7 @@ package com.example.footfitstore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +18,17 @@ public class FootFitActivity extends AppCompatActivity {
 
         View mainLayout = findViewById(R.id.main);
 
-        mainLayout.setOnClickListener(new View.OnClickListener() {
+        /*mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FootFitActivity.this, OnBoard1Activity.class);
                 startActivity(intent);
             }
-        });
-
-
+        });*/
+        new Handler().postDelayed(()->{
+            Intent intent = new Intent(FootFitActivity.this, OnBoard1Activity.class);
+            startActivity(intent);
+            finish();
+        },1500);
     }
 }
