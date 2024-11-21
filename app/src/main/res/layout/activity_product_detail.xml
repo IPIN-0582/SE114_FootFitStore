@@ -107,15 +107,35 @@
                 android:textSize="20dp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvPrice"
+        <!-- Product Price -->
+        <LinearLayout
+            android:id="@+id/priceLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="$179.39"
-            android:textColor="@color/black2B2B2B"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <!-- Giá cũ -->
+            <TextView
+                android:id="@+id/tvOriginalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Original Price"
+                android:textSize="16sp"
+                android:textColor="@color/gray707B81"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone" />
+
+            <!-- Giá mới -->
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
         <!-- Product Description -->
         <TextView

@@ -1,6 +1,7 @@
 package com.example.footfitstore.activity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,15 +31,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView ivProductImage;
-    private TextView tvProductName, tvCategory, tvPrice, tvDescription, tvRating;
+    private TextView tvProductName, tvCategory, tvPrice, tvDescription, tvRating, tvOriginalPrice;
     private ImageButton btnFavorite;
     private ImageButton btnCart;
     private ImageButton btnBack;
@@ -66,6 +71,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvProductName = findViewById(R.id.tvProductName);
         tvCategory = findViewById(R.id.tvCategory);
         tvPrice = findViewById(R.id.tvPrice);
+        tvOriginalPrice =findViewById(R.id.tvOriginalPrice);
         tvDescription = findViewById(R.id.tvDescription);
         btnFavorite = findViewById(R.id.btnFavorite);
         btnAddToCart = findViewById(R.id.btnAddToCart);
@@ -144,16 +150,44 @@ public class ProductDetailActivity extends AppCompatActivity {
                     String description = dataSnapshot.child("description").getValue(String.class);
                     price = dataSnapshot.child("price").getValue(Double.class);
                     String imageUrl = dataSnapshot.child("picUrl").child("0").getValue(String.class);  // Lấy URL của ảnh đầu tiên
+                    String category =dataSnapshot.child("category").getValue(String.class);
                     double productRating = dataSnapshot.child("rating").getValue(Double.class);
+
                     // Gán dữ liệu vào các View
                     tvProductName.setText(productName);
                     tvDescription.setText(description);
-                    tvPrice.setText("$" + price);
-                    tvCategory.setText("Men's Shoes");  // Giả sử là danh mục
+                    tvCategory.setText(category+"'s Shoes");
                     ratingBar.setRating((float)productRating);
                     tvRating.setText(ratingBar.getRating()+"");
                     // Tải hình ảnh từ URL (sử dụng Picasso)
                     Picasso.get().load(imageUrl).into(ivProductImage);
+
+                    // Kiểm tra thông tin khuyến mãi
+                    DataSnapshot promotionSnapshot = dataSnapshot.child("promotion");
+                    if (promotionSnapshot.exists()) {
+                        int discount = promotionSnapshot.child("discount").getValue(Integer.class);
+                        String startDate = promotionSnapshot.child("startDate").getValue(String.class);
+                        String endDate = promotionSnapshot.child("endDate").getValue(String.class);
+
+                        if (isPromotionActive(startDate, endDate)) {
+                            // Tính giá đã giảm
+                            double finalPrice = price * (1 - discount / 100.0);
+
+                            // Hiển thị giá cũ (gạch ngang) và giá mới
+                            tvOriginalPrice.setText("$" + String.format("%.2f", price));
+                            tvOriginalPrice.setVisibility(View.VISIBLE);
+                            tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            tvPrice.setText("$" + String.format("%.2f", finalPrice));
+                        } else {
+                            // Không có khuyến mãi, hiển thị giá gốc
+                            tvOriginalPrice.setVisibility(View.GONE);
+                            tvPrice.setText("$" + String.format("%.2f", price));
+                        }
+                    } else {
+                        // Không có thông tin khuyến mãi, chỉ hiển thị giá gốc
+                        tvOriginalPrice.setVisibility(View.GONE);
+                        tvPrice.setText("$" + String.format("%.2f", price));
+                    }
 
                     // Tải kích cỡ giày từ Firebase
                     List<String> sizes = new ArrayList<>();
@@ -324,6 +358,19 @@ public class ProductDetailActivity extends AppCompatActivity {
             alertDialog.dismiss();
         });
         alertDialog.show();
+    }
+    private boolean isPromotionActive(String startDate, String endDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date start = sdf.parse(startDate);
+            Date end = sdf.parse(endDate);
+            Date today = new Date();
+
+            return today.after(start) && today.before(end);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.footfitstore.adapter;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.model.Cart;
+import com.example.footfitstore.model.Promotion;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import com.google.firebase.database.DataSnapshot;
@@ -23,9 +25,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private List<Boolean> selectedList;
@@ -66,6 +72,47 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         Cart item = cartItems.get(position);
+
+        // Kiểm tra và lấy dữ liệu khuyến mãi
+        DatabaseReference productRef = FirebaseDatabase.getInstance()
+                .getReference("Shoes")
+                .child(item.getProductId())
+                .child("promotion");
+
+        productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Promotion promotion = dataSnapshot.getValue(Promotion.class);
+                    if (promotion != null && isPromotionActive(promotion)) {
+                        // Áp dụng giá khuyến mãi
+                        double discount = promotion.getDiscount();
+                        double discountedPrice = item.getPrice() * (1 - discount / 100);
+
+                        // Hiển thị giá gốc với gạch ngang và giá khuyến mãi
+                        holder.tvProductOriginalPrice.setText("$" + String.format("%.2f", item.getPrice()));
+                        holder.tvProductOriginalPrice.setPaintFlags(holder.tvProductOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        holder.tvProductOriginalPrice.setVisibility(View.VISIBLE);
+
+                        holder.tvProductPrice.setText("$" + String.format("%.2f", discountedPrice));
+                    } else {
+                        // Nếu không có khuyến mãi, chỉ hiển thị giá gốc
+                        holder.tvProductOriginalPrice.setVisibility(View.GONE);
+                        holder.tvProductPrice.setText("$" + String.format("%.2f", item.getPrice()));
+                    }
+                } else {
+                    // Nếu không có khuyến mãi, chỉ hiển thị giá gốc
+                    holder.tvProductOriginalPrice.setVisibility(View.GONE);
+                    holder.tvProductPrice.setText("$" + String.format("%.2f", item.getPrice()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Failed to load promotion data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         holder.tvProductName.setText(item.getProductName());
         holder.tvProductPrice.setText("$" + item.getPrice());
         holder.tvProductQuantity.setText(String.valueOf(item.getQuantity()));
@@ -129,24 +176,51 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     // Phương thức để tính toán tổng giá
     public void calculateTotal() {
-        double totalPrice = 0;
-        int totalQuantity = 0;
-        List<Integer> index=new ArrayList<>();
-        for (int i=0;i<selectedList.size();i++)
-        {
-            if (selectedList.get(i)) index.add(i);
-        }
-        for (Integer x: index)
-        {
-            totalPrice += cartItems.get(x).getPrice() * cartItems.get(x).getQuantity();
-            totalQuantity+=cartItems.get(x).getQuantity();
+        final double[] totalPrice = {0}; // Sử dụng mảng để có thể thay đổi giá trị
+        final int[] totalQuantity = {0};
+
+        List<Integer> selectedIndices = new ArrayList<>();
+        for (int i = 0; i < selectedList.size(); i++) {
+            if (selectedList.get(i)) selectedIndices.add(i);
         }
 
-        // Gọi lại hàm onQuantityChanged để cập nhật tổng giá và số lượng sản phẩm
-        if (onQuantityChangeListener != null) {
-            onQuantityChangeListener.onQuantityChanged(totalPrice, totalQuantity);
+        for (Integer index : selectedIndices) {
+            Cart item = cartItems.get(index);
+
+            DatabaseReference productRef = FirebaseDatabase.getInstance()
+                    .getReference("Shoes")
+                    .child(item.getProductId())
+                    .child("promotion");
+
+            productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    double discountedPrice = item.getPrice(); // Giá ban đầu
+                    if (dataSnapshot.exists()) {
+                        Promotion promotion = dataSnapshot.getValue(Promotion.class);
+                        if (promotion != null && isPromotionActive(promotion)) {
+                            double discount = promotion.getDiscount();
+                            discountedPrice = item.getPrice() * (1 - discount / 100); // Giá sau giảm
+                        }
+                    }
+
+                    totalPrice[0] += discountedPrice * item.getQuantity();
+                    totalQuantity[0] += item.getQuantity();
+
+                    // Gọi callback để cập nhật UI sau mỗi lần tính toán
+                    if (onQuantityChangeListener != null) {
+                        onQuantityChangeListener.onQuantityChanged(totalPrice[0], totalQuantity[0]);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(context, "Failed to load promotion data", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
+
 
     // Phương thức để lấy và hiển thị ảnh từ Firebase
     private void loadImageFromFirebase(String productId, ImageView imageView) {
@@ -174,7 +248,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     static class CartViewHolder extends RecyclerView.ViewHolder {
-        TextView tvProductName, tvProductPrice, tvProductQuantity, tvProductSize;
+        TextView tvProductName, tvProductPrice, tvProductQuantity, tvProductSize, tvProductOriginalPrice;
         ImageView ivProductImage;
         ImageButton btnIncrease, btnDecrease, btnDelete;
         CheckBox cbSelected;
@@ -183,6 +257,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             cbSelected=itemView.findViewById(R.id.cb_selected);
             tvProductName = itemView.findViewById(R.id.item_name);
             tvProductPrice = itemView.findViewById(R.id.item_price);
+            tvProductOriginalPrice= itemView.findViewById(R.id.item_original_price);
             tvProductQuantity = itemView.findViewById(R.id.item_quantity);
             tvProductSize = itemView.findViewById(R.id.item_size);
             ivProductImage = itemView.findViewById(R.id.item_image);  // Đảm bảo `ImageView` này có trong layout `item_cart.xml`
@@ -232,6 +307,21 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public List<Boolean> getSelectedList() {
         return selectedList;
+    }
+
+    // Kiểm tra ngày khuyến mãi
+    private boolean isPromotionActive(Promotion promotion) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date startDate = sdf.parse(promotion.getStartDate());
+            Date endDate = sdf.parse(promotion.getEndDate());
+            Date today = new Date();
+
+            return today.after(startDate) && today.before(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

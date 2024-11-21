@@ -12,6 +12,8 @@ public class Shoe {
     private List<String> size;
     private Boolean isPopular;
     private boolean isFavourite;
+    private String category;
+    private Promotion promotion;
 
     // Empty constructor for Firebase
     public Shoe() {
@@ -81,6 +83,7 @@ public class Shoe {
     public void setFavourite(boolean favourite) {
         isFavourite = favourite;
     }
+
     public Boolean getIsPopular() {
         return isPopular;
     }
@@ -88,4 +91,12 @@ public class Shoe {
     public void setIsPopular(Boolean isPopular) {
         this.isPopular = isPopular;
     }
+
+    public String getCategory() { return category;}
+
+    public void setCategory(String category){ this.category = category;}
+
+    public Promotion getPromotion() { return promotion;}
+
+    public void setPromotion(Promotion promotion) { this.promotion = promotion;}
 }

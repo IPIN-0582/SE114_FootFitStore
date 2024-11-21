@@ -26,6 +26,7 @@ import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.activity.PaymentActivity;
 import com.example.footfitstore.adapter.CartAdapter;
 import com.example.footfitstore.model.Cart;
+import com.example.footfitstore.model.Promotion;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,10 +39,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import vn.zalopay.sdk.Environment;
@@ -91,17 +96,48 @@ public class CartFragment extends Fragment {
         cartAdapter = new CartAdapter(cartList, getContext(), new CartAdapter.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(int position, boolean isChecked) {
-                if (isChecked) {
-                    totalPrice += cartList.get(position).getPrice() * cartList.get(position).getQuantity();
-                } else
-                    totalPrice -= cartList.get(position).getPrice() * cartList.get(position).getQuantity();
-                tvTotalPrice.setText("Total: $" + totalPrice);
+                Cart item = cartList.get(position);
+
+                // Lấy dữ liệu khuyến mãi từ Firebase để tính toán
+                DatabaseReference productRef = FirebaseDatabase.getInstance()
+                        .getReference("Shoes")
+                        .child(item.getProductId())
+                        .child("promotion");
+
+                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        double itemPrice = item.getPrice(); // Giá gốc
+                        if (dataSnapshot.exists()) {
+                            Promotion promotion = dataSnapshot.getValue(Promotion.class);
+                            if (promotion != null && isPromotionActive(promotion)) {
+                                double discount = promotion.getDiscount();
+                                itemPrice = itemPrice * (1 - discount / 100); // Áp dụng giảm giá
+                            }
+                        }
+
+                        // Cập nhật totalPrice khi sản phẩm được chọn hoặc bỏ chọn
+                        if (isChecked) {
+                            totalPrice += itemPrice * item.getQuantity();
+                        } else {
+                            totalPrice -= itemPrice * item.getQuantity();
+                        }
+
+                        // Hiển thị giá trị tổng
+                        tvTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getContext(), "Failed to load promotion data", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }, new CartAdapter.OnQuantityChangeListener() {
             @Override
-            public void onQuantityChanged(double Price, int totalQuantity) {
-                totalPrice=Price;
-                tvTotalPrice.setText("Total: $" + totalPrice);
+            public void onQuantityChanged(double price, int totalQuantity) {
+                totalPrice = price;
+                tvTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
             }
         });
         recyclerView.setAdapter(cartAdapter);
@@ -191,4 +227,18 @@ public class CartFragment extends Fragment {
         });
     }
 
+    // Kiểm tra ngày khuyến mãi
+    private boolean isPromotionActive(Promotion promotion) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date startDate = sdf.parse(promotion.getStartDate());
+            Date endDate = sdf.parse(promotion.getEndDate());
+            Date today = new Date();
+
+            return today.after(startDate) && today.before(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

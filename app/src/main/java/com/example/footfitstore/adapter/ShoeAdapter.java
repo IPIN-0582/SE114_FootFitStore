@@ -18,6 +18,7 @@ import com.example.footfitstore.R;
 import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.activity.ProductDetailActivity;
 import com.example.footfitstore.fragment.FavouriteFragment;
+import com.example.footfitstore.model.Promotion;
 import com.example.footfitstore.model.Shoe;
 import com.example.footfitstore.fragment.ExploreFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -27,8 +28,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.internal.http2.Http2Connection;
@@ -86,9 +91,17 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
             shoe = allShoesList.get(position);
         }
 
+        // Hiển thị giá gốc và giá sau giảm
+        double finalPrice = shoe.getPrice();
+        Promotion promotion = shoe.getPromotion();
+
+        if (promotion != null && isPromotionActive(promotion)) {
+            finalPrice = shoe.getPrice() * (1 - promotion.getDiscount() / 100.0);
+        }
+
         // Cập nhật dữ liệu cho các TextView và ImageView
         holder.titleTextView.setText(shoe.getTitle());
-        holder.priceTextView.setText("$" + shoe.getPrice());
+        holder.priceTextView.setText("$" + String.format("%.2f", finalPrice));
 
         // Sử dụng Picasso để tải ảnh từ URL
         if (shoe.getPicUrl() != null && !shoe.getPicUrl().isEmpty()) {
@@ -225,6 +238,21 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
         // Gọi phương thức updateAdapters() từ ExploreFragment để cập nhật cả hai RecyclerView
         if (exploreFragment != null) {
             exploreFragment.updateAdapters();
+        }
+    }
+
+    // Kiểm tra ngày khuyến mãi
+    private boolean isPromotionActive(Promotion promotion) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date startDate = sdf.parse(promotion.getStartDate());
+            Date endDate = sdf.parse(promotion.getEndDate());
+            Date today = new Date();
+
+            return today.after(startDate) && today.before(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
