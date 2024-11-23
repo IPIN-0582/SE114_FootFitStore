@@ -19,10 +19,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private final List<String> categoryList;
     private final Context context;
     private int selectedPosition = RecyclerView.NO_POSITION;
-
-    public CategoryAdapter(Context context, List<String> categoryList) {
+    private OnCategoryClickListener listener;
+    public interface OnCategoryClickListener {
+        void onCategoryClick(String categoryName);
+    }
+    public CategoryAdapter(Context context, List<String> categoryList, OnCategoryClickListener onCategoryClickListener) {
         this.context = context;
         this.categoryList = categoryList;
+        this.listener=onCategoryClickListener;
     }
 
     @NonNull
@@ -53,6 +57,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             selectedPosition = holder.getAdapterPosition();
             notifyItemChanged(previousPosition);
             notifyItemChanged(selectedPosition);
+            listener.onCategoryClick(category);
         });
     }
 

@@ -47,7 +47,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     private DatabaseReference userCartRef, bannerReference, allshoesReference;
     private String selectedSize, productId, productName;
     private double price;
-
+    private String selectedCategory="";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,7 +99,13 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         popularShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "popular", this, this);
         allShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "all", this, this);
         bannerAdapter = new BannerAdapter(bannerList);
-        categoryAdapter = new CategoryAdapter(getContext(), categoryList);
+        categoryAdapter = new CategoryAdapter(getContext(), categoryList, new CategoryAdapter.OnCategoryClickListener() {
+            @Override
+            public void onCategoryClick(String categoryName) {
+                selectedCategory=categoryName;
+                ensureFavouriteStatusOnItem();
+            }
+        });
 
         // Thiết lập adapter cho các RecyclerView
         popularShoesRecyclerView.setAdapter(popularShoeAdapter);
@@ -300,5 +306,55 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
             });
             alertDialog.show();
         }
+    }
+    private void ensureFavouriteStatusOnItem()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user != null ? user.getUid() : null;
+        DatabaseReference userFavouriteRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("favourite");
+        userFavouriteRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Set<String> favouriteProductIds = new HashSet<>();
+                for (DataSnapshot favSnapshot : snapshot.getChildren()) {
+                    favouriteProductIds.add(favSnapshot.getKey());
+                    loadProductByCategory(favouriteProductIds);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void loadProductByCategory(Set<String> favouriteProductIds)
+    {
+        allshoesReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!selectedCategory.isEmpty())
+                {
+                    popularshoeList.clear();
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                    {
+                        if (dataSnapshot.child("category").getValue(String.class).equals(selectedCategory))
+                        {
+                            Shoe shoe = dataSnapshot.getValue(Shoe.class);
+                            if (shoe != null) {
+                                shoe.setProductId(dataSnapshot.getKey());
+                                shoe.setFavourite(favouriteProductIds.contains(shoe.getProductId()));
+                                popularshoeList.add(shoe);
+                            }
+                        }
+                    }
+                    popularShoeAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

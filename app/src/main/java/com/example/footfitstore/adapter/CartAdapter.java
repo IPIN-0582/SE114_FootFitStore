@@ -183,7 +183,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         for (int i = 0; i < selectedList.size(); i++) {
             if (selectedList.get(i)) selectedIndices.add(i);
         }
-
+        if (selectedIndices.isEmpty())
+        {
+            if (onQuantityChangeListener != null) {
+                onQuantityChangeListener.onQuantityChanged(totalPrice[0], totalQuantity[0]);
+            }
+        }
         for (Integer index : selectedIndices) {
             Cart item = cartItems.get(index);
 
