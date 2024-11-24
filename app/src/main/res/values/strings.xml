@@ -60,4 +60,6 @@
     <string name="Cancelled">Your Payment Has Been Cancelled</string>
     <string name="Error">Sorry! Something Wrong Happens</string>
     <string name="add_to_cart">Successfully Add To Cart</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
