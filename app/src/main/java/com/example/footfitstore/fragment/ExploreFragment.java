@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -60,6 +61,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     private String selectedCategory="";
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    TextView headerTextView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,6 +79,8 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 drawerLayout.openDrawer(navigationView);
             }
         });
+        View headerView = navigationView.getHeaderView(0);
+        headerTextView = headerView.findViewById(R.id.txt_displayName);
         navigationView.bringToFront();
         navigationView.getMenu().getItem(0).setChecked(true);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(getActivity(),drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -221,12 +225,26 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     private void loadDataFromFirebase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user != null ? user.getUid() : null;
-
         // Lấy dữ liệu giỏ hàng và yêu thích của người dùng nếu đã đăng nhập
         if (uid != null) {
             userCartRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("cart");
             DatabaseReference userFavouriteRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("favourite");
             userFavouriteRef.addListenerForSingleValueEvent(getFavouriteEventListener());
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String firstName = snapshot.child("firstName").getValue(String.class);
+                    String lastName = snapshot.child("lastName").getValue(String.class);
+                    // Hiển thị vào TextView
+                    headerTextView.setText(firstName+" "+lastName);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         } else {
             loadShoesData(new HashSet<>());
         }

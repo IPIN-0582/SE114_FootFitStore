@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginStart="35dp"
-        android:fontFamily="@font/raleway_medium"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="@color/white"
         android:text="Display Name"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 </LinearLayout>
