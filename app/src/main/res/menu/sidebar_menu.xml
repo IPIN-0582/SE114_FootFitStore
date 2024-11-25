@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/navi_explore"
+            android:title="Explore"
+            android:icon="@drawable/ic_explore"/>
+        <item android:id="@+id/navi_profile"
+            android:title="Profile"
+            android:icon="@drawable/ic_profile"/>
+        <item android:id="@+id/navi_cart"
+            android:title="My cart"
+            android:icon="@drawable/ic_cart"/>
+        <item android:id="@+id/navi_favourite"
+            android:title="Favourite"
+            android:icon="@drawable/ic_favourite"/>
+        <item android:id="@+id/navi_notification"
+            android:title="Notification"
+            android:icon="@drawable/ic_notifications"/>
+        <item android:id="@+id/navi_order"
+            android:title="My Order"
+            android:icon="@drawable/ic_order"/>
+    </group>
+    <item android:title="">
+        <menu>
+            <item android:id="@+id/navi_log_out"
+                android:title="Log out"
+                android:icon="@drawable/ic_log_out"/>
+        </menu>
+    </item>
+</menu>

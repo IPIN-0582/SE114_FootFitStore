@@ -16,8 +16,10 @@ import com.example.footfitstore.R;
 import com.example.footfitstore.fragment.CartFragment;
 import com.example.footfitstore.fragment.ExploreFragment;
 import com.example.footfitstore.fragment.FavouriteFragment;
+import com.example.footfitstore.fragment.NotificationsFragment;
 import com.example.footfitstore.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_cart) {
                     setFragment(new CartFragment());
                     return true;
-//                } else if (itemId == R.id.nav_notifications) {
-//                    setFragment(new NotificationsFragment());
-//                    return true;
+                } else if (itemId == R.id.nav_notifications) {
+                      setFragment(new NotificationsFragment());
+                      return true;
                 } else if (itemId == R.id.nav_profile) {
                     setFragment(new ProfileFragment());
                     return true;
@@ -85,5 +87,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void setSelectedNavItem(int itemId) {
         bottomNavigationView.setSelectedItemId(itemId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

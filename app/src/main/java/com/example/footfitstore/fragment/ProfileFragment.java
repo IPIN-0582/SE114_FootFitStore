@@ -39,7 +39,6 @@ public class ProfileFragment extends Fragment {
     private TextView recoveryPassword, etEmail, etUsername;
     private ImageButton btnEditProfile;
     private ImageView btnBack, imgProfilePicture;
-    private Button button;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,14 +81,6 @@ public class ProfileFragment extends Fragment {
             // Cập nhật BottomNavigationView
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);  // Cập nhật trạng thái bottom nav
-            }
-        });
-        button=view.findViewById(R.id.button3);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PaymentHistory.class);
-                startActivity(intent);
             }
         });
         return view;
