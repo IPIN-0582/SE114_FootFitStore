@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
+import com.squareup.picasso.Picasso;
+
 import java.util.*;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheetListener {
 
@@ -62,6 +67,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     TextView headerTextView;
+    CircleImageView imgHeader;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,6 +87,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         });
         View headerView = navigationView.getHeaderView(0);
         headerTextView = headerView.findViewById(R.id.txt_displayName);
+        imgHeader = headerView.findViewById(R.id.avatar);
         navigationView.bringToFront();
         navigationView.getMenu().getItem(0).setChecked(true);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(getActivity(),drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -236,8 +243,11 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String firstName = snapshot.child("firstName").getValue(String.class);
                     String lastName = snapshot.child("lastName").getValue(String.class);
-                    // Hiển thị vào TextView
                     headerTextView.setText(firstName+" "+lastName);
+                    String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
+                    if (avatarUrl != null) {
+                        Picasso.get().load(avatarUrl).into(imgHeader);
+                    }
                 }
 
                 @Override
