@@ -284,7 +284,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         // Cập nhật số lượng trên Firebase
         cartRef.child("quantity").setValue(item.getQuantity()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(context, "Quantity updated in Firebase", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Quantity updated in Firebase", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(context, "Failed to update quantity in Firebase", Toast.LENGTH_SHORT).show();
             }
@@ -303,7 +303,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         // Xóa sản phẩm khỏi Firebase
         cartRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(context, "Product removed from Firebase", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Product removed from Firebase", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(context, "Failed to remove product from Firebase", Toast.LENGTH_SHORT).show();
             }
