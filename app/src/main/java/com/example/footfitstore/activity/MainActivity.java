@@ -16,6 +16,7 @@ import com.example.footfitstore.R;
 import com.example.footfitstore.fragment.CartFragment;
 import com.example.footfitstore.fragment.ExploreFragment;
 import com.example.footfitstore.fragment.FavouriteFragment;
+import com.example.footfitstore.fragment.NotificationsFragment;
 import com.example.footfitstore.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_cart) {
                     setFragment(new CartFragment());
                     return true;
-//                } else if (itemId == R.id.nav_notifications) {
-//                    setFragment(new NotificationsFragment());
-//                    return true;
+                } else if (itemId == R.id.nav_notifications) {
+                      setFragment(new NotificationsFragment());
+                      return true;
                 } else if (itemId == R.id.nav_profile) {
                     setFragment(new ProfileFragment());
                     return true;
