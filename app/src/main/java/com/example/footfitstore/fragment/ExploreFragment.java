@@ -137,6 +137,16 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                         getActivity().finish();
                     }
                 }
+                else if (item.getItemId() == R.id.navi_notification)
+                {
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.main_frame, new NotificationsFragment())
+                            .addToBackStack(null)
+                            .commit();
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_notifications);
+                    }
+                }
                 drawerLayout.closeDrawer(GravityCompat.START);
                 drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
                     @Override

@@ -14,6 +14,9 @@
         <item android:id="@+id/navi_favourite"
             android:title="Favourite"
             android:icon="@drawable/ic_favourite"/>
+        <item android:id="@+id/navi_notification"
+            android:title="Notification"
+            android:icon="@drawable/ic_notifications"/>
         <item android:id="@+id/navi_order"
             android:title="My Order"
             android:icon="@drawable/ic_order"/>

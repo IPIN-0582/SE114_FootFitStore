@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.activity.ProductDetailActivity;
 import com.example.footfitstore.adapter.NotificationAdapter;
 import com.example.footfitstore.model.Notification;
@@ -33,12 +36,23 @@ public class NotificationsFragment extends Fragment {
     private RecyclerView recyclerView;
     private NotificationAdapter adapter;
     private List<Notification> notificationList;
+    ImageButton buttonBack;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("NotificationsFragment", "Clearing notification list");
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         recyclerView = view.findViewById(R.id.recycler_notification);
+        buttonBack = view.findViewById(R.id.btn_Back);
+        buttonBack.setOnClickListener(v->{
+            ExploreFragment exploreFragment = new  ExploreFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame, exploreFragment)
+                    .addToBackStack(null)
+                    .commit();
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);
+            }
+        });
         notificationList = new ArrayList<>();
         adapter = new NotificationAdapter(getContext(), notificationList, new NotificationAdapter.OnNotificationClickListener() {
             @Override
@@ -49,6 +63,8 @@ public class NotificationsFragment extends Fragment {
                         .child(notificationList.get(position).getProductId())
                         .child(notificationList.get(position).getEndDate());
                 userReference.setValue("READ");
+                notificationList.get(position).setRead(true);
+                adapter.notifyDataSetChanged();
                 Intent intent = new Intent(getContext(), ProductDetailActivity.class);
                 intent.putExtra("productId", notificationList.get(position).getProductId()); // Truyền productId vào Intent
                 getContext().startActivity(intent);
@@ -58,15 +74,6 @@ public class NotificationsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("NotificationsFragment", "Clearing notification list");
-        notificationList.clear(); // Clear the list here
-        adapter.notifyDataSetChanged();
-        getNotifications(notificationList,adapter);
     }
 
     private void getNotifications(List<Notification> notificationList, NotificationAdapter adapter)
