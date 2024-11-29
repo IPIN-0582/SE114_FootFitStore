@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@drawable/notification_item_shape_unread"
-    android:layout_height="100dp">
+    android:layout_height="100dp"
+    android:layout_marginBottom="20dp">
 
     <TextView
         android:id="@+id/edtDescription"

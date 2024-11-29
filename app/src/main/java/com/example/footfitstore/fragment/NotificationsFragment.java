@@ -1,6 +1,7 @@
 package com.example.footfitstore.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -90,17 +98,30 @@ public class NotificationsFragment extends Fragment {
                         String description = dataSnapshot.child("promotion").child("description").getValue(String.class);
                         String imgUrl = dataSnapshot.child("picUrl").child("0").getValue(String.class);
                         String endDate = dataSnapshot.child("promotion").child("endDate").getValue(String.class);
-                        checkReadStatus(productId, endDate, isRead -> {
-                            Notification newNoti = new Notification();
-                            newNoti.setDescription(description);
-                            newNoti.setProductId(productId);
-                            newNoti.setImgUrl(imgUrl);
-                            newNoti.setEndDate(endDate);
-                            newNoti.setRead(isRead);
-
-                            notificationList.add(newNoti);
-                            adapter.notifyDataSetChanged();
-                        });
+                        String startDate = dataSnapshot.child("promotion").child("startDate").getValue(String.class);
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            Date parsedStartDate = sdf.parse(startDate);
+                            Date parsedEndDate = sdf.parse(endDate);
+                            Date today = new Date();
+                            today = resetTime(today);
+                            if (parsedStartDate != null && parsedEndDate != null && (parsedStartDate.before(today) || parsedEndDate.equals(today))
+                                    && (parsedEndDate.after(today) || parsedEndDate.equals(today))) {
+                                checkReadStatus(productId, endDate, isRead -> {
+                                    Notification newNoti = new Notification();
+                                    newNoti.setDescription(description);
+                                    newNoti.setProductId(productId);
+                                    newNoti.setImgUrl(imgUrl);
+                                    newNoti.setEndDate(endDate);
+                                    newNoti.setRead(isRead);
+                                    notificationList.add(newNoti);
+                                    adapter.notifyDataSetChanged();
+                                });
+                            }
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }
@@ -147,5 +168,14 @@ public class NotificationsFragment extends Fragment {
     }
     public interface Callback<T> {
         void onResult(T result);
+    }
+    private static Date resetTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }
