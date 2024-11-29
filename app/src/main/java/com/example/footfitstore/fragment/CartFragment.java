@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -234,11 +235,20 @@ public class CartFragment extends Fragment {
             Date startDate = sdf.parse(promotion.getStartDate());
             Date endDate = sdf.parse(promotion.getEndDate());
             Date today = new Date();
-
-            return today.after(startDate) && today.before(endDate);
+            today = resetTime(today);
+            return (today.after(startDate)||today.equals(startDate)) && (today.before(endDate) || today.equals(endDate));
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
+    }
+    private static Date resetTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }
