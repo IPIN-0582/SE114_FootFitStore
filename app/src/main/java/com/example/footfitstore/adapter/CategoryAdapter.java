@@ -1,7 +1,6 @@
 package com.example.footfitstore.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +72,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             super(itemView);
             categoryTextView = itemView.findViewById(R.id.categoryTextView);
         }
+    }
+    public void setDefaultSelectedPosition()
+    {
+        selectedPosition = RecyclerView.NO_POSITION;
     }
 }
 
