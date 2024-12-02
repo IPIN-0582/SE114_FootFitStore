@@ -40,21 +40,25 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Context context;
     private OnQuantityChangeListener onQuantityChangeListener;
     private OnCheckedChangeListener onCheckedChangeListener;
-    //private boolean checkActivity;
     public interface OnCheckedChangeListener {
         void onCheckedChanged(int position, boolean isChecked);
     }
     public interface OnQuantityChangeListener {
         void onQuantityChanged(double Price, int totalQuantity);
     }
-    public CartAdapter(List<Cart> cartItems,Context context)
-    {
-        this.selectedList=new ArrayList<>(Collections.nCopies(cartItems.size(),false));
-        this.cartItems=cartItems;
-        this.context=context;
+
+    public void setSelectedList(List<Boolean> selectedList) {
+        this.selectedList = selectedList;
     }
+
+    /*public CartAdapter(List<Cart> cartItems,Context context)
+        {
+            this.selectedList=new ArrayList<>(Collections.nCopies(cartItems.size(),false));
+            this.cartItems=cartItems;
+            this.context=context;
+        }*/
     public CartAdapter(List<Cart> cartItems, Context context, OnCheckedChangeListener onCheckedChangeListener, OnQuantityChangeListener onQuantityChangeListener) {
-        this.selectedList=new ArrayList<>(Collections.nCopies(100,false));
+        this.selectedList = new ArrayList<>();
         this.cartItems = cartItems;
         this.context = context;
         this.onCheckedChangeListener = onCheckedChangeListener;
@@ -119,13 +123,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.cbSelected.setOnCheckedChangeListener(null);
         holder.cbSelected.setChecked(selectedList.get(position));
         int positionNew = position;
-        /*if (checkActivity)
-        {
-            holder.cbSelected.setVisibility(View.GONE);
-            holder.btnDecrease.setVisibility(View.GONE);
-            holder.btnIncrease.setVisibility(View.GONE);
-            holder.btnDelete.setVisibility(View.GONE);
-        }*/
         holder.cbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

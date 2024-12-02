@@ -66,7 +66,7 @@ public class CartFragment extends Fragment {
     private DatabaseReference userCartRef;
     private List<Cart> cartList = new ArrayList<>();
     private double totalPrice = 0;
-    //private List<Boolean> selectedList=new ArrayList<>(Collections.nCopies(1000,false));
+    private Boolean isInit=false;
 
     @Nullable
     @Override
@@ -215,6 +215,12 @@ public class CartFragment extends Fragment {
                     Cart cart = cartSnapshot.getValue(Cart.class);
                     cartList.add(cart);
 
+                }
+                if (!isInit)
+                {
+                    List<Boolean> myList = new ArrayList<>(Collections.nCopies(cartList.size(),false));
+                    cartAdapter.setSelectedList(myList);
+                    isInit=true;
                 }
                 // Update UI
                 cartAdapter.notifyDataSetChanged();
