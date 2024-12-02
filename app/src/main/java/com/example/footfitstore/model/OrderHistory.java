@@ -4,7 +4,7 @@ import java.util.List;
 
 public class OrderHistory {
     String orderTime;
-    List<Cart> cartList;
+    List<CartRating> cartList;
     String orderStatus;
 
     public String getOrderTime() {
@@ -15,11 +15,11 @@ public class OrderHistory {
         this.orderTime = orderTime;
     }
 
-    public List<Cart> getCartList() {
+    public List<CartRating> getCartList() {
         return cartList;
     }
 
-    public void setCartList(List<Cart> cartList) {
+    public void setCartList(List<CartRating> cartList) {
         this.cartList = cartList;
     }
 

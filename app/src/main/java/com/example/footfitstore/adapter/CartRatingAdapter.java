@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,10 +33,13 @@ import java.util.Locale;
 public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.CartRatingViewHolder> {
     private Context context;
     private List<CartRating> cartRatings;
-
-    public CartRatingAdapter(Context context, List<CartRating> cartRatings) {
+    private boolean displayRatingBar;
+    private String orderDate;
+    public CartRatingAdapter(Context context, List<CartRating> cartRatings, boolean displayRatingBar, String OrderDate) {
         this.context = context;
         this.cartRatings = cartRatings;
+        this.displayRatingBar = displayRatingBar;
+        this.orderDate = OrderDate;
     }
 
     @NonNull
@@ -47,6 +51,10 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
 
     @Override
     public void onBindViewHolder(@NonNull CartRatingViewHolder holder, int position) {
+        if (!displayRatingBar)
+        {
+            holder.ratingBar.setVisibility(View.GONE);
+        }
         CartRating cartRating = cartRatings.get(position);
         holder.tvProductName.setText(cartRating.getProductName());
         holder.tvProductSize.setText(cartRating.getSize());
@@ -60,7 +68,7 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     Promotion promotion = dataSnapshot.getValue(Promotion.class);
-                    if (promotion != null && isPromotionActive(promotion)) {
+                    if (promotion != null && isPromotionActive(promotion,orderDate)) {
                         // Áp dụng giá khuyến mãi
                         double discount = promotion.getDiscount();
                         double discountedPrice = cartRating.getPrice() * (1 - discount / 100);
@@ -144,14 +152,15 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
             }
         });
     }
-    private boolean isPromotionActive(Promotion promotion) {
+    private boolean isPromotionActive(Promotion promotion, String orderDate) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date startDate = sdf.parse(promotion.getStartDate());
             Date endDate = sdf.parse(promotion.getEndDate());
-            Date today = new Date();
-            today = resetTime(today);
-            return (today.after(startDate)||today.equals(startDate)) && (today.before(endDate) || today.equals(endDate));
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault());
+            Date buyDate = inputFormat.parse(orderDate);
+            buyDate = resetTime(buyDate);
+            return (buyDate.after(startDate)||buyDate.equals(startDate)) && (buyDate.before(endDate) || buyDate.equals(endDate));
         } catch (ParseException e) {
             e.printStackTrace();
             return false;

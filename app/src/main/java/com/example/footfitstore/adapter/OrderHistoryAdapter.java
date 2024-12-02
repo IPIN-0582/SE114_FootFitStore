@@ -2,6 +2,7 @@ package com.example.footfitstore.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +46,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull PaymentViewHolder holder, int position) {
-        List<Cart> singleCartList = orderHistoryList.get(position).getCartList();
+        List<CartRating> singleCartList = orderHistoryList.get(position).getCartList();
         holder.txtDate.setText("Order Time:"+orderHistoryList.get(position).getOrderTime());
         holder.txtStatus.setText("Status:" + orderHistoryList.get(position).getOrderStatus());
-        CartAdapter cartAdapter=new CartAdapter(singleCartList,context,true);
+        CartRatingAdapter cartAdapter=new CartRatingAdapter(context, singleCartList,false,orderHistoryList.get(position).getOrderTime());
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.recyclerView.setAdapter(cartAdapter);
         if (!orderHistoryList.get(position).getOrderStatus().equals("ARRIVED"))
@@ -61,13 +62,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             public void onClick(View v) {
                 Dialog dialog = new Dialog(v.getContext());
                 dialog.setContentView(R.layout.dialog_review);
+
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                }
+
                 Button button = dialog.findViewById(R.id.btnSubmitRating);
                 EditText editText=dialog.findViewById(R.id.edtFeedback);
                 RecyclerView recyclerView = dialog.findViewById(R.id.recyclerRating);
                 recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 List<CartRating> newRatingList = new ArrayList<>();
-                for (Cart cart:singleCartList)
+                for (CartRating cart:singleCartList)
                 {
                     CartRating cartRating=new CartRating();
                     cartRating.setProductName(cart.getProductName());
@@ -77,7 +83,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                     cartRating.setSize(cart.getSize());
                     newRatingList.add(cartRating);
                 }
-                CartRatingAdapter cartRatingAdapter=new CartRatingAdapter(v.getContext(), newRatingList);
+                CartRatingAdapter cartRatingAdapter=new CartRatingAdapter(v.getContext(), newRatingList,true,orderHistoryList.get(newPos).getOrderTime());
                 recyclerView.setAdapter(cartRatingAdapter);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override

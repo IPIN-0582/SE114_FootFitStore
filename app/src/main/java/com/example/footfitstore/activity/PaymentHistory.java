@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
 import com.example.footfitstore.adapter.OrderHistoryAdapter;
 import com.example.footfitstore.model.Cart;
+import com.example.footfitstore.model.CartRating;
 import com.example.footfitstore.model.OrderHistory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,10 +61,16 @@ public class PaymentHistory extends AppCompatActivity {
                     OrderHistory orderHistory = new OrderHistory();
                     orderHistory.setOrderTime(dataSnapshot.child("orderTime").getValue(String.class));
                     orderHistory.setOrderStatus(dataSnapshot.child("orderStatus").getValue(String.class));
-                    List<Cart> cartList = new ArrayList<>();
+                    List<CartRating> cartList = new ArrayList<>();
                     for (DataSnapshot cartSnapshot : dataSnapshot.child("carList").getChildren()) {
                         Cart cart = cartSnapshot.getValue(Cart.class);
-                        cartList.add(cart);
+                        CartRating temporary = new CartRating();
+                        temporary.setPrice(cart.getPrice());
+                        temporary.setProductId(cart.getProductId());
+                        temporary.setSize(cart.getSize());
+                        temporary.setProductName(cart.getProductName());
+                        temporary.setQuantity(cart.getQuantity());
+                        cartList.add(temporary);
                     }
                     orderHistory.setCartList(cartList);
                     paymentHistoryList.add(orderHistory);
