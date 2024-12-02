@@ -16,6 +16,9 @@
         android:theme="@style/Theme.FootFitStore"
         tools:targetApi="31">
         <activity
+            android:name=".activity.MainActivityAdmin"
+            android:exported="false" />
+        <activity
             android:name=".activity.PaymentHistory"
             android:exported="false" />
         <activity
