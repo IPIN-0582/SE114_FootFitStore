@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -39,19 +40,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Context context;
     private OnQuantityChangeListener onQuantityChangeListener;
     private OnCheckedChangeListener onCheckedChangeListener;
-    private boolean checkActivity;
+    //private boolean checkActivity;
     public interface OnCheckedChangeListener {
         void onCheckedChanged(int position, boolean isChecked);
     }
     public interface OnQuantityChangeListener {
         void onQuantityChanged(double Price, int totalQuantity);
     }
-    public CartAdapter(List<Cart> cartItems,Context context, boolean checkActivity)
+    public CartAdapter(List<Cart> cartItems,Context context)
     {
         this.selectedList=new ArrayList<>(Collections.nCopies(cartItems.size(),false));
         this.cartItems=cartItems;
         this.context=context;
-        this.checkActivity=checkActivity;
     }
     public CartAdapter(List<Cart> cartItems, Context context, OnCheckedChangeListener onCheckedChangeListener, OnQuantityChangeListener onQuantityChangeListener) {
         this.selectedList=new ArrayList<>(Collections.nCopies(100,false));
@@ -59,7 +59,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         this.context = context;
         this.onCheckedChangeListener = onCheckedChangeListener;
         this.onQuantityChangeListener = onQuantityChangeListener;
-        this.checkActivity=false;
     }
 
     @NonNull
@@ -120,13 +119,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.cbSelected.setOnCheckedChangeListener(null);
         holder.cbSelected.setChecked(selectedList.get(position));
         int positionNew = position;
-        if (checkActivity)
+        /*if (checkActivity)
         {
             holder.cbSelected.setVisibility(View.GONE);
             holder.btnDecrease.setVisibility(View.GONE);
             holder.btnIncrease.setVisibility(View.GONE);
             holder.btnDelete.setVisibility(View.GONE);
-        }
+        }*/
         holder.cbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -321,12 +320,21 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             Date startDate = sdf.parse(promotion.getStartDate());
             Date endDate = sdf.parse(promotion.getEndDate());
             Date today = new Date();
-
-            return today.after(startDate) && today.before(endDate);
+            today = resetTime(today);
+            return (today.after(startDate) || today.equals(startDate)) && (today.before(endDate) || today.equals(endDate));
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
+    }
+    private static Date resetTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }
 

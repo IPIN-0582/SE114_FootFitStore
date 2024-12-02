@@ -22,6 +22,7 @@
 
     <TextView
         android:id="@+id/textView3"
+        android:layout_marginStart="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -30,7 +31,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:layout_marginTop="5dp"
+        android:layout_margin="5dp"
         android:id="@+id/edtFeedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

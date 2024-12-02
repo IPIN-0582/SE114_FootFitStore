@@ -35,33 +35,48 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.001" />
 
-    <TextView
-        android:id="@+id/txt_price"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$64.95"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.027"
-        app:layout_constraintStart_toEndOf="@+id/imgView_image"
-        app:layout_constraintTop_toBottomOf="@+id/txt_name"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/item_original_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$64.95"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            android:paddingEnd="5dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$64.95"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
     <TextView
         android:id="@+id/txt_quantity"
         android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:text="1"
-        android:textSize="16sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.027"
         app:layout_constraintStart_toEndOf="@+id/imgView_image"
-        app:layout_constraintTop_toBottomOf="@+id/txt_price"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.837" />
 
     <TextView
         android:id="@+id/txt_size"
@@ -71,24 +86,27 @@
         android:paddingTop="20dp"
         android:text="38"
         android:textColor="@android:color/black"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toEndOf="@+id/txt_price"
+        app:layout_constraintHorizontal_bias="0.459"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintVertical_bias="0.8" />
 
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="235dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
         android:numStars="5"
         android:scaleX="0.5"
         android:scaleY="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.68"
-        app:layout_constraintStart_toEndOf="@+id/txt_quantity"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

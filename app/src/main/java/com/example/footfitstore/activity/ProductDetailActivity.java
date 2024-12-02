@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -365,12 +366,21 @@ public class ProductDetailActivity extends AppCompatActivity {
             Date start = sdf.parse(startDate);
             Date end = sdf.parse(endDate);
             Date today = new Date();
-
-            return today.after(start) && today.before(end);
+            today = resetTime(today);
+            return (today.after(start) || today.equals(start)) && (today.before(end) || today.equals(end));
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
         }
+    }
+    private static Date resetTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }
 
