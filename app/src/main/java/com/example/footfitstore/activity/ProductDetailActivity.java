@@ -249,10 +249,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         isFavorite = false;
                         updateFavoriteIcon();
-                        Toast.makeText(ProductDetailActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetailActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(ProductDetailActivity.this, "Failed to remove from favourites", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetailActivity.this, "Failed to remove from favourites", Toast.LENGTH_SHORT).show();
                     });
         } else {
             // Nếu sản phẩm chưa được yêu thích, thêm vào danh sách yêu thích
@@ -263,10 +263,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         isFavorite = true;
                         updateFavoriteIcon();
-                        Toast.makeText(ProductDetailActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetailActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(ProductDetailActivity.this, "Failed to add to favourites", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProductDetailActivity.this, "Failed to add to favourites", Toast.LENGTH_SHORT).show();
                     });
         }
     }

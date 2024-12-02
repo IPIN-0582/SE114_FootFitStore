@@ -185,13 +185,13 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
                     .addOnSuccessListener(aVoid -> {
                         shoe.setFavourite(false);
                         holder.heartIcon.setImageResource(R.drawable.ic_heart);
-                        Toast.makeText(context, "Removed from favourites.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Removed from favourites.", Toast.LENGTH_SHORT).show();
 
                         // Đồng bộ trạng thái yêu thích giữa cả hai danh sách
                         syncFavouriteStatus(shoe);
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed to remove from favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Failed to remove from favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
             // Nếu sản phẩm chưa được yêu thích, thực hiện thêm vào yêu thích
@@ -203,13 +203,13 @@ public class ShoeAdapter extends RecyclerView.Adapter<ShoeAdapter.ItemViewHolder
                     .addOnSuccessListener(aVoid -> {
                         shoe.setFavourite(true);
                         holder.heartIcon.setImageResource(R.drawable.ic_heart_filled);
-                        Toast.makeText(context, "Added to favourites.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Added to favourites.", Toast.LENGTH_SHORT).show();
 
                         // Đồng bộ trạng thái yêu thích giữa cả hai danh sách
                         syncFavouriteStatus(shoe);
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed to add to favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Failed to add to favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         }
     }
