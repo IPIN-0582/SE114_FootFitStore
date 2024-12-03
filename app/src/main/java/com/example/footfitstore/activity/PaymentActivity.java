@@ -46,6 +46,7 @@ import vn.zalopay.sdk.ZaloPaySDK;
 import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class PaymentActivity extends AppCompatActivity {
+    private String paymentMethod;
     int selecteditem=-1;
     double finalprice;
     private FirebaseAuth mAuth;
@@ -146,10 +147,12 @@ public class PaymentActivity extends AppCompatActivity {
 
                 if (selecteditem == 1)
                 {
+                    paymentMethod = "COD";
                     paymentSuccess();
                 }
                 else if (selecteditem == 0)
                 {
+                    paymentMethod = "ZaloPay Sandbox";
                     CreateOrder orderApi = new CreateOrder();
                     String totalString = String.format("%.0f", finalprice);
                     try {
@@ -245,6 +248,8 @@ public class PaymentActivity extends AppCompatActivity {
                     formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                     formattedDateTime= currentDateTime.format(formatter);
                 }
+                orderRef.child(currentOrder).child("paymentMethod").setValue(paymentMethod);
+                orderRef.child(currentOrder).child("transaction").setValue(finalprice);
                 orderRef.child(currentOrder).child("orderTime").setValue(formattedDateTime);
                 for (int i=0;i<cartList.size();i++)
                 {
