@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                                 {
                                     if (Objects.equals(snapshot.getValue(String.class), "admin"))
                                     {
-                                        startActivity(new Intent(LoginActivity.this, MainActivityAdmin.class));
+                                        startActivity(new Intent(LoginActivity.this, MainActivity_Admin.class));
                                         finish();
                                     }
                                     else
@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     if (Objects.equals(snapshot.getValue(String.class), "admin"))
                     {
-                        startActivity(new Intent(LoginActivity.this, MainActivityAdmin.class));
+                        startActivity(new Intent(LoginActivity.this, MainActivity_Admin.class));
                         finish();
                     }
                     else

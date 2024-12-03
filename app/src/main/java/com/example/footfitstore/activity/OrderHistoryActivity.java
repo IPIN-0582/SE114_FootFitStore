@@ -1,7 +1,6 @@
 package com.example.footfitstore.activity;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -29,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentHistory extends AppCompatActivity {
+public class OrderHistoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     OrderHistoryAdapter orderHistoryAdapter;
     ImageButton imgBack;

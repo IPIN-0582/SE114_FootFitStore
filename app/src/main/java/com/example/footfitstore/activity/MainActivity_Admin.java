@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.footfitstore.R;
 
-public class MainActivityAdmin extends AppCompatActivity {
+public class MainActivity_Admin extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

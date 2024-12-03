@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.LoginActivity;
 import com.example.footfitstore.activity.MainActivity;
-import com.example.footfitstore.activity.PaymentHistory;
+import com.example.footfitstore.activity.OrderHistoryActivity;
 import com.example.footfitstore.activity.SearchActivity;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.CategoryAdapter;
@@ -108,7 +108,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 else if (item.getItemId() == R.id.navi_order)
                 {
-                    Intent intent = new Intent(getActivity(), PaymentHistory.class);
+                    Intent intent = new Intent(getActivity(), OrderHistoryActivity.class);
                     startActivity(intent);
                 }
                 else if (item.getItemId() == R.id.navi_profile)
