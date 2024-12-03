@@ -16,10 +16,10 @@
         android:theme="@style/Theme.FootFitStore"
         tools:targetApi="31">
         <activity
-            android:name=".activity.MainActivityAdmin"
+            android:name=".activity.MainActivity_Admin"
             android:exported="false" />
         <activity
-            android:name=".activity.PaymentHistory"
+            android:name=".activity.OrderHistoryActivity"
             android:exported="false" />
         <activity
             android:name=".activity.PaymentActivity"
