@@ -122,15 +122,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <ImageButton
-                android:id="@+id/btn_edit_email"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/edit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
         <LinearLayout
@@ -185,15 +176,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <ImageButton
-                android:id="@+id/btn_edit_phone"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/edit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
         <TextView

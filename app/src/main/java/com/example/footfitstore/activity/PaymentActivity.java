@@ -58,7 +58,7 @@ public class PaymentActivity extends AppCompatActivity {
     List<PaymentMethod> methodList=new ArrayList<>();
     PaymentAdapter paymentAdapter;
     TextView txtEmail,txtPhone,txtAddr,txtProduct,txtDelivery,txtTotal;
-    ImageButton btnEditEmail,btnEditPhone,btnBack;
+    ImageButton btnBack;
     Button btnCheckout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,30 +81,10 @@ public class PaymentActivity extends AppCompatActivity {
         txtProduct=findViewById(R.id.txt_productPrice);
         txtDelivery=findViewById(R.id.txt_deliveryFee);
         txtTotal=findViewById(R.id.txt_totalPrice);
-        btnEditEmail=findViewById(R.id.btn_edit_email);
-        btnEditPhone=findViewById(R.id.btn_edit_phone);
         btnCheckout=findViewById(R.id.button2);
         btnBack=findViewById(R.id.btnBack);
         spinner=findViewById(R.id.spinner);
 
-        btnEditEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtEmail.setFocusable(true);
-                txtEmail.setEnabled(true);
-                txtEmail.setClickable(true);
-                txtEmail.setFocusableInTouchMode(true);
-            }
-        });
-        btnEditPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtPhone.setFocusable(true);
-                txtPhone.setEnabled(true);
-                txtPhone.setClickable(true);
-                txtPhone.setFocusableInTouchMode(true);
-            }
-        });
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
