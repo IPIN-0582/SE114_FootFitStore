@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
-import com.example.footfitstore.model.Cart;
 import com.example.footfitstore.model.CartRating;
 import com.example.footfitstore.model.OrderHistory;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,21 +39,21 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     @NonNull
     @Override
     public PaymentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.payment_history,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_order,parent,false);
         return new PaymentViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PaymentViewHolder holder, int position) {
         List<CartRating> singleCartList = orderHistoryList.get(position).getCartList();
-        holder.txtDate.setText("Order Time:"+orderHistoryList.get(position).getOrderTime());
-        holder.txtStatus.setText("Status:" + orderHistoryList.get(position).getOrderStatus());
+        holder.txtDate.setText(orderHistoryList.get(position).getOrderTime());
+        holder.txtStatus.setText(orderHistoryList.get(position).getOrderStatus());
         CartRatingAdapter cartAdapter=new CartRatingAdapter(context, singleCartList,false,orderHistoryList.get(position).getOrderTime());
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.recyclerView.setAdapter(cartAdapter);
         if (!orderHistoryList.get(position).getOrderStatus().equals("ARRIVED"))
         {
-            holder.btnReviewOrder.setVisibility(View.GONE);
+            holder.btnReviewOrder.setVisibility(View.INVISIBLE);
         }
         int newPos=position;
         holder.btnReviewOrder.setOnClickListener(new View.OnClickListener() {
