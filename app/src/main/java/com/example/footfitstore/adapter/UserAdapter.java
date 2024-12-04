@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.model.Shoe;
 import com.example.footfitstore.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -23,10 +24,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
     Context context;
     List<User> userList;
-
-    public UserAdapter(Context context, List<User> userList) {
+    private NavigateProfileManagement listener;
+    public interface NavigateProfileManagement{
+        void NavigateToAdmin(User user);
+    }
+    public UserAdapter(Context context, List<User> userList, NavigateProfileManagement listener) {
         this.context = context;
         this.userList = userList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -59,12 +64,49 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
         {
             phoneNumber = user.getPhone();
         }
+        if (user.getStatus() != null)
+        {
+            holder.txtStatus.setText(user.getStatus());
+        }
         holder.txtName.setText(firstName+" "+lastName);
         holder.txtMail.setText(mail);
         holder.txtPhone.setText(phoneNumber);
         if (user.getAvatarUrl() != null)
         {
-            Picasso.get().load(user.getAvatarUrl()).placeholder(R.drawable.onboard1).into(holder.imgAvatar);
+            Picasso.get().load(user.getAvatarUrl()).into(holder.imgAvatar);
+        }
+        else
+        {
+            if (user.getGender() == 0)
+            {
+                holder.imgAvatar.setImageResource(R.drawable.boy);
+            }
+            else
+            {
+                holder.imgAvatar.setImageResource(R.drawable.girl);
+            }
+        }
+        holder.txtRole.setText(user.getRole());
+        if (user.getRole().equals("admin"))
+        {
+            holder.imgRole.setImageResource(R.drawable.admin);
+        }
+        else
+        {
+            holder.imgRole.setImageResource(R.drawable.user);
+        }
+        holder.btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener !=null)
+                {
+                    listener.NavigateToAdmin(user);
+                }
+            }
+        });
+        if (!user.getStatus().equals("active"))
+        {
+            holder.btnSubmit.setVisibility(View.GONE);
         }
     }
 
@@ -75,8 +117,9 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         CircleImageView imgAvatar;
-        TextView txtName, txtMail, txtPhone;
+        TextView txtName, txtMail, txtPhone,txtRole,txtStatus;
         Button btnSubmit;
+        ImageView imgRole;
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             imgAvatar = itemView.findViewById(R.id.avatar);
@@ -84,6 +127,9 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
             txtMail = itemView.findViewById(R.id.email);
             txtPhone = itemView.findViewById(R.id.phone);
             btnSubmit = itemView.findViewById(R.id.btnSubmit);
+            txtRole = itemView.findViewById(R.id.txtRole);
+            imgRole = itemView.findViewById(R.id.role);
+            txtStatus = itemView.findViewById(R.id.txtStatus);
         }
     }
 }

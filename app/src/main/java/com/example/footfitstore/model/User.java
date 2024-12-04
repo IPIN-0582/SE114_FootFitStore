@@ -3,7 +3,7 @@ package com.example.footfitstore.model;
 import java.util.List;
 
 public class User {
-
+    private String userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -12,14 +12,15 @@ public class User {
     private int gender;
     private String avatarUrl;
     private List<Cart> cartList;
-
-
+    private String role;
+    private String status;
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public User( String email) {
         this.email = email;
+        this.status = "active";
     }
 
     public String getFirstname() {
@@ -84,5 +85,29 @@ public class User {
 
     public void setCartList(List<Cart> cartList) {
         this.cartList = cartList;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

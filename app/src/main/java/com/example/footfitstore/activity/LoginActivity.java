@@ -114,7 +114,13 @@ public class LoginActivity extends AppCompatActivity {
                                 {
                                     addUser(user,uid,databaseReference);
                                 }
-                                loginSuccess(uid);
+                                if (Objects.equals(snapshot.child("status").getValue(String.class), "active"))
+                                {
+                                    loginSuccess(uid);
+                                }
+                                else {
+                                    Toast.makeText(LoginActivity.this, "Your account has been banned",Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override
@@ -142,21 +148,18 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String uid = user != null ? user.getUid() : null;
-                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("role");
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
                         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists())
                                 {
-                                    if (Objects.equals(snapshot.getValue(String.class), "admin"))
+                                    if (Objects.equals(snapshot.child("status").getValue(String.class), "active"))
                                     {
-                                        startActivity(new Intent(LoginActivity.this, MainActivity_Admin.class));
-                                        finish();
+                                        loginSuccess(uid);
                                     }
-                                    else
-                                    {
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                        finish();
+                                    else {
+                                        Toast.makeText(LoginActivity.this, "Your account has been banned",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
