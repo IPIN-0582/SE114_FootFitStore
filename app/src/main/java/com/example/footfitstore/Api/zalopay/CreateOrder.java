@@ -1,4 +1,4 @@
-package com.example.footfitstore.Api;
+package com.example.footfitstore.Api.zalopay;
 
 
 
@@ -66,7 +66,7 @@ public class CreateOrder {
                 .add("mac", input.Mac)
                 .build();
 
-        JSONObject data = com.example.footfitstore.Api.HttpProvider.sendPost(AppInfo.URL_CREATE_ORDER, formBody);
+        JSONObject data = HttpProvider.sendPost(AppInfo.URL_CREATE_ORDER, formBody);
         return data;
     }
 }
