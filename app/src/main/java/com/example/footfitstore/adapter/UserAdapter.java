@@ -120,6 +120,7 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
         TextView txtName, txtMail, txtPhone,txtRole,txtStatus;
         Button btnSubmit;
         ImageView imgRole;
+        View line;
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             imgAvatar = itemView.findViewById(R.id.avatar);
@@ -130,6 +131,7 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
             txtRole = itemView.findViewById(R.id.txtRole);
             imgRole = itemView.findViewById(R.id.role);
             txtStatus = itemView.findViewById(R.id.txtStatus);
+            line = itemView.findViewById(R.id.view);
         }
     }
 }
