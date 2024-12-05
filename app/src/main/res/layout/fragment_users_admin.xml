@@ -9,9 +9,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_users"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
         tools:listitem="@layout/item_user"/>
 </ScrollView>
