@@ -361,7 +361,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         int orderId = OrderIdGenerator.generateOrderId();
 
-        CreateOrderLink data = new CreateOrderLink(orderId, 2000, "Movie ticket",
+        CreateOrderLink data = new CreateOrderLink(orderId, 2000, "Shoe Order Payment",
                 movieDescription, CANCEL_URL, RETURN_URL, expiredAt);
 
         Dotenv dotenv = Dotenv.configure().directory("/assets").filename("env").load();
