@@ -196,15 +196,18 @@ public class PaymentActivity extends AppCompatActivity {
         launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_CANCELED) return;
-
+                    if (result.getResultCode() == RESULT_CANCELED)
+                    {
+                        createDialog("cancelled");
+                        return;
+                    }
                     Intent data = result.getData();
                     if (data == null) return;
 
                     String status = data.getStringExtra("status");
                     if (status == null) return;
-                    if (status.equals("cancelled")) {
-                        createDialog("cancel");
+                    if (status.equals("cancel")) {
+                        createDialog("cancelled");
                     } else if (status.equals("success")) {
                         paymentSuccess();
                     }
