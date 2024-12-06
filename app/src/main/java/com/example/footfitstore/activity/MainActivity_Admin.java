@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.fragment.PromotionFragmentAdmin;
 import com.example.footfitstore.fragment.UsersFragmentAdmin;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +41,7 @@ public class MainActivity_Admin extends AppCompatActivity {
                     setFragment(new UsersFragmentAdmin());
                     return true;
                 } else if (itemId == R.id.nav_discount) {
-                    //setFragment(new FavouriteFragment());
+                    setFragment(new PromotionFragmentAdmin());
                     return true;
                 } else if (itemId == R.id.nav_product) {
                     //setFragment(new CartFragment());
@@ -63,6 +64,11 @@ public class MainActivity_Admin extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame, fragment);
         fragmentTransaction.commit();
     }
+
+    public void setSelectedNavItem(int itemId) {
+        bottomNavigationView.setSelectedItemId(itemId);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
