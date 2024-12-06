@@ -45,7 +45,7 @@
 
             <Button
                 android:id="@+id/btn_ReviewOrder"
-                android:background="@drawable/button_shape"
+                app:backgroundTint="@null"
                 android:layout_width="150dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
