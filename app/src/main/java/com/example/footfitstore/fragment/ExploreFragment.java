@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -171,9 +172,13 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         // Xử lý khi nhấn vào nút giỏ hàng
         btnCart.setOnClickListener(v -> openCartFragment());
         // Xử lý khi nhấn vào thanh tìm kiếm
-        searchEditText.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), SearchActivity.class);
-            startActivity(intent);
+        searchEditText.setOnTouchListener((v,motionEvent) ->{
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
         });
         txtSeeAllPopular.setOnClickListener(v->loadPopularShoe());
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
