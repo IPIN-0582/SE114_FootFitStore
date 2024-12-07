@@ -38,9 +38,9 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
         holder.txtStatus.setText(orderHistory.getOrderStatus());
         holder.txtMethod.setText(orderHistory.getPaymentMethod());
         holder.txtTransaction.setText(orderHistory.getTransaction()+" $");
-        if (orderHistory.getOrderStatus().equals("ARRIVED"))
+        if (!orderHistory.getOrderStatus().equals("SUCCESS"))
         {
-            holder.btnSubmit.setVisibility(View.INVISIBLE);
+            holder.btnSubmit.setVisibility(View.GONE);
         }
     }
 

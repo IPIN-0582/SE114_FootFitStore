@@ -1,7 +1,6 @@
 package com.example.footfitstore.fragment;
 
 import android.app.DatePickerDialog;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -36,13 +35,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Random;
 
 public class PromotionFragmentAdmin extends Fragment {
     Button btnSubmit;
@@ -158,7 +157,7 @@ public class PromotionFragmentAdmin extends Fragment {
                         return;
                     }
                 }
-                checkExistPromotion(alertDialog, startPromoDate);
+                checkExistPromotion(alertDialog, startPromoDate, endPromoDate);
             }
         });
         getMinizeShoeList();
@@ -254,39 +253,53 @@ public class PromotionFragmentAdmin extends Fragment {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
-    private void checkExistPromotion(CreateAlertDialog alertDialog, String startPromoDate)
+    private void checkExistPromotion(CreateAlertDialog alertDialog, String startPromoDate, String endPromoDate)
     {
-        String outputStartDate = "";
+        String outputStartDate = "", outputEndDate = "";
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
+        Date dateStart, dateEnd;
         try {
-            date = inputFormat.parse(startPromoDate);
+            dateStart = inputFormat.parse(startPromoDate);
+            dateEnd = inputFormat.parse(endPromoDate);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        outputStartDate = outputFormat.format(date);
+        outputStartDate = outputFormat.format(dateStart);
+        outputEndDate = outputFormat.format(dateEnd);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Shoes").child(selectedProductId);
         String finalOutputStartDate = outputStartDate;
+        String finalOutputEndDate = outputEndDate;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Date startFinal, end = null;
                 if (snapshot.child("promotion").exists())
                 {
                     String endDate = snapshot.child("promotion").child("endDate").getValue(String.class);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    Date start,end;
                     try {
-                        start = sdf.parse(finalOutputStartDate);
-                        end = sdf.parse(endDate);
+                        startFinal = sdf.parse(finalOutputStartDate);
+                        if (endDate != null)
+                        {
+                            end = sdf.parse(endDate);
+                        }
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
-                    assert start != null;
-                    if (start.before(end))
+                    if (end!=null && (Objects.requireNonNull(startFinal).before(end) || Objects.requireNonNull(startFinal).equals(end)))
                     {
                         alertDialog.createDialog("Promotion's already exists");
+                        return;
                     }
+                    else
+                    {
+                        addPromotion(finalOutputStartDate, finalOutputEndDate);
+                    }
+                }
+                else
+                {
+                    addPromotion(finalOutputStartDate, finalOutputEndDate);
                 }
             }
 
@@ -295,5 +308,20 @@ public class PromotionFragmentAdmin extends Fragment {
 
             }
         });
+    }
+    private void addPromotion(String startDate, String endDate)
+    {
+        DatabaseReference promotionRef = FirebaseDatabase.getInstance().getReference("Shoes").child(selectedProductId).child("promotion");
+        List<String> descriptionList = new ArrayList<>();
+        descriptionList.add(promotionValue+"% DISCOUNT from "+startDate+" to "+endDate+" BUY NOW!!!");
+        descriptionList.add("BIG DISCOUNT from "+ startDate + " to " +endDate + " UP TO "+promotionValue+ " %!!!");
+        descriptionList.add("ONLY from "+startDate + " to " + endDate + " with "+ promotionValue + " % !!!");
+        Random random = new Random();
+        int randomNumber = random.nextInt(3);
+        String finalDescription = descriptionList.get(randomNumber);
+        promotionRef.child("description").setValue(finalDescription);
+        promotionRef.child("discount").setValue(promotionValue);
+        promotionRef.child("startDate").setValue(startDate);
+        promotionRef.child("endDate").setValue(endDate);
     }
 }
