@@ -157,7 +157,25 @@ public class PromotionFragmentAdmin extends Fragment {
                         return;
                     }
                 }
-                checkExistPromotion(alertDialog, startPromoDate, endPromoDate);
+                checkExistPromotion(alertDialog, startPromoDate, exists -> {
+                    if (!exists) {
+                        String outputStartDate = "", outputEndDate = "";
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date dateStart, dateEnd;
+                        try {
+                            dateStart = inputFormat.parse(startPromoDate);
+                            dateEnd = inputFormat.parse(endPromoDate);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        outputStartDate = outputFormat.format(dateStart);
+                        outputEndDate = outputFormat.format(dateEnd);
+                        String finalOutputStartDate = outputStartDate;
+                        String finalOutputEndDate = outputEndDate;
+                        addPromotion(finalOutputStartDate, finalOutputEndDate);
+                    }
+                });
             }
         });
         getMinizeShoeList();
@@ -253,27 +271,25 @@ public class PromotionFragmentAdmin extends Fragment {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
-    private void checkExistPromotion(CreateAlertDialog alertDialog, String startPromoDate, String endPromoDate)
+    private void checkExistPromotion(CreateAlertDialog alertDialog, String startPromoDate, PromotionCheckCallback callback)
     {
-        String outputStartDate = "", outputEndDate = "";
+        String outputStartDate = "";
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateStart, dateEnd;
+        Date dateStart;
         try {
             dateStart = inputFormat.parse(startPromoDate);
-            dateEnd = inputFormat.parse(endPromoDate);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         outputStartDate = outputFormat.format(dateStart);
-        outputEndDate = outputFormat.format(dateEnd);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Shoes").child(selectedProductId);
         String finalOutputStartDate = outputStartDate;
-        String finalOutputEndDate = outputEndDate;
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Date startFinal, end = null;
+                boolean exists = false;
                 if (snapshot.child("promotion").exists())
                 {
                     String endDate = snapshot.child("promotion").child("endDate").getValue(String.class);
@@ -287,25 +303,17 @@ public class PromotionFragmentAdmin extends Fragment {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
-                    if (end!=null && (Objects.requireNonNull(startFinal).before(end) || Objects.requireNonNull(startFinal).equals(end)))
+                    if (end != null && (Objects.requireNonNull(startFinal).before(end) || Objects.requireNonNull(startFinal).equals(end)))
                     {
                         alertDialog.createDialog("Promotion's already exists");
-                        return;
-                    }
-                    else
-                    {
-                        addPromotion(finalOutputStartDate, finalOutputEndDate);
+                        exists = true;
                     }
                 }
-                else
-                {
-                    addPromotion(finalOutputStartDate, finalOutputEndDate);
-                }
+                callback.onResult(exists);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                callback.onResult(false);
             }
         });
     }
@@ -323,5 +331,8 @@ public class PromotionFragmentAdmin extends Fragment {
         promotionRef.child("discount").setValue(promotionValue);
         promotionRef.child("startDate").setValue(startDate);
         promotionRef.child("endDate").setValue(endDate);
+    }
+    public interface PromotionCheckCallback {
+        void onResult(boolean exists);
     }
 }
