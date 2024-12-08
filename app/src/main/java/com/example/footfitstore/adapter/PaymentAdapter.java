@@ -31,7 +31,7 @@ public class PaymentAdapter extends ArrayAdapter<PaymentMethod> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_payment_method,parent,false);
+        convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_payment_selected,parent,false);
         TextView t1=convertView.findViewById(R.id.txt_paymentName);
         ImageView i1= convertView.findViewById(R.id.img_payment);
         PaymentMethod paymentMethod = this.getItem(position);

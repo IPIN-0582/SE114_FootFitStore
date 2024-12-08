@@ -88,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             Toast.makeText(RegisterActivity.this, "Failed to save user info", Toast.LENGTH_SHORT).show();
                                         }
                                     });
+                            databaseReference.child(uid).child("role").setValue("user");
                         }
                 }
 

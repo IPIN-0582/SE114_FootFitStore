@@ -1,5 +1,8 @@
 # SE114_FootFitStore
 SE114 Final Project
+#### Hướng dẫn thêm thanh toán QRCode
+Thêm file env vào thư mục assets, sau đó copy toàn bộ nội dung của file env.template vào và liên hệ BeCaBuCode để lấy API Key
+
 #### Hướng dẫn sử dụng ZaloPay sandbox
 
 Trong file build.gradle, xóa dòng implementation fileTree(....) 

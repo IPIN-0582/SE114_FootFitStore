@@ -6,6 +6,8 @@ public class OrderHistory {
     String orderTime;
     List<CartRating> cartList;
     String orderStatus;
+    String paymentMethod;
+    Double transaction;
 
     public String getOrderTime() {
         return orderTime;
@@ -29,5 +31,21 @@ public class OrderHistory {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Double getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Double transaction) {
+        this.transaction = transaction;
     }
 }

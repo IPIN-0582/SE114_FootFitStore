@@ -2,17 +2,15 @@ package com.example.footfitstore.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,14 +28,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.LoginActivity;
 import com.example.footfitstore.activity.MainActivity;
-import com.example.footfitstore.activity.PaymentHistory;
+import com.example.footfitstore.activity.OrderHistoryActivity;
 import com.example.footfitstore.activity.SearchActivity;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.CategoryAdapter;
-import com.example.footfitstore.adapter.SearchShoeAdapter;
 import com.example.footfitstore.adapter.ShoeAdapter;
 import com.example.footfitstore.adapter.SizeAdapter;
-import com.example.footfitstore.model.OrderHistory;
 import com.example.footfitstore.model.Shoe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
@@ -52,6 +48,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheetListener {
 
+    private TextView txtSeeAllPopular;
     private RecyclerView popularShoesRecyclerView, bannerRecyclerView, allShoesRecyclerView, categoryRecyclerView;
     private ImageButton btnCart,btnMenu;
     private EditText searchEditText;
@@ -112,7 +109,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 else if (item.getItemId() == R.id.navi_order)
                 {
-                    Intent intent = new Intent(getActivity(), PaymentHistory.class);
+                    Intent intent = new Intent(getActivity(), OrderHistoryActivity.class);
                     startActivity(intent);
                 }
                 else if (item.getItemId() == R.id.navi_profile)
@@ -175,10 +172,15 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         // Xử lý khi nhấn vào nút giỏ hàng
         btnCart.setOnClickListener(v -> openCartFragment());
         // Xử lý khi nhấn vào thanh tìm kiếm
-        searchEditText.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), SearchActivity.class);
-            startActivity(intent);
+        searchEditText.setOnTouchListener((v,motionEvent) ->{
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
         });
+        txtSeeAllPopular.setOnClickListener(v->loadPopularShoe());
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -201,6 +203,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
 
     // Hàm khởi tạo các thành phần UI
     private void initializeViews(View view) {
+        txtSeeAllPopular = view.findViewById(R.id.seeAllPopular);
         btnMenu=view.findViewById(R.id.btnMenu);
         btnCart = view.findViewById(R.id.btnCart);
         popularShoesRecyclerView = view.findViewById(R.id.popularShoesRecyclerView);
@@ -497,5 +500,15 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
 
             }
         });
+    }
+    private void loadPopularShoe()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user != null ? user.getUid() : null;
+        DatabaseReference userFavouriteRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("favourite");
+        userFavouriteRef.addListenerForSingleValueEvent(getFavouriteEventListener());
+        selectedCategory="";
+        categoryAdapter.setDefaultSelectedPosition();
+        categoryAdapter.notifyDataSetChanged();
     }
 }
