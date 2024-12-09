@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragment.PromotionFragmentAdmin">
+    tools:context=".fragment.PromotionFragmentAdmin"
+    android:background="@color/whiteF7F7F9">
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
