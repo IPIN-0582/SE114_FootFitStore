@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="160dp"
+    android:layout_height="205dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/item_shoe_background">
+
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside"
+        android:layout_margin="12dp"/>
+
+    <TextView
+        android:id="@+id/itemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemImage"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="12dp"
+        android:text="Nike Air Max"
+        android:textSize="16sp"
+        android:textColor="@color/black2B2B2B"/>
+
+    <TextView
+        android:id="@+id/itemPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemTitle"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="12dp"
+        android:text="$752.00"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black2B2B2B"/>
+
+</RelativeLayout>

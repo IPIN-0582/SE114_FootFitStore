@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".fragment.ProductsFragmentAdmin"
+    android:background="@color/whiteF7F7F9">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/tvFavourite"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Products"
+                android:textColor="@color/black2B2B2B"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="Add Shoes"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="7dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/raleway_medium"
+                        android:text="Title: "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:id="@+id/edt_title"
+                        android:layout_width="150dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Title"
+                        android:padding="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/raleway_medium"
+                        android:text="Category: "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <Spinner
+                        android:id="@+id/categorySpinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/raleway_medium"
+                        android:text="Price: "
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:maxLines="1"
+                        android:id="@+id/edt_price"
+                        android:layout_width="146dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Price"
+                        android:inputType="number"
+                        android:padding="10dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="60dp"
+                    android:fontFamily="@font/raleway_medium"
+                    android:text="Description:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_product"
+                    android:layout_width="140dp"
+                    android:layout_height="100dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:contentDescription="Product's Product" />
+
+                <Button
+                    android:id="@+id/submit_add_image"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/button_shape"
+                    android:text="Add Image" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <EditText
+            android:padding="5dp"
+            android:id="@+id/edt_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/edittext_background"
+            android:fontFamily="@font/raleway_semibold"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="5dp"
+            android:lines="4"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/submit_add_shoes"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_shape"
+            android:text="Add shoes" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:text="Products List"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="10dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/item_shoe_product"/>
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

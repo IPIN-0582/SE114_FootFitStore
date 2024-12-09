@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.fragment.ProductsFragmentAdmin;
 import com.example.footfitstore.fragment.PromotionFragmentAdmin;
 import com.example.footfitstore.fragment.UsersFragmentAdmin;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -44,7 +45,7 @@ public class MainActivity_Admin extends AppCompatActivity {
                     setFragment(new PromotionFragmentAdmin());
                     return true;
                 } else if (itemId == R.id.nav_product) {
-                    //setFragment(new CartFragment());
+                    setFragment(new ProductsFragmentAdmin());
                     return true;
                 } else if (itemId == R.id.nav_category) {
                     //setFragment(new NotificationsFragment());
