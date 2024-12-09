@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -24,7 +23,7 @@ import com.example.footfitstore.Utils.CreateAlertDialog;
 import com.example.footfitstore.activity.MainActivity_Admin;
 import com.example.footfitstore.adapter.MinimizeShoeAdapter;
 import com.example.footfitstore.adapter.NotificationAdminAdapter;
-import com.example.footfitstore.model.MinimizeShoe;
+import com.example.footfitstore.model.ShoeMinimize;
 import com.example.footfitstore.model.NotificationAdmin;
 import com.google.android.material.slider.Slider;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +36,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -52,13 +52,14 @@ public class PromotionFragmentAdmin extends Fragment {
     Slider promotionPick;
     TextView promotionDisplay;
     String startPromoDate, endPromoDate;
-    List<MinimizeShoe> minimizeShoeList = new ArrayList<>();
+    List<ShoeMinimize> minimizeShoeList = new ArrayList<>();
     MinimizeShoeAdapter minimizeShoeAdapter;
     Spinner spinner;
     String selectedProductId = "";
     RecyclerView recyclerView;
     NotificationAdminAdapter notificationAdminAdapter;
     List<NotificationAdmin> notificationAdminList = new ArrayList<>();
+    Button btnDeleteNotification;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +74,10 @@ public class PromotionFragmentAdmin extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
         recyclerView = view.findViewById(R.id.promotionList);
         btnSubmit = view.findViewById(R.id.submit_button);
+        btnDeleteNotification = view.findViewById(R.id.btnDeleteNotification);
+        btnDeleteNotification.setOnClickListener(v->{
+            deleteNotification(notificationAdminList);
+        });
         CreateAlertDialog alertDialog = new CreateAlertDialog(getContext());
         btnBack.setOnClickListener(v -> {
             UsersFragmentAdmin usersFragmentAdmin = new UsersFragmentAdmin();
@@ -85,13 +90,10 @@ public class PromotionFragmentAdmin extends Fragment {
             }
         });
         notificationAdminAdapter = new NotificationAdminAdapter(getContext(), notificationAdminList);
-        minimizeShoeAdapter = new MinimizeShoeAdapter(getContext(), R.layout.item_shoe_minimize_selected, minimizeShoeList);
-        promotionPick.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                promotionValue = (int)value;
-                promotionDisplay.setText(promotionValue + "%");
-            }
+        minimizeShoeAdapter = new MinimizeShoeAdapter(requireContext(), R.layout.item_shoe_minimize_selected, minimizeShoeList);
+        promotionPick.addOnChangeListener((slider, value, fromUser) -> {
+            promotionValue = (int)value;
+            promotionDisplay.setText(promotionValue + "%");
         });
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -101,87 +103,76 @@ public class PromotionFragmentAdmin extends Fragment {
         endPromoDate = day + "-" + (month+1) + "-" + year;
         startDate.setText(startPromoDate);
         endDate.setText(endPromoDate);
-        datePicker1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(), new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                startPromoDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                                startDate.setText(startPromoDate);
-                            }
-                        }, year, month, day);
-                datePickerDialog.show();
-            }
+        datePicker1.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireActivity(), (view1, year1, monthOfYear, dayOfMonth) -> {
+                        startPromoDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year1;
+                        startDate.setText(startPromoDate);
+                    }, year, month, day);
+            datePickerDialog.show();
         });
-        datePicker2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-                        endPromoDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+        datePicker2.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireActivity(), (view2, year2, monthOfYear, dayOfMonth) -> {
+                        endPromoDate = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year2;
                         endDate.setText(endPromoDate);
-                    }
-                }, year, month, day);
-                datePickerDialog.show();
-            }
+                    }, year, month, day);
+            datePickerDialog.show();
         });
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (promotionValue == 0)
+        btnSubmit.setOnClickListener(v -> {
+            if (promotionValue == 0)
+            {
+                alertDialog.createDialog("Please Select a promotion value");
+                return;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            Date start,end;
+            try {
+                start = sdf.parse(startPromoDate);
+                end = sdf.parse(endPromoDate);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Date today = new Date();
+            today = resetTime(today);
+            if (start !=null && end !=null)
+            {
+                if (today.after(start) || today.after(end) || start.after(end))
                 {
-                    alertDialog.createDialog("Please Select a promotion value");
+                    alertDialog.createDialog("Invalid Date");
                     return;
                 }
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                Date start,end;
-                try {
-                    start = sdf.parse(startPromoDate);
-                    end = sdf.parse(endPromoDate);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-                Date today = new Date();
-                today = resetTime(today);
-                if (start !=null && end !=null)
-                {
-                    if (today.after(start) || today.after(end) || start.after(end))
-                    {
-                        alertDialog.createDialog("Invalid Date");
-                        return;
-                    }
-                }
-                checkExistPromotion(alertDialog, startPromoDate, exists -> {
-                    if (!exists) {
-                        String outputStartDate = "", outputEndDate = "";
-                        SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
-                        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date dateStart, dateEnd;
-                        try {
-                            dateStart = inputFormat.parse(startPromoDate);
-                            dateEnd = inputFormat.parse(endPromoDate);
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                        outputStartDate = outputFormat.format(dateStart);
-                        outputEndDate = outputFormat.format(dateEnd);
-                        String finalOutputStartDate = outputStartDate;
-                        String finalOutputEndDate = outputEndDate;
-                        addPromotion(finalOutputStartDate, finalOutputEndDate);
-                    }
-                });
             }
+            checkExistPromotion(alertDialog, startPromoDate, exists -> {
+                if (!exists) {
+                    String outputStartDate, outputEndDate;
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.getDefault());
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+                    Date dateStart, dateEnd;
+                    try {
+                        dateStart = inputFormat.parse(startPromoDate);
+                        dateEnd = inputFormat.parse(endPromoDate);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    outputStartDate = outputFormat.format(dateStart);
+                    outputEndDate = outputFormat.format(dateEnd);
+                    String finalOutputStartDate = outputStartDate;
+                    String finalOutputEndDate = outputEndDate;
+                    addPromotion(finalOutputStartDate, finalOutputEndDate);
+                }
+            });
         });
-        getMinizeShoeList();
+        getMinimizeShoeList();
         getNotification();
         recyclerView.setAdapter(notificationAdminAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        recyclerView.setLayoutManager(linearLayoutManager);
         spinner.setAdapter(minimizeShoeAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -196,7 +187,7 @@ public class PromotionFragmentAdmin extends Fragment {
         return view;
     }
 
-    private void getMinizeShoeList()
+    private void getMinimizeShoeList()
     {
         DatabaseReference shoeRef = FirebaseDatabase.getInstance().getReference("Shoes");
         shoeRef.addValueEventListener(new ValueEventListener() {
@@ -205,7 +196,7 @@ public class PromotionFragmentAdmin extends Fragment {
                 minimizeShoeList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren())
                 {
-                    MinimizeShoe minimizeShoe = new MinimizeShoe();
+                    ShoeMinimize minimizeShoe = new ShoeMinimize();
                     if (dataSnapshot.child("picUrl").child("0").getValue(String.class) !=null)
                     {
                         minimizeShoe.setAvatarUrl(dataSnapshot.child("picUrl").child("0").getValue(String.class));
@@ -240,7 +231,7 @@ public class PromotionFragmentAdmin extends Fragment {
                 {
                     if (dataSnapshot.child("promotion").exists()) {
                         NotificationAdmin notificationAdmin = new NotificationAdmin();
-                        String title = dataSnapshot.child("title").getValue(String.class);
+                        String title = dataSnapshot.child("productId").getValue(String.class);
                         String description = dataSnapshot.child("promotion").child("description").getValue(String.class);
                         String imgUrl = dataSnapshot.child("picUrl").child("0").getValue(String.class);
                         String startDate = dataSnapshot.child("promotion").child("startDate").getValue(String.class);
@@ -251,8 +242,10 @@ public class PromotionFragmentAdmin extends Fragment {
                         notificationAdmin.setStartDate(startDate);
                         notificationAdmin.setEndDate(endDate);
                         notificationAdminList.add(notificationAdmin);
+                        notificationAdminAdapter.notifyItemChanged(notificationAdminList.size()-1);
                     }
                 }
+                notificationAdminAdapter.setSelectedList(new ArrayList<>(Collections.nCopies(notificationAdminList.size(),false)));
                 notificationAdminAdapter.notifyDataSetChanged();
             }
 
@@ -273,9 +266,9 @@ public class PromotionFragmentAdmin extends Fragment {
     }
     private void checkExistPromotion(CreateAlertDialog alertDialog, String startPromoDate, PromotionCheckCallback callback)
     {
-        String outputStartDate = "";
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String outputStartDate;
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
         Date dateStart;
         try {
             dateStart = inputFormat.parse(startPromoDate);
@@ -320,19 +313,51 @@ public class PromotionFragmentAdmin extends Fragment {
     private void addPromotion(String startDate, String endDate)
     {
         DatabaseReference promotionRef = FirebaseDatabase.getInstance().getReference("Shoes").child(selectedProductId).child("promotion");
-        List<String> descriptionList = new ArrayList<>();
-        descriptionList.add(promotionValue+"% DISCOUNT from "+startDate+" to "+endDate+" BUY NOW!!!");
-        descriptionList.add("BIG DISCOUNT from "+ startDate + " to " +endDate + " UP TO "+promotionValue+ " %!!!");
-        descriptionList.add("ONLY from "+startDate + " to " + endDate + " with "+ promotionValue + " % !!!");
-        Random random = new Random();
-        int randomNumber = random.nextInt(3);
-        String finalDescription = descriptionList.get(randomNumber);
+        String finalDescription = getString(startDate, endDate);
         promotionRef.child("description").setValue(finalDescription);
         promotionRef.child("discount").setValue(promotionValue);
         promotionRef.child("startDate").setValue(startDate);
         promotionRef.child("endDate").setValue(endDate);
     }
+
+    private String getString(String startDate, String endDate) {
+        List<String> descriptionList = new ArrayList<>();
+        descriptionList.add(promotionValue+"% DISCOUNT from "+ startDate +" to "+ endDate +" BUY NOW!!!");
+        descriptionList.add("BIG DISCOUNT from "+ startDate + " to " + endDate + " UP TO "+promotionValue+ " %!!!");
+        descriptionList.add("ONLY from "+ startDate + " to " + endDate + " with "+ promotionValue + " % !!!");
+        Random random = new Random();
+        int randomNumber = random.nextInt(3);
+        return descriptionList.get(randomNumber);
+    }
+
     public interface PromotionCheckCallback {
         void onResult(boolean exists);
+    }
+    private void deleteNotification( List<NotificationAdmin> NotificationList)
+    {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Shoes");
+        List<Integer> tempSelected = new ArrayList<>();
+        for (int i=0;i< notificationAdminAdapter.getSelectedList().size();i++)
+        {
+            if (notificationAdminAdapter.getSelectedList().get(i))
+            {
+                tempSelected.add(i);
+            }
+        }
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (Integer x : tempSelected)
+                {
+                    String productId = NotificationList.get(x).getProductId();
+                    databaseReference.child(productId).child("promotion").removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
