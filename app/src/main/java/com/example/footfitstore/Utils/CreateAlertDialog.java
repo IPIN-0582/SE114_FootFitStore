@@ -12,13 +12,13 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.footfitstore.R;
 
 public class CreateAlertDialog {
-    @SuppressLint("StaticFieldLeak")
-    public static Context context;
+    private final Context context;
 
     public CreateAlertDialog(Context context) {
-        CreateAlertDialog.context = context;
+        this.context = context;
     }
-    public static void createDialog(String s)
+    @SuppressLint("InflateParams")
+    public void createDialog(String s)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
         final View customLayout;
