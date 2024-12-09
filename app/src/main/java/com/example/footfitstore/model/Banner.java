@@ -1,21 +1,21 @@
 package com.example.footfitstore.model;
 
 public class Banner {
-    private String imageUrl;
+    private String url;
 
     public Banner() {
     }
 
-    public Banner(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public Banner(String url) {
+        this.url = url;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getUrl() {
+        return url;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
 
