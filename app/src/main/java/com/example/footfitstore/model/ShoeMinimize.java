@@ -1,6 +1,6 @@
 package com.example.footfitstore.model;
 
-public class MinimizeShoe {
+public class ShoeMinimize {
     String productId;
     String avatarUrl;
     String shoeName;
