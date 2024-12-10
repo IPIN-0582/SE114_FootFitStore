@@ -17,6 +17,7 @@ import com.example.footfitstore.R;
 import com.example.footfitstore.fragment.CategoriesAndBannersFragment;
 import com.example.footfitstore.fragment.ProductsFragmentAdmin;
 import com.example.footfitstore.fragment.PromotionFragmentAdmin;
+import com.example.footfitstore.fragment.StatisticsFragment;
 import com.example.footfitstore.fragment.UsersFragmentAdmin;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +53,7 @@ public class MainActivity_Admin extends AppCompatActivity {
                     setFragment(new CategoriesAndBannersFragment());
                     return true;
                 } else if (itemId == R.id.nav_order) {
-                    //setFragment(new ProfileFragment());
+                    setFragment(new StatisticsFragment());
                     return true;
                 } else {
                     return false;
