@@ -9,31 +9,28 @@
     android:background="@color/whiteF7F7F9">
 
     <LinearLayout
-        android:id="@+id/topbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
-        <View
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-        <!-- Product Category -->
-        <TextView
-            android:id="@+id/tvFavourite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_menu" />
+        <TextView
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:id="@+id/tvFavourite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:text="Users List"
             android:textColor="@color/black2B2B2B"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:textSize="20sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
