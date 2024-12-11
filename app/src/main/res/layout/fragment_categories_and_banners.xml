@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/whiteF7F7F9"
+    tools:context=".fragment.Admin.CategoriesAndBannersFragment">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/tvFavourite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Categories and Banners"
+            android:textColor="@color/black2B2B2B"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Banner"
+        android:layout_marginStart="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:fontFamily="@font/raleway_semibold"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+    <ImageView
+        android:id="@+id/imgBanner"
+        android:layout_marginTop="10dp"
+        android:layout_width="350dp"
+        android:layout_height="120dp" />
+        <ImageButton
+            android:id="@+id/button_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|end"
+            android:background="@null"
+            android:src="@drawable/ic_edit_profile"
+            android:layout_margin="8dp" />
+    </FrameLayout>
+    <Button
+        android:id="@+id/btnAddBanner"
+        android:layout_width="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape"
+        android:layout_gravity="center"
+        android:text="Add Banner"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Banner List"
+        android:layout_marginStart="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:fontFamily="@font/raleway_semibold"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bannerRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="16dp"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_new_arrival_banner" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Category: "
+            android:layout_marginStart="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+        <EditText
+            android:paddingStart="10dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:layout_marginHorizontal="10dp"
+            android:id="@+id/categoryName"
+            android:background="@drawable/edittext_background"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnAddCategory"
+        android:layout_width="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape"
+        android:layout_gravity="center"
+        android:text="Add Category"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category List "
+        android:layout_marginStart="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:fontFamily="@font/raleway_semibold"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categoryRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        tools:listitem="@layout/item_category" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

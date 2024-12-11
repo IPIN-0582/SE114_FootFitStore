@@ -14,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.Admin.MainActivity_Admin;
+import com.example.footfitstore.activity.User.MainActivity;
+import com.example.footfitstore.activity.User.ResetPasswordActivity;
 import com.example.footfitstore.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -107,19 +110,22 @@ public class LoginActivity extends AppCompatActivity {
 
                         String uid = user != null ? user.getUid() : null;
                         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("Users");
-                        databaseReference.child(uid).addValueEventListener(new ValueEventListener() {
+                        databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (!snapshot.exists())
                                 {
                                     addUser(user,uid,databaseReference);
                                 }
-                                if (Objects.equals(snapshot.child("status").getValue(String.class), "active"))
+                                else
                                 {
-                                    loginSuccess(uid);
-                                }
-                                else {
-                                    Toast.makeText(LoginActivity.this, "Your account has been banned",Toast.LENGTH_SHORT).show();
+                                    if (Objects.equals(snapshot.child("status").getValue(String.class), "active"))
+                                    {
+                                        loginSuccess(uid);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginActivity.this, "Your account has been banned",Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
 

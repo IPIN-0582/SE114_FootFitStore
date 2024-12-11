@@ -19,13 +19,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private final Context context;
     private int selectedPosition = RecyclerView.NO_POSITION;
     private OnCategoryClickListener listener;
+
     public interface OnCategoryClickListener {
         void onCategoryClick(String categoryName);
     }
+
     public CategoryAdapter(Context context, List<String> categoryList, OnCategoryClickListener onCategoryClickListener) {
         this.context = context;
         this.categoryList = categoryList;
-        this.listener=onCategoryClickListener;
+        this.listener = onCategoryClickListener;
+    }
+
+    public CategoryAdapter(List<String> categoryList, Context context) {
+        this.categoryList = categoryList;
+        this.context = context;
+        this.listener = null;
     }
 
     @NonNull
@@ -50,14 +58,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             holder.categoryTextView.setTextColor(ContextCompat.getColor(context, R.color.black2B2B2B)); // Default text color
         }
 
-        // Handle item clicks
-        holder.itemView.setOnClickListener(v -> {
-            int previousPosition = selectedPosition;
-            selectedPosition = holder.getAdapterPosition();
-            notifyItemChanged(previousPosition);
-            notifyItemChanged(selectedPosition);
-            listener.onCategoryClick(category);
-        });
+        if (listener != null){
+            holder.itemView.setOnClickListener(v -> {
+                int previousPosition = selectedPosition;
+                selectedPosition = holder.getAdapterPosition();
+                notifyItemChanged(previousPosition);
+                notifyItemChanged(selectedPosition);
+                listener.onCategoryClick(category);
+            });
+        }
     }
 
     @Override

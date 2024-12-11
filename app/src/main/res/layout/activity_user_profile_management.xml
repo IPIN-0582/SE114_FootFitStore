@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.UserProfileManagement">
+    tools:context=".activity.Admin.UserProfileManagement">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -14,7 +14,8 @@
         app:layout_constraintTop_toTopOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/whiteF7F7F9">
         <TextView
             android:id="@+id/tv_mail"
             android:layout_width="wrap_content"

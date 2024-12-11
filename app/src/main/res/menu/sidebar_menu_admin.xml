@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_users"
+            android:icon="@drawable/users"
+            android:title="Users" />
+        <item
+            android:id="@+id/nav_discount"
+            android:icon="@drawable/percent"
+            android:title="Discount" />
+        <item
+            android:id="@+id/nav_product"
+            android:icon="@drawable/product"
+            android:title="Product" />
+        <item
+            android:id="@+id/nav_category"
+            android:icon="@drawable/category"
+            android:title="Category &amp; Banner" />
+        <item
+            android:id="@+id/nav_order"
+            android:icon="@drawable/order"
+            android:title="Orders" />
+    </group>
+    <item android:title="">
+        <menu>
+            <item android:id="@+id/navi_log_out"
+                android:title="Log out"
+                android:icon="@drawable/ic_logout_24px"/>
+        </menu>
+    </item>
+</menu>

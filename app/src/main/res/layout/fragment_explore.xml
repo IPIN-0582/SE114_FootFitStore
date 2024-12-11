@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:id="@+id/explore_nav"
     android:fitsSystemWindows="true"
-    tools:context=".fragment.ExploreFragment"
+    tools:context=".fragment.User.ExploreFragment"
     tools:openDrawer="start">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main"
-        tools:context=".activity.MainActivity">
+        tools:context=".activity.User.MainActivity">
 
         <!-- ScrollView wrapper for the entire content to enable scrolling -->
         <androidx.core.widget.NestedScrollView
@@ -237,6 +237,6 @@
         android:layout_height="match_parent"
         android:id="@+id/nav_view"
         app:headerLayout="@layout/sidebar_header"
-        app:menu="@menu/sidebar_menu"
+        app:menu="@menu/sidebar_menu_user"
         android:layout_gravity="start" />
 </androidx.drawerlayout.widget.DrawerLayout>

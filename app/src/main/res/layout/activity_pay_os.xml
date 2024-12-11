@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.PayOsActivity">
+    tools:context=".activity.User.PayOsActivity">
     <WebView
         android:id="@+id/pay_os_screen"
         android:layout_width="0dp"
