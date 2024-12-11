@@ -23,6 +23,7 @@ import android.widget.ImageView;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.Utils.CreateAlertDialog;
+import com.example.footfitstore.activity.MainActivity_Admin;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.CategoryAdapter;
 import com.example.footfitstore.adapter.SimpleSpaceItemDecoration;
@@ -41,7 +42,7 @@ import java.util.List;
 
 public class CategoriesAndBannersFragment extends Fragment {
     ImageView imgBanner;
-    ImageButton imgAddBanner;
+    ImageButton imgAddBanner, btnBack;
     Button btnAddBanner, btnAddCategory;
     RecyclerView bannerRecyclerView, categoryRecyclerView;
     EditText editText;
@@ -87,6 +88,16 @@ public class CategoriesAndBannersFragment extends Fragment {
                 editText.setText("");
             }
         });
+        btnBack.setOnClickListener(v -> {
+            UsersFragmentAdmin usersFragmentAdmin = new UsersFragmentAdmin();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frame, usersFragmentAdmin)
+                    .addToBackStack(null)
+                    .commit();
+            if (getActivity() instanceof MainActivity_Admin) {
+                ((MainActivity_Admin) getActivity()).setSelectedNavItem(R.id.nav_users);
+            }
+        });
         return view;
     }
     private void initializeView(View view)
@@ -98,6 +109,7 @@ public class CategoriesAndBannersFragment extends Fragment {
         bannerRecyclerView = view.findViewById(R.id.bannerRecyclerView);
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
         editText = view.findViewById(R.id.categoryName);
+        btnBack = view.findViewById(R.id.btnBack);
     }
     private void getDataFromDatabase()
     {

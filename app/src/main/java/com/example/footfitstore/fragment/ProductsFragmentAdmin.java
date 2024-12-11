@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.example.footfitstore.R;
 import com.example.footfitstore.Utils.CreateAlertDialog;
 import com.example.footfitstore.activity.EditProfileActivity;
+import com.example.footfitstore.activity.MainActivity_Admin;
 import com.example.footfitstore.adapter.MinimizeCategoryAdapter;
 import com.example.footfitstore.adapter.ShoeProductAdapter;
 import com.example.footfitstore.adapter.SimpleSpaceItemDecoration;
@@ -44,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsFragmentAdmin extends Fragment {
+    ImageButton btnBack;
     EditText edt_Title, edt_Price, edt_Description;
     Spinner spinner_Price;
     ImageView imgView;
@@ -72,6 +75,16 @@ public class ProductsFragmentAdmin extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        btnBack.setOnClickListener(v -> {
+            UsersFragmentAdmin usersFragmentAdmin = new UsersFragmentAdmin();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frame, usersFragmentAdmin)
+                    .addToBackStack(null)
+                    .commit();
+            if (getActivity() instanceof MainActivity_Admin) {
+                ((MainActivity_Admin) getActivity()).setSelectedNavItem(R.id.nav_users);
             }
         });
         submit_AddImg.setOnClickListener(v->{
@@ -178,6 +191,7 @@ public class ProductsFragmentAdmin extends Fragment {
         });
     }
     private void initializeView(View view) {
+        btnBack = view.findViewById(R.id.btnBack);
         edt_Title = view.findViewById(R.id.edt_title);
         edt_Price = view.findViewById(R.id.edt_price);
         edt_Description = view.findViewById(R.id.edt_description);

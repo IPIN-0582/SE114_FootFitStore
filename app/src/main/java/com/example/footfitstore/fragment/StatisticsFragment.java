@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.MainActivity_Admin;
 import com.example.footfitstore.adapter.MinimizeCategoryAdapter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -51,6 +53,7 @@ import java.util.Locale;
 import java.util.Set;
 
 public class StatisticsFragment extends Fragment {
+    ImageButton btnBack;
     PieChart pieChart;
     Spinner monthSpinner, yearSpinner, yearSpinner2;
     List<String> monthList = new ArrayList<>(), yearList = new ArrayList<>();
@@ -66,6 +69,16 @@ public class StatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
         initializeView(view);
+        btnBack.setOnClickListener(v -> {
+            UsersFragmentAdmin usersFragmentAdmin = new UsersFragmentAdmin();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frame, usersFragmentAdmin)
+                    .addToBackStack(null)
+                    .commit();
+            if (getActivity() instanceof MainActivity_Admin) {
+                ((MainActivity_Admin) getActivity()).setSelectedNavItem(R.id.nav_users);
+            }
+        });
         monthAdapter = new MinimizeCategoryAdapter(requireContext(), R.layout.item_category_picked, monthList);
         yearAdapter = new MinimizeCategoryAdapter(requireContext(), R.layout.item_category_picked, yearList);
         getTitleList(task -> {
@@ -132,17 +145,18 @@ public class StatisticsFragment extends Fragment {
     }
     private void initializeView(View view)
     {
-           pieChart = view.findViewById(R.id.productChart);
-           monthSpinner = view.findViewById(R.id.monthSpinner);
-           yearSpinner = view.findViewById(R.id.yearSpinner);
-           yearSpinner2 = view.findViewById(R.id.yearSpinner2);
-           barChart = view.findViewById(R.id.barChart);
-           textView = view.findViewById(R.id.txtRevenue);
-           barChart.getAxisRight().setDrawLabels(false);
-            pieChart.setNoDataText("");
-            pieChart.setNoDataTextColor(Color.TRANSPARENT);
-            barChart.setNoDataText("");
-            barChart.setNoDataTextColor(Color.TRANSPARENT);
+        btnBack = view.findViewById(R.id.btnBack);
+        pieChart = view.findViewById(R.id.productChart);
+        monthSpinner = view.findViewById(R.id.monthSpinner);
+        yearSpinner = view.findViewById(R.id.yearSpinner);
+        yearSpinner2 = view.findViewById(R.id.yearSpinner2);
+        barChart = view.findViewById(R.id.barChart);
+        textView = view.findViewById(R.id.txtRevenue);
+        barChart.getAxisRight().setDrawLabels(false);
+        pieChart.setNoDataText("");
+        pieChart.setNoDataTextColor(Color.TRANSPARENT);
+        barChart.setNoDataText("");
+        barChart.setNoDataTextColor(Color.TRANSPARENT);
     }
     private void getDateTimeList(boolean isChange, OnCompleteListener<Void> onCompleteListener)
     {
