@@ -237,6 +237,6 @@
         android:layout_height="match_parent"
         android:id="@+id/nav_view"
         app:headerLayout="@layout/sidebar_header"
-        app:menu="@menu/sidebar_menu"
+        app:menu="@menu/sidebar_menu_user"
         android:layout_gravity="start" />
 </androidx.drawerlayout.widget.DrawerLayout>
