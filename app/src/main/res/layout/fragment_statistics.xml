@@ -120,8 +120,15 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="20dp"
             android:textSize="18sp"
+            android:fontFamily="@font/raleway_semibold"
             android:textColor="@color/black"
-            android:text="Top Customer"/>
+            android:text="Top Customer: "/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/topUser"
+            tools:listitem="@layout/item_top_user"/>
     </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

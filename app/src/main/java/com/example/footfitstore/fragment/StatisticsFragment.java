@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 import com.example.footfitstore.R;
 import com.example.footfitstore.activity.MainActivity_Admin;
 import com.example.footfitstore.adapter.MinimizeCategoryAdapter;
+import com.example.footfitstore.adapter.TopUserAdapter;
+import com.example.footfitstore.model.TopUser;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -30,7 +34,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,13 +49,15 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 public class StatisticsFragment extends Fragment {
+    RecyclerView recyclerView;
+    List<TopUser> topUserList = new ArrayList<>();
+    TopUserAdapter topUserAdapter;
     ImageButton btnBack;
     PieChart pieChart;
     Spinner monthSpinner, yearSpinner, yearSpinner2;
@@ -81,6 +86,8 @@ public class StatisticsFragment extends Fragment {
         });
         monthAdapter = new MinimizeCategoryAdapter(requireContext(), R.layout.item_category_picked, monthList);
         yearAdapter = new MinimizeCategoryAdapter(requireContext(), R.layout.item_category_picked, yearList);
+        topUserAdapter = new TopUserAdapter(requireContext(), topUserList);
+        recyclerView.setAdapter(topUserAdapter);
         getTitleList(task -> {
             if (!titleList.isEmpty()) {
                 getDateTimeList(false, task1 -> {
@@ -141,6 +148,7 @@ public class StatisticsFragment extends Fragment {
 
             }
         });
+        getTopUserList();
         return view;
     }
     private void initializeView(View view)
@@ -152,6 +160,8 @@ public class StatisticsFragment extends Fragment {
         yearSpinner2 = view.findViewById(R.id.yearSpinner2);
         barChart = view.findViewById(R.id.barChart);
         textView = view.findViewById(R.id.txtRevenue);
+        recyclerView = view.findViewById(R.id.topUser);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         barChart.getAxisRight().setDrawLabels(false);
         pieChart.setNoDataText("");
         pieChart.setNoDataTextColor(Color.TRANSPARENT);
@@ -413,6 +423,53 @@ public class StatisticsFragment extends Fragment {
                 xAxis.setTextSize(18f); // Tăng kích thước chữ trên trục X
                 xAxis.setDrawGridLines(false); // Loại bỏ grid lines trên trục X
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void getTopUserList()
+    {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                topUserList.clear();
+                List<TopUser> tempList = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    String firstName = dataSnapshot.child("firstName").getValue(String.class) != null ? dataSnapshot.child("firstName").getValue(String.class) : "";
+                    String lastName = dataSnapshot.child("lastName").getValue(String.class) != null ? dataSnapshot.child("lastName").getValue(String.class) : "";
+                    String email = dataSnapshot.child("email").getValue(String.class) != null ? dataSnapshot.child("email").getValue(String.class) : "";
+                    String imageUrl = dataSnapshot.child("avatarUrl").getValue(String.class) != null ? dataSnapshot.child("avatarUrl").getValue(String.class) : "";
+                    int gender = dataSnapshot.child("gender").getValue(Integer.class) != null ? dataSnapshot.child("gender").getValue(Integer.class) : 0;
+                    double totalTransaction = 0d;
+                    for (DataSnapshot orderSnapshot : dataSnapshot.child("order").getChildren())
+                    {
+                        String status = orderSnapshot.child("orderStatus").getValue(String.class);
+                        assert status != null;
+                        if (status.equals("ARRIVED") || status.equals("REVIEWED"))
+                        {
+                            Double transaction = orderSnapshot.child("transaction").getValue(Double.class);
+                            if (transaction != null)
+                            {
+                                totalTransaction += transaction;
+                            }
+                        }
+                    }
+                    TopUser topUser = new TopUser(firstName, lastName, email, totalTransaction,  imageUrl, gender);
+                    tempList.add(topUser);
+                }
+                topUserList.sort((o1, o2) -> Double.compare(o2.getTotalTransaction(), o1.getTotalTransaction()));
+                if (tempList.size() > 3) {
+                    tempList = tempList.subList(0, 3);
+                }
+                topUserList.addAll(tempList);
+                topUserAdapter.notifyDataSetChanged();
             }
 
             @Override
