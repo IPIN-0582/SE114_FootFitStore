@@ -14,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.activity.Admin.MainActivity_Admin;
+import com.example.footfitstore.activity.User.MainActivity;
+import com.example.footfitstore.activity.User.ResetPasswordActivity;
 import com.example.footfitstore.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

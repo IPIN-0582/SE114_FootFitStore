@@ -16,19 +16,19 @@
         android:theme="@style/Theme.FootFitStore"
         tools:targetApi="31">
         <activity
-            android:name=".activity.PayOsActivity"
+            android:name=".activity.User.PayOsActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.UserProfileManagement"
+            android:name=".activity.Admin.UserProfileManagement"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity_Admin"
+            android:name=".activity.Admin.MainActivity_Admin"
             android:exported="false" />
         <activity
-            android:name=".activity.OrderHistoryActivity"
+            android:name=".activity.User.OrderHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.PaymentActivity"
+            android:name=".activity.User.PaymentActivity"
             android:exported="true"
             android:label="Merchant Demo"
             android:launchMode="singleTask">
@@ -44,19 +44,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".fragment.FavouriteFragment"
+            android:name=".fragment.User.FavouriteFragment"
             android:exported="false" />
         <activity
-            android:name=".activity.ProductDetailActivity"
+            android:name=".activity.User.ProductDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".fragment.ExploreFragment"
+            android:name=".fragment.User.ExploreFragment"
             android:exported="false" />
         <activity
-            android:name=".activity.EditProfileActivity"
+            android:name=".activity.User.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ResetPasswordActivity"
+            android:name=".activity.User.ResetPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".activity.OnBoard3Activity"
@@ -77,7 +77,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.User.MainActivity"
             android:exported="false" />
         <activity
             android:name=".activity.RegisterActivity"
@@ -86,7 +86,7 @@
             android:name=".activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SearchActivity"
+            android:name=".activity.User.SearchActivity"
             android:exported="false" />
 
         <meta-data
