@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.OnBackPressedListener;
 import com.example.footfitstore.activity.LoginActivity;
 import com.example.footfitstore.activity.MainActivity;
 import com.example.footfitstore.activity.OrderHistoryActivity;
@@ -46,8 +47,15 @@ import java.util.*;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheetListener {
-
+public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheetListener, OnBackPressedListener {
+    @Override
+    public boolean onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+        return false;
+    }
     private TextView txtSeeAllPopular;
     private RecyclerView popularShoesRecyclerView, bannerRecyclerView, allShoesRecyclerView, categoryRecyclerView;
     private ImageButton btnCart,btnMenu;
@@ -99,10 +107,10 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 else if (item.getItemId() == R.id.navi_favourite)
                 {
-                    getParentFragmentManager().beginTransaction()
+                    /*getParentFragmentManager().beginTransaction()
                             .replace(R.id.main_frame, new FavouriteFragment())
                             .addToBackStack(null)
-                            .commit();
+                            .commit();*/
                     if (getActivity() instanceof MainActivity) {
                         ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_favourite);
                     }
@@ -114,10 +122,10 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 else if (item.getItemId() == R.id.navi_profile)
                 {
-                    getParentFragmentManager().beginTransaction()
+                    /*getParentFragmentManager().beginTransaction()
                             .replace(R.id.main_frame, new ProfileFragment())
                             .addToBackStack(null)
-                            .commit();
+                            .commit();*/
                     if (getActivity() instanceof MainActivity) {
                         ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_profile);
                     }
@@ -136,10 +144,10 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 else if (item.getItemId() == R.id.navi_notification)
                 {
-                    getParentFragmentManager().beginTransaction()
+                    /*getParentFragmentManager().beginTransaction()
                             .replace(R.id.main_frame, new NotificationsFragment())
                             .addToBackStack(null)
-                            .commit();
+                            .commit();*/
                     if (getActivity() instanceof MainActivity) {
                         ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_notifications);
                     }

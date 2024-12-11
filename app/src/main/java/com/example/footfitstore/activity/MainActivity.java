@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -92,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_frame);
+        if (fragment instanceof ExploreFragment) {
+            if (((ExploreFragment) fragment).onBackPressed()) {
+                return;
+            }
+        }
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);

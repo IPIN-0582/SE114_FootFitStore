@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.fragment.CategoriesAndBannersFragment;
+import com.example.footfitstore.fragment.ExploreFragment;
 import com.example.footfitstore.fragment.ProductsFragmentAdmin;
 import com.example.footfitstore.fragment.PromotionFragmentAdmin;
 import com.example.footfitstore.fragment.StatisticsFragment;
@@ -27,13 +28,7 @@ public class MainActivity_Admin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main_admin);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         bottomNavigationView = findViewById(R.id.bottomNavigationAdmin);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -75,6 +70,12 @@ public class MainActivity_Admin extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame);
+        if (fragment instanceof UsersFragmentAdmin) {
+            if (((UsersFragmentAdmin) fragment).onBackPressed()) {
+                return;
+            }
+        }
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
         Intent intent = new Intent(MainActivity_Admin.this, LoginActivity.class);
