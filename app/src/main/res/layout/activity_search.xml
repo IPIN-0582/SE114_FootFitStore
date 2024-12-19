@@ -27,7 +27,7 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="Back"
-            android:src="@drawable/ic_back_arrow" />
+            android:src="@drawable/ic_back" />
 
         <!-- Title -->
         <TextView
@@ -62,5 +62,20 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:listitem="@layout/item_search_result"/>
+    <!-- TextView hiển thị khi không có kết quả -->
+    <TextView
+        android:id="@+id/noResultsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="No results found"
+        android:textColor="@color/black2B2B2B"
+        android:visibility="gone"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/searchResultsRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

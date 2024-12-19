@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintVertical_bias=".95"
         android:text="Next"
-        android:textColor="@color/textSecondary"
+        android:textColor="@color/black2B2B2B"
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textStyle="bold"

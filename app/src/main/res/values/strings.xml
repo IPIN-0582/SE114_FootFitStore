@@ -5,7 +5,7 @@
         Hello Again!
     </string>
     <string name="fill_your_d">
-        Fill Your Details Or Continue With\nSocial Media
+        Fill Your Details To Register
     </string>
     <string name="email_addre">
         Email Address
@@ -35,7 +35,7 @@
         Register Account
     </string>
     <string name="your_name">
-        Your Name
+        Your UserName
     </string>
     <string name="already_hav">
         Already Have Account? Log In

@@ -3,8 +3,10 @@ package com.example.footfitstore.activity.User;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +29,8 @@ public class SearchActivity extends AppCompatActivity {
     private List<Shoe> searchResultsList = new ArrayList<>();
     private DatabaseReference shoesReference;
     private ImageView backButton;
+    private TextView noResultsTextView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,7 @@ public class SearchActivity extends AppCompatActivity {
 
         searchEditText = findViewById(R.id.searchEditText);
         searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView);
+        noResultsTextView = findViewById(R.id.noResultsTextView);
 
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResultsAdapter = new SearchShoeAdapter(searchResultsList, this);
@@ -57,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
         searchResultsList.clear();
         if (query.isEmpty()) {
             searchResultsAdapter.notifyDataSetChanged();
+            noResultsTextView.setVisibility(View.GONE);
             return;
         }
 
@@ -70,10 +76,18 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 }
                 searchResultsAdapter.notifyDataSetChanged();
+
+                // Hiển thị/Ẩn thông báo không có kết quả
+                if (searchResultsList.isEmpty()) {
+                    noResultsTextView.setVisibility(View.VISIBLE);
+                } else {
+                    noResultsTextView.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
+
 }
