@@ -31,7 +31,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/ic_back"
+                android:layout_marginStart="16dp"/>
 
             <View
                 android:layout_width="10dp"
@@ -66,15 +67,17 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/raleway_medium"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/raleway_semibold"
             android:text="@string/ct_info"
+            android:textSize="16dp"
+            android:textColor="@color/black2B2B2B"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -102,8 +105,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/raleway_bold"
+                    android:fontFamily="@font/poppins"
                     android:text="&quot;&quot;"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -113,8 +118,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/raleway_medium"
+                    android:fontFamily="@font/raleway_semibold"
                     android:text="@string/email"
+                    android:textColor="@color/black2B2B2B"
+                    android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.202"
                     app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +136,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -157,8 +164,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/raleway_bold"
+                    android:fontFamily="@font/poppins"
                     android:text="&quot;&quot;"
+                    android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.193"
                     app:layout_constraintStart_toStartOf="parent"
@@ -169,8 +177,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:fontFamily="@font/raleway_medium"
+                    android:fontFamily="@font/raleway_semibold"
                     android:text="@string/phone"
+                    android:textColor="@color/black2B2B2B"
+                    android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -189,7 +199,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/raleway_medium"
+            android:fontFamily="@font/raleway_semibold"
+            android:textSize="18dp"
+            android:textColor="@color/black2B2B2B"
             android:text="@string/address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
@@ -203,11 +215,12 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins"
             android:text="&quot;&quot;"
+            android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.043"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="20dp"/>
 
         <TextView
             android:layout_marginStart="16dp"
@@ -215,7 +228,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/raleway_medium"
+            android:fontFamily="@font/raleway_semibold"
+            android:textSize="16dp"
+            android:textColor="@color/black2B2B2B"
             android:text="@string/payment_method"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.06"
@@ -223,16 +238,19 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:background="@android:color/transparent"
             android:id="@+id/spinner"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="10dp"/>
+            tools:listitem="@layout/item_payment_selected" />
     </LinearLayout>
 
     <LinearLayout
@@ -250,7 +268,9 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/raleway_medium"
+            android:fontFamily="@font/raleway_semibold"
+            android:textSize="16dp"
+            android:textColor="@color/black2B2B2B"
             android:text="Subtotal" />
 
         <TextView
@@ -258,7 +278,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
-            android:fontFamily="@font/raleway_bold"
+            android:fontFamily="@font/poppins"
+            android:textSize="16dp"
             android:text="TextView" />
     </LinearLayout>
 
@@ -277,7 +298,9 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/raleway_medium"
+            android:fontFamily="@font/raleway_semibold"
+            android:textSize="16dp"
+            android:textColor="@color/black2B2B2B"
             android:text="Delivery" />
 
         <TextView
@@ -285,7 +308,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
-            android:fontFamily="@font/raleway_bold"
+            android:fontFamily="@font/poppins"
+            android:textSize="16dp"
             android:text="TextView" />
     </LinearLayout>
 
@@ -312,17 +336,22 @@
 
         <TextView
             android:id="@+id/textView18"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/raleway_medium"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/raleway_semibold"
             android:text="Total Cost"
-            android:layout_marginStart="16dp" />
+            android:textColor="@color/black2B2B2B"
+            android:textSize="18dp" />
         <TextView
             android:id="@+id/txt_totalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="200dp"
-            android:fontFamily="@font/raleway_bold"
+            android:layout_marginStart="180dp"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textColor="@color/black2B2B2B"
+            android:textSize="18dp"
             android:text="TextView" />
     </LinearLayout>
 

@@ -8,38 +8,61 @@
     tools:context=".activity.User.EditProfileActivity"
     android:background="@android:color/white">
 
-    <!-- Back button -->
-    <ImageView
-        android:id="@+id/btn_back_profile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_back_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="Back button"/>
-
-    <!-- Done button -->
-    <TextView
-        android:id="@+id/btn_done"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Done"
-        android:textSize="16sp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="26dp">
+        <!-- Back Button -->
+        <ImageButton
+            android:id="@+id/btn_back_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_back"
+            android:layout_marginStart="16dp"/>
 
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <!-- Product Category -->
+        <TextView
+            android:id="@+id/tvFavourite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text=""
+            android:textColor="@color/black2B2B2B"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="16dp"/>
+    </LinearLayout>
     <!-- Profile Image -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_profile_picture"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:contentDescription="Profile Picture"
         android:src="@drawable/onboard1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,8 +103,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="First Name"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="@color/textSecondary"
         android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/tv_full_name"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="32dp"
@@ -109,8 +133,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Last Name"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="@color/textSecondary"
         android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/et_first_name"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="32dp"
@@ -138,8 +163,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Address"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="@color/textSecondary"
         android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/et_last_name"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="32dp"
@@ -165,8 +191,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gender"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="@color/textSecondary"
         android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/et_address"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="32dp"
@@ -205,8 +232,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mobile Number"
+        android:fontFamily="@font/raleway_bold"
+        android:textColor="@color/textSecondary"
         android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/rg_gender"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="32dp"

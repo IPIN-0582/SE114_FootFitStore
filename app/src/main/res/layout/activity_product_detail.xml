@@ -143,6 +143,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textSize="18dp"
             android:text="The Max Air 270 Unit Delivers Unrivaled, All-Day Comfort. The Sleek, Running-Inspired Design Roots You To Everything Nike..." />
 
         <!-- Product Size Selection -->
@@ -151,7 +152,8 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:orientation="horizontal"
-            android:padding="8dp" />
+            android:padding="8dp"
+            tools:listitem="@layout/item_size"/>
 
 
     </LinearLayout>
@@ -170,6 +172,7 @@
             android:layout_height="56dp"
             android:baselineAligned="false"
             android:src="@drawable/ic_heart"
+            android:backgroundTint="@color/whiteF7F7F9"
             android:layout_marginStart="40dp"/>
 
         <!-- Add to Cart Button -->

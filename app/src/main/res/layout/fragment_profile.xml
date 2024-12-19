@@ -92,7 +92,8 @@
             app:layout_constraintTop_toBottomOf="@id/img_profile_picture"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="10dp"/>
 
         <!-- Name EditText -->
         <TextView
@@ -124,7 +125,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="10dp"/>
 
         <!-- Email EditText -->
         <TextView
@@ -156,7 +158,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_email"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="10dp"/>
 
         <!-- Password EditText -->
         <TextView

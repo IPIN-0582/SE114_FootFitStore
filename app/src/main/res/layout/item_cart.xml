@@ -131,7 +131,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="right"
                 android:background="@null"
-                android:paddingTop="20dp"
+                android:paddingTop="5dp"
                 android:src="@drawable/ic_delete" />
         </LinearLayout>
 
