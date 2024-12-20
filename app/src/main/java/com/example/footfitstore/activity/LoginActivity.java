@@ -7,13 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.Admin.MainActivity_Admin;
 import com.example.footfitstore.activity.User.MainActivity;
 import com.example.footfitstore.activity.User.ResetPasswordActivity;
@@ -96,7 +96,13 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                Toast.makeText(LoginActivity.this, "Google sign in failed", Toast.LENGTH_SHORT).show();
+                new CustomDialog(LoginActivity.this)
+                        .setTitle("Login Failed")
+                        .setMessage("Google sign in failed. Please try again.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         }
     }
@@ -124,7 +130,12 @@ public class LoginActivity extends AppCompatActivity {
                                         loginSuccess(uid);
                                     }
                                     else {
-                                        Toast.makeText(LoginActivity.this, "Your account has been banned",Toast.LENGTH_SHORT).show();
+                                        new CustomDialog(LoginActivity.this)
+                                                .setTitle("Login Failed")
+                                                .setMessage("Your account has been banned.")
+                                                .setIcon(R.drawable.error)
+                                                .setPositiveButton("OK", null)
+                                                .show();
                                     }
                                 }
                             }
@@ -135,7 +146,13 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                        new CustomDialog(LoginActivity.this)
+                                .setTitle("Login Failed")
+                                .setMessage("Authentication Failed")
+                                .setIcon(R.drawable.error)
+                                .setPositiveButton("OK", null)
+                                .hideNegativeButton()
+                                .show();
                     }
                 });
     }
@@ -145,7 +162,13 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordLogin.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(LoginActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            new CustomDialog(LoginActivity.this)
+                    .setTitle("Login Failed")
+                    .setMessage("Please fill all fields")
+                    .setIcon(R.drawable.error)
+                    .hideNegativeButton()
+                    .setPositiveButton("OK", null)
+                    .show();
             return;
         }
 
@@ -165,7 +188,12 @@ public class LoginActivity extends AppCompatActivity {
                                         loginSuccess(uid);
                                     }
                                     else {
-                                        Toast.makeText(LoginActivity.this, "Your account has been banned",Toast.LENGTH_SHORT).show();
+                                        new CustomDialog(LoginActivity.this)
+                                                .setTitle("Login Failed")
+                                                .setMessage("Your account has been banned.")
+                                                .setIcon(R.drawable.error)
+                                                .setPositiveButton("OK", null)
+                                                .show();
                                     }
                                 }
                             }
@@ -176,7 +204,13 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        new CustomDialog(LoginActivity.this)
+                                .setTitle("Login Failed")
+                                .setMessage("Email Address or Password incorrect.")
+                                .setIcon(R.drawable.error)
+                                .setPositiveButton("OK", null)
+                                .hideNegativeButton()
+                                .show();
                     }
                 });
     }

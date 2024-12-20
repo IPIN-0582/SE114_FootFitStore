@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.User.MainActivity;
 import com.example.footfitstore.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,7 +58,13 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordRegister.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
-            Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            new CustomDialog(RegisterActivity.this)
+                    .setTitle("Register Failed")
+                    .setMessage("Please fill all fields")
+                    .setIcon(R.drawable.error)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
             return;
         }
 
@@ -77,11 +84,24 @@ public class RegisterActivity extends AppCompatActivity {
                             databaseReference.child(uid).setValue(user)
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                            new CustomDialog(RegisterActivity.this)
+                                                    .setTitle("Register Failed")
+                                                    .setMessage("Registration Successful")
+                                                    .setIcon(R.drawable.done)
+                                                    .setPositiveButton("OK", null)
+                                                    .hideNegativeButton()
+                                                    .show();
+
                                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                                             finish();
                                         } else {
-                                            Toast.makeText(RegisterActivity.this, "Failed to save user info", Toast.LENGTH_SHORT).show();
+                                            new CustomDialog(RegisterActivity.this)
+                                                    .setTitle("Register Failed")
+                                                    .setMessage("Failed to save user info. Please try again.")
+                                                    .setIcon(R.drawable.error)
+                                                    .setPositiveButton("OK", null)
+                                                    .hideNegativeButton()
+                                                    .show();
                                         }
                                     });
                             databaseReference.child(uid).child("role").setValue("user");
@@ -93,14 +113,33 @@ public class RegisterActivity extends AppCompatActivity {
                         try {
                             throw task.getException();
                         } catch (FirebaseAuthWeakPasswordException e) {
-                            Toast.makeText(RegisterActivity.this, "Mật khẩu quá yếu.", Toast.LENGTH_SHORT).show();
+                            new CustomDialog(RegisterActivity.this)
+                                    .setTitle("Register Failed")
+                                    .setMessage("Password is too weak. Please choose a stronger password.")
+                                    .setIcon(R.drawable.warning)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
+
                         } catch (FirebaseAuthInvalidCredentialsException e) {
-                            Toast.makeText(RegisterActivity.this, "Email không hợp lệ.", Toast.LENGTH_SHORT).show();
+                            new CustomDialog(RegisterActivity.this)
+                                    .setTitle("Register Failed")
+                                    .setMessage("The email address is invalid. Please enter a valid email address.")
+                                    .setIcon(R.drawable.warning)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
                         } catch (FirebaseAuthUserCollisionException e) {
-                            Toast.makeText(RegisterActivity.this, "Email đã được sử dụng.", Toast.LENGTH_SHORT).show();
+                            new CustomDialog(RegisterActivity.this)
+                                    .setTitle("Register Failed")
+                                    .setMessage("The email address is already in use. Please use a different email.")
+                                    .setIcon(R.drawable.warning)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
                         } catch (Exception e) {
                             Log.e("RegisterActivity", e.getMessage());
-                            Toast.makeText(RegisterActivity.this, "Đăng ký thất bại.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Register Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
 
