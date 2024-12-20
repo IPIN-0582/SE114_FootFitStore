@@ -159,17 +159,18 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
         return view;
     }
 
-
-    private void loadUser()
-    {
+    private void loadUser() {
         userList.clear();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userList.clear();
-                for (DataSnapshot userSnapshot : snapshot.getChildren())
-                {
+                int totalUsers = 0;
+                int activeUsers = 0;
+                int bannedUsers = 0;
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     User user = new User();
                     String userId = userSnapshot.getKey();
                     String firstName = userSnapshot.child("firstName").getValue(String.class);
@@ -180,6 +181,7 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
                     String avatarUrl = userSnapshot.child("avatarUrl").getValue(String.class);
                     Integer gender = userSnapshot.child("gender").getValue(Integer.class);
                     String role = userSnapshot.child("role").getValue(String.class);
+
                     user.setUserId(userId);
                     user.setFirstname(firstName);
                     user.setLastname(lastName);
@@ -189,17 +191,37 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
                     user.setGender(gender);
                     user.setRole(role);
                     user.setStatus(status);
+
                     userList.add(user);
+
+                    // Increment counters based on user status
+                    totalUsers++;
+                    if ("active".equalsIgnoreCase(status)) {
+                        activeUsers++;
+                    } else if ("banned".equalsIgnoreCase(status)) {
+                        bannedUsers++;
+                    }
                 }
+
                 userAdapter.notifyDataSetChanged();
+
+                // Update UI elements with the counts
+                TextView totalUserText = getView().findViewById(R.id.total_user);
+                TextView activeUserText = getView().findViewById(R.id.active_user);
+                TextView bannedUserText = getView().findViewById(R.id.banned_user);
+
+                totalUserText.setText(String.valueOf(totalUsers));
+                activeUserText.setText(String.valueOf(activeUsers));
+                bannedUserText.setText(String.valueOf(bannedUsers));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Handle database error
             }
         });
     }
+
     private void loadDataFromFirebase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user != null ? user.getUid() : null;

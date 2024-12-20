@@ -1,154 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginBottom="20dp">
+    android:layout_marginBottom="20dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@android:color/white"
+    android:layout_margin="8dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_gravity="center"
-        android:id="@+id/avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:paddingTop="10dp"
-        android:src="@drawable/onboard1" />
-    <LinearLayout
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <LinearLayout
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
         <LinearLayout
-            android:paddingTop="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name: "
-                android:textSize="16sp"
-                android:fontFamily="@font/raleway_bold"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:id="@+id/name"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/raleway_medium"
-                android:text=" Your Name Here"
-                android:paddingStart="5dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:paddingTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/raleway_bold"
-                android:textSize="16sp"
-                android:text="Email: "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/email"
-                android:fontFamily="@font/raleway_medium"
-                android:text="Your Email Here"
-                android:paddingStart="5dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:paddingTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/raleway_bold"
-                android:textSize="16sp"
-                android:text="Phone: "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/phone"
-                android:fontFamily="@font/raleway_medium"
-                android:text="Phone Number Here"
-                android:paddingStart="5dp" />
-        </LinearLayout>
-    </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-        <LinearLayout
-            android:layout_marginStart="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Role: "
-                android:textSize="16sp"
-                android:fontFamily="@font/raleway_bold"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtRole"
-                android:fontFamily="@font/raleway_medium"
-                android:layout_gravity="center"
-                android:text="Your role"/>
-        </LinearLayout>
-            <LinearLayout
-                android:layout_marginStart="5dp"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <TextView
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:src="@drawable/onboard1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/role"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="60dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status: "
-                    android:textSize="16sp"
-                    android:fontFamily="@font/raleway_bold"/>
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/user_icon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/user" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:paddingStart="5dp"
+                            android:text=" Your Name Here"
+                            android:textColor="@color/black2B2B2B"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/phone_icon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/phone" />
+
+                        <TextView
+                            android:id="@+id/phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins"
+                            android:paddingStart="5dp"
+                            android:text="Phone Number Here"
+                            android:textColor="@color/black2B2B2B"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/email_icon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/mail" />
+
+                        <TextView
+                            android:id="@+id/email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins"
+                            android:paddingStart="5dp"
+                            android:text="Your Email Here"
+                            android:textColor="@color/black2B2B2B"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/status"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtStatus"
-                    android:fontFamily="@font/raleway_medium"
-                    android:layout_gravity="center"
-                    android:text="Your status"/>
+                    android:fontFamily="@font/poppins"
+                    android:text="Status"
+                    android:textColor="@color/black2B2B2B"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
             </LinearLayout>
         </LinearLayout>
-        <ImageView
-            android:id="@+id/role"
-            android:layout_gravity="center"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/user"/>
     </LinearLayout>
-    <Button
-        android:layout_marginTop="10dp"
-        android:id="@+id/btnSubmit"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_btn_secondary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Detail"/>
-    <View
-        android:layout_marginTop="10dp"
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-</LinearLayout>
+</androidx.cardview.widget.CardView>

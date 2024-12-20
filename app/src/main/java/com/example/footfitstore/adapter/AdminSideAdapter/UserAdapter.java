@@ -1,6 +1,8 @@
 package com.example.footfitstore.adapter.AdminSideAdapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +64,22 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
         {
             phoneNumber = user.getPhone();
         }
-        if (user.getStatus() != null)
-        {
-            holder.txtStatus.setText(user.getStatus());
+        if (user.getStatus() != null) {
+            if (user.getStatus().equals("active")) {
+                holder.txtStatus.setText("Active");
+                holder.txtStatus.setTextColor(Color.parseColor("#32a834"));
+                holder.txtStatus.setBackground(createBorder(Color.parseColor("#32a834")));
+            } else {
+                holder.txtStatus.setText("Banned");
+                holder.txtStatus.setTextColor(Color.parseColor("#FF0000"));
+                holder.txtStatus.setBackground(createBorder(Color.parseColor("#FF0000")));
+            }
+        } else {
+            holder.txtStatus.setText("Unknown Status");
+            holder.txtStatus.setTextColor(Color.parseColor("#808080"));
+            holder.txtStatus.setBackground(createBorder(Color.parseColor("#808080")));
         }
+
         holder.txtName.setText(firstName+" "+lastName);
         holder.txtMail.setText(mail);
         holder.txtPhone.setText(phoneNumber);
@@ -84,16 +98,11 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
                 holder.imgAvatar.setImageResource(R.drawable.girl);
             }
         }
-        holder.txtRole.setText(user.getRole());
         if (user.getRole().equals("admin"))
         {
             holder.imgRole.setImageResource(R.drawable.admin);
         }
-        else
-        {
-            holder.imgRole.setImageResource(R.drawable.user);
-        }
-        holder.btnSubmit.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener !=null)
@@ -102,10 +111,6 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
                 }
             }
         });
-        if (!user.getStatus().equals("active"))
-        {
-            holder.btnSubmit.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -115,8 +120,7 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         CircleImageView imgAvatar;
-        TextView txtName, txtMail, txtPhone,txtRole,txtStatus;
-        Button btnSubmit;
+        TextView txtName, txtMail, txtPhone,txtStatus;
         ImageView imgRole;
         View line;
         public UserViewHolder(@NonNull View itemView) {
@@ -125,11 +129,18 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
             txtName = itemView.findViewById(R.id.name);
             txtMail = itemView.findViewById(R.id.email);
             txtPhone = itemView.findViewById(R.id.phone);
-            btnSubmit = itemView.findViewById(R.id.btnSubmit);
-            txtRole = itemView.findViewById(R.id.txtRole);
             imgRole = itemView.findViewById(R.id.role);
-            txtStatus = itemView.findViewById(R.id.txtStatus);
+            txtStatus = itemView.findViewById(R.id.status);
             line = itemView.findViewById(R.id.view);
         }
+    }
+
+    private GradientDrawable createBorder(int borderColor) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE); // Hình dạng là hình chữ nhật
+        drawable.setStroke(4, borderColor); // Độ dày viền là 4px
+        drawable.setCornerRadius(8); // Bo góc 8px (có thể thay đổi theo ý muốn)
+        drawable.setColor(Color.TRANSPARENT); // Màu nền trong suốt
+        return drawable;
     }
 }
