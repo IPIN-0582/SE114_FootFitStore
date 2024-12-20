@@ -1,77 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="@color/white"
+    android:padding="8dp"
+    android:layout_marginBottom="16dp">
 
-    android:layout_height="100dp"
-    android:layout_marginBottom="20dp">
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/notification_item_shape_read"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    <!-- Hình ảnh sản phẩm -->
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Product Image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
-        <ImageView
-            android:id="@+id/imgProduct"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="5dp"
-            tools:srcCompat="@tools:sample/avatars" />
+    <!-- Nội dung sản phẩm -->
+    <LinearLayout
+        android:id="@+id/productContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toEndOf="@id/imgProduct"
+        app:layout_constraintEnd_toStartOf="@id/selected_notification"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+        <!-- Mô tả sản phẩm -->
         <TextView
             android:id="@+id/edtDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@null"
             android:ellipsize="end"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="start|top"
-            android:inputType="none"
-            android:maxLines="3"
-            android:text=""
-            android:textSize="16sp" />
+            android:maxLines="2"
+            android:text="Product description goes here"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins" />
 
+        <!-- Ngày bắt đầu và kết thúc -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
 
+            <!-- Ngày bắt đầu -->
             <TextView
-
                 android:id="@+id/startDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:text="Start: 01/01/2024"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins" />
 
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <!-- Ngày kết thúc -->
             <TextView
                 android:id="@+id/endDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="" />
+                android:text="End: 31/12/2024"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins" />
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Checkbox chọn -->
     <CheckBox
         android:id="@+id/selected_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout3"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="8dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

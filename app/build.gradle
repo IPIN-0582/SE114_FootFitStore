@@ -39,7 +39,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.firebase.database
-    implementation fileTree(dir: 'D:\\UIT\\SE114_MobileApp\\SE114_FootFitStore\\ZaloLib', include: ['*.aar', '*.jar'], exclude: [""])
+    implementation fileTree(dir: 'K:\\SE114\\DoAn\\SE114_FootFitStore\\ZaloLib', include: ['*.aar', '*.jar'], exclude: [""])
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
