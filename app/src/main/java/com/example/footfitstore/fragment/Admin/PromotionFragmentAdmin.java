@@ -322,7 +322,7 @@ public class PromotionFragmentAdmin extends Fragment {
 
     private String getString(String startDate, String endDate) {
         List<String> descriptionList = new ArrayList<>();
-        descriptionList.add(promotionValue+"% DISCOUNT from "+ startDate +" to "+ endDate +" BUY NOW!!!");
+        descriptionList.add(promotionValue+"% DISCOUNT " + "BUY NOW!!!");
         descriptionList.add("BIG DISCOUNT from "+ startDate + " to " + endDate + " UP TO "+promotionValue+ " %!!!");
         descriptionList.add("ONLY from "+ startDate + " to " + endDate + " with "+ promotionValue + " % !!!");
         Random random = new Random();
