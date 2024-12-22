@@ -25,13 +25,15 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/raleway_bold"
-                    android:text="Name: "
-                    android:textColor="@color/black"
-                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:id="@+id/user_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user" />
                 <TextView
                     android:id="@+id/displayName"
                     android:layout_marginStart="5dp"
@@ -43,13 +45,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/raleway_bold"
-                    android:text="Email: "
-                    android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/mail" />
                 <TextView
                     android:id="@+id/email"
                     android:layout_marginStart="5dp"
@@ -61,13 +63,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/raleway_bold"
-                    android:text="Transaction: "
-                    android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/transaction" />
                 <TextView
                     android:layout_marginStart="5dp"
                     android:id="@+id/totalTransaction"

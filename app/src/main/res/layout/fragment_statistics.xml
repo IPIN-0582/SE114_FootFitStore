@@ -50,6 +50,7 @@
             android:fontFamily="@font/raleway_semibold"
             android:textSize="18sp"/>
         <Spinner
+            android:paddingTop="3dp"
             android:layout_marginStart="5dp"
             android:id="@+id/monthSpinner"
             android:layout_width="wrap_content"
@@ -63,6 +64,7 @@
             android:fontFamily="@font/raleway_semibold"/>
         <Spinner
             android:id="@+id/yearSpinner"
+            android:paddingTop="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"/>
@@ -97,6 +99,8 @@
                 android:id="@+id/yearSpinner2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:paddingTop="3dp"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
         <TextView
