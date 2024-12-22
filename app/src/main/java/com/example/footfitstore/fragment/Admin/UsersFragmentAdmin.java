@@ -51,6 +51,9 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
     NavigationView navigationView;
     TextView headerTextView;
     CircleImageView imgHeader;
+    TextView totalUserText;
+    TextView activeUserText;
+    TextView bannedUserText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,7 +62,9 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
         recyclerView = view.findViewById(R.id.recycler_users);
         drawerLayout=view.findViewById(R.id.explore_nav);
         navigationView=view.findViewById(R.id.nav_view);
-
+        totalUserText = view.findViewById(R.id.total_user);
+        activeUserText = view.findViewById(R.id.active_user);
+        bannedUserText = view.findViewById(R.id.banned_user);
         btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(navigationView));
         View headerView = navigationView.getHeaderView(0);
         headerTextView = headerView.findViewById(R.id.txt_displayName);
@@ -160,7 +165,6 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
     }
 
     private void loadUser() {
-        userList.clear();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -206,9 +210,7 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
                 userAdapter.notifyDataSetChanged();
 
                 // Update UI elements with the counts
-                TextView totalUserText = getView().findViewById(R.id.total_user);
-                TextView activeUserText = getView().findViewById(R.id.active_user);
-                TextView bannedUserText = getView().findViewById(R.id.banned_user);
+
 
                 totalUserText.setText(String.valueOf(totalUsers));
                 activeUserText.setText(String.valueOf(activeUsers));

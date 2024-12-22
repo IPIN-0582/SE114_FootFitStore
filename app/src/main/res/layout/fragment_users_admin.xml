@@ -101,7 +101,6 @@
                             android:layout_gravity="end"
                             android:layout_weight="1"
                             android:gravity="end|center_vertical"
-                            android:text="39"
                             android:textColor="@color/blue0D6EFD"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -155,7 +154,6 @@
                             android:layout_gravity="end"
                             android:layout_weight="1"
                             android:gravity="end|center_vertical"
-                            android:text="39"
                             android:textColor="@color/green"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -209,7 +207,6 @@
                             android:layout_gravity="end"
                             android:layout_weight="1"
                             android:gravity="end|center_vertical"
-                            android:text="39"
                             android:textColor="@color/redF87265"
                             android:textSize="16sp"
                             android:textStyle="bold" />
