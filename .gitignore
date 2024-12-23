@@ -15,5 +15,6 @@
 local.properties
 /app/src/main/asset/.env.template
 .idea/deploymentTargetSelector.xml
-/app/google-services.json
-/app/src/main/assets/env.template
+app/google-services.json
+app/src/main/assets/env.template
+app/src/main/assets

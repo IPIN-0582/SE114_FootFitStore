@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,13 +47,13 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
         String lastName = "";
         String mail = "";
         String phoneNumber = "";
-        if (user.getFirstname() != null)
+        if (user.getFirstName() != null)
         {
-            firstName = user.getFirstname();
+            firstName = user.getFirstName();
         }
-        if (user.getLastname() != null)
+        if (user.getLastName() != null)
         {
-            lastName = user.getLastname();
+            lastName = user.getLastName();
         }
         if (user.getEmail() != null)
         {

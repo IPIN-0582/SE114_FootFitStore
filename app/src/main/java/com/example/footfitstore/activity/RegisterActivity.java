@@ -24,9 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText usernameRegister, emailRegister, passwordRegister;
+    private EditText firstNameRegister, lastNameRegister, emailRegister, passwordRegister;
     private FirebaseAuth mAuth;
-
     private DatabaseReference databaseReference;
 
     @Override
@@ -37,8 +36,9 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
+        firstNameRegister = findViewById(R.id.firstnameRegister);
+        lastNameRegister = findViewById(R.id.lastnameRegister);
         emailRegister = findViewById(R.id.emailRegister);
-        usernameRegister = findViewById(R.id.usernameRegister);
         passwordRegister = findViewById(R.id.passwordRegister);
         Button btnRegister = findViewById(R.id.btnRegister);
         TextView tvLogin = findViewById(R.id.tvLogin);
@@ -49,11 +49,16 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+        String firstName = firstNameRegister.getText().toString().trim();
+        String lastName = lastNameRegister.getText().toString().trim();
         String email = emailRegister.getText().toString().trim();
-        String username = usernameRegister.getText().toString();
         String password = passwordRegister.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)) {
+        int gender = 0; // 0 = Male, 1 = Female
+        String role = "user";
+        String status = "active";
+
+        if (TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             new CustomDialog(RegisterActivity.this)
                     .setTitle("Register Failed")
                     .setMessage("Please fill all fields")
@@ -64,24 +69,26 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-
                     if (task.isSuccessful()) {
-
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
-
                             String uid = firebaseUser.getUid();
+
                             User user = new User(email);
+                            user.setFirstName(firstName); // Lưu với tên trường là firstName
+                            user.setLastName(lastName);   // Lưu với tên trường là lastName
+                            user.setGender(gender);
+                            user.setRole(role);
+                            user.setStatus(status);
+
                             databaseReference.child(uid).setValue(user)
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             new CustomDialog(RegisterActivity.this)
-                                                    .setTitle("Register Failed")
-                                                    .setMessage("Registration Successful")
+                                                    .setTitle("Registration Successful")
+                                                    .setMessage("Welcome, " + firstName + " " + lastName + "!")
                                                     .setIcon(R.drawable.done)
                                                     .setPositiveButton("OK", null)
                                                     .hideNegativeButton()
@@ -99,48 +106,49 @@ public class RegisterActivity extends AppCompatActivity {
                                                     .show();
                                         }
                                     });
-                            databaseReference.child(uid).child("role").setValue("user");
                         }
-                }
-
-                    else {
-                        try {
-                            throw Objects.requireNonNull(task.getException());
-                        } catch (FirebaseAuthWeakPasswordException e) {
-                            new CustomDialog(RegisterActivity.this)
-                                    .setTitle("Register Failed")
-                                    .setMessage("Password is too weak. Please choose a stronger password.")
-                                    .setIcon(R.drawable.warning)
-                                    .setPositiveButton("OK", null)
-                                    .hideNegativeButton()
-                                    .show();
-
-                        } catch (FirebaseAuthInvalidCredentialsException e) {
-                            new CustomDialog(RegisterActivity.this)
-                                    .setTitle("Register Failed")
-                                    .setMessage("The email address is invalid. Please enter a valid email address.")
-                                    .setIcon(R.drawable.warning)
-                                    .setPositiveButton("OK", null)
-                                    .hideNegativeButton()
-                                    .show();
-                        } catch (FirebaseAuthUserCollisionException e) {
-                            new CustomDialog(RegisterActivity.this)
-                                    .setTitle("Register Failed")
-                                    .setMessage("The email address is already in use. Please use a different email.")
-                                    .setIcon(R.drawable.warning)
-                                    .setPositiveButton("OK", null)
-                                    .hideNegativeButton()
-                                    .show();
-                        } catch (Exception e) {
-                            new CustomDialog(RegisterActivity.this)
-                                    .setTitle("Failed")
-                                    .setMessage("Registering Failed .")
-                                    .setIcon(R.drawable.error)
-                                    .setPositiveButton("OK", null)
-                                    .hideNegativeButton()
-                                    .show();
-                        }
+                    } else {
+                        handleFirebaseError(task.getException());
                     }
                 });
+    }
+
+    private void handleFirebaseError(Exception exception) {
+        try {
+            throw Objects.requireNonNull(exception);
+        } catch (FirebaseAuthWeakPasswordException e) {
+            new CustomDialog(RegisterActivity.this)
+                    .setTitle("Register Failed")
+                    .setMessage("Password is too weak. Please choose a stronger password.")
+                    .setIcon(R.drawable.warning)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
+
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            new CustomDialog(RegisterActivity.this)
+                    .setTitle("Register Failed")
+                    .setMessage("The email address is invalid. Please enter a valid email address.")
+                    .setIcon(R.drawable.warning)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
+        } catch (FirebaseAuthUserCollisionException e) {
+            new CustomDialog(RegisterActivity.this)
+                    .setTitle("Register Failed")
+                    .setMessage("The email address is already in use. Please use a different email.")
+                    .setIcon(R.drawable.warning)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
+        } catch (Exception e) {
+            new CustomDialog(RegisterActivity.this)
+                    .setTitle("Failed")
+                    .setMessage("Registration failed.")
+                    .setIcon(R.drawable.error)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
+        }
     }
 }

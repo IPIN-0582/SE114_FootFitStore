@@ -7,33 +7,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragment.Admin.ProductsFragmentAdmin"
-    android:background="@color/whiteF7F7F9">
+    android:background="@color/whiteF7F7F9"
+    >
 
     <!-- Header Section -->
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
+        android:padding="16dp"
+        android:layout_marginTop="10dp">
+        <!-- Back Button -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_back" />
-
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <!-- Product Category -->
         <TextView
             android:id="@+id/tvFavourite"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Products"
+            android:text="Product"
             android:textColor="@color/black2B2B2B"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:fontFamily="@font/poppins" />
+            android:layout_marginTop="8dp"/>
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <!-- Scrollable Content -->

@@ -187,8 +187,8 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
                     String role = userSnapshot.child("role").getValue(String.class);
 
                     user.setUserId(userId);
-                    user.setFirstname(firstName);
-                    user.setLastname(lastName);
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
                     user.setEmail(email);
                     user.setPhone(phone);
                     user.setAvatarUrl(avatarUrl);

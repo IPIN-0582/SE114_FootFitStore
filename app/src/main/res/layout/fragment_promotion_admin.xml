@@ -16,10 +16,11 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
+                android:padding="16dp">
+                <!-- Back Button -->
                 <ImageButton
                     android:id="@+id/btnBack"
                     android:layout_width="wrap_content"
@@ -27,21 +28,29 @@
                     android:layout_gravity="start"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_back" />
-
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <!-- Product Category -->
                 <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:id="@+id/tvFavourite"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Promotion Events"
-                    android:fontFamily="@font/poppins"
                     android:textColor="@color/black2B2B2B"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"

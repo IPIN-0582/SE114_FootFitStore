@@ -2,11 +2,11 @@ package com.example.footfitstore.activity.Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -38,6 +38,7 @@ public class UserProfileManagement extends AppCompatActivity {
     RecyclerView recyclerView;
     List<OrderHistory> orderHistoryList = new ArrayList<>();
     OrderMinimizeAdapter orderMinimizeAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,22 +49,19 @@ public class UserProfileManagement extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Intent intent = getIntent();
         String userId = intent.getStringExtra("userId");
         initializeView();
-        orderMinimizeAdapter = new OrderMinimizeAdapter(this, orderHistoryList,userId);
+        orderMinimizeAdapter = new OrderMinimizeAdapter(this, orderHistoryList, userId);
         getDataFromDb(userId);
         recyclerView.setAdapter(orderMinimizeAdapter);
-        submit.setOnClickListener(v -> {
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-            userRef.child("status").setValue("banned");
-            finish();
-        });
-        btnBack.setOnClickListener(v->finish());
+
+        submit.setOnClickListener(v -> toggleUserStatus(userId));
+        btnBack.setOnClickListener(v -> finish());
     }
 
-    private void getDataFromDb(String userId)
-    {
+    private void getDataFromDb(String userId) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,32 +73,34 @@ public class UserProfileManagement extends AppCompatActivity {
                 String role = snapshot.child("role").getValue(String.class);
                 String firstName = snapshot.child("firstName").getValue(String.class);
                 String lastName = snapshot.child("lastName").getValue(String.class);
-                String name = (firstName != null) ? firstName.concat(" "+lastName) : "";
+                String name = (firstName != null) ? firstName.concat(" " + lastName) : "";
                 String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
+                String status = snapshot.child("status").getValue(String.class);
+
                 txtName.setText(name);
                 if (address != null) edtAddress.setText(address);
                 if (phone != null) edtPhoneNumber.setText(phone);
-                edtGender.setText((gender==0)?"Male": "Female");
-                if (mail !=null) edtMail.setText(mail);
+                edtGender.setText((gender == 0) ? "Male" : "Female");
+                if (mail != null) edtMail.setText(mail);
                 edtRole.setText(role);
-                if (avatarUrl!=null)
-                {
+                if (avatarUrl != null) {
                     Picasso.get().load(avatarUrl).into(imgAvatar);
+                } else {
+                    imgAvatar.setImageResource(gender == 0 ? R.drawable.boy : R.drawable.girl);
                 }
-                else
-                {
-                    if (gender == 0)
-                    {
-                        imgAvatar.setImageResource(R.drawable.boy);
-                    }
-                    else
-                    {
-                        imgAvatar.setImageResource(R.drawable.girl);
-                    }
+
+                // Cập nhật nút submit dựa trên trạng thái
+                if ("banned".equalsIgnoreCase(status)) {
+                    submit.setText("UNBAN USER");
+                    submit.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+                } else {
+                    submit.setText("BAN USER");
+                    submit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
                 }
+
+                // Cập nhật danh sách đơn hàng
                 orderHistoryList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.child("order").getChildren())
-                {
+                for (DataSnapshot dataSnapshot : snapshot.child("order").getChildren()) {
                     OrderHistory orderHistory = dataSnapshot.getValue(OrderHistory.class);
                     orderHistoryList.add(orderHistory);
                 }
@@ -109,14 +109,37 @@ public class UserProfileManagement extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(UserProfileManagement.this, "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void initializeView()
-    {
-        submit =findViewById(R.id.btnSubmit);
+    private void toggleUserStatus(String userId) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        userRef.child("status").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String currentStatus = snapshot.getValue(String.class);
+                if ("banned".equalsIgnoreCase(currentStatus)) {
+                    userRef.child("status").setValue("active");
+                    submit.setText("BAN USER");
+                    submit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+                } else {
+                    userRef.child("status").setValue("banned");
+                    submit.setText("UNBAN USER");
+                    submit.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(UserProfileManagement.this, "Failed to update status: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initializeView() {
+        submit = findViewById(R.id.btnSubmit);
         txtName = findViewById(R.id.tv_full_name);
         btnBack = findViewById(R.id.btn_back_profile);
         edtAddress = findViewById(R.id.address);

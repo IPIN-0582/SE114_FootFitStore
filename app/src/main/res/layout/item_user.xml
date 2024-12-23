@@ -74,7 +74,7 @@
 
                         <TextView
                             android:id="@+id/name"
-                            android:layout_width="wrap_content"
+                            android:layout_width="162dp"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
                             android:paddingStart="5dp"
@@ -127,16 +127,16 @@
 
                         <TextView
                             android:id="@+id/email"
-                            android:layout_width="wrap_content"
+                            android:layout_width="167dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/poppins"
+                            android:maxLines="2"
                             android:paddingStart="5dp"
                             android:text="Your Email Here"
                             android:textColor="@color/black2B2B2B"
                             android:textSize="14dp"
-                            android:textStyle="bold"
-                            android:maxLines="2"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
 
