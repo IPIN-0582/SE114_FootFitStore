@@ -53,7 +53,7 @@ public class CartFragment extends Fragment {
     private List<Cart> cartList = new ArrayList<>();
     private double totalPrice = 0;
     private Boolean isInit=false;
-
+    private String userAddress, userPhone;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class CartFragment extends Fragment {
 
             // Load cart data from Firebase
             loadCartData();
+            loadInfo();
         }
         cartAdapter = new CartAdapter(cartList, getContext(), new CartAdapter.OnCheckedChangeListener() {
             @Override
@@ -144,8 +145,11 @@ public class CartFragment extends Fragment {
             }
         });
 
-        // Handle checkout button click
         btnCheckout.setOnClickListener(v -> {
+            if (userAddress == null || userPhone == null) {
+                Toast.makeText(getContext(), "Please complete your profile", Toast.LENGTH_SHORT).show();
+                return;
+            }
             List<Boolean> selectedList = cartAdapter.getSelectedList();
             boolean check = true;
             for (int i=0;i<selectedList.size();i++)
@@ -219,7 +223,28 @@ public class CartFragment extends Fragment {
             }
         });
     }
+    private void loadInfo()
+    {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child("address").exists())
+                {
+                    userAddress = dataSnapshot.child("address").getValue(String.class);
+                }
+                if (dataSnapshot.child("mobileNumber").exists())
+                {
+                    userPhone = dataSnapshot.child("mobileNumber").getValue(String.class);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     // Kiểm tra ngày khuyến mãi
     private boolean isPromotionActive(Promotion promotion) {
         try {
