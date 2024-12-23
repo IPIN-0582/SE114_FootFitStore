@@ -102,6 +102,9 @@ public class UserAdapter  extends RecyclerView.Adapter<UserAdapter.UserViewHolde
         {
             holder.imgRole.setImageResource(R.drawable.admin);
         }
+        else {
+            holder.imgRole.setImageDrawable(null); // Xóa ảnh nếu role không xác định
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
