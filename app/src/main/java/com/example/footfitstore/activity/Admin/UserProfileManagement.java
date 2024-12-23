@@ -51,16 +51,13 @@ public class UserProfileManagement extends AppCompatActivity {
         Intent intent = getIntent();
         String userId = intent.getStringExtra("userId");
         initializeView();
-        orderMinimizeAdapter = new OrderMinimizeAdapter(this, orderHistoryList);
+        orderMinimizeAdapter = new OrderMinimizeAdapter(this, orderHistoryList,userId);
         getDataFromDb(userId);
         recyclerView.setAdapter(orderMinimizeAdapter);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-                userRef.child("status").setValue("banned");
-                finish();
-            }
+        submit.setOnClickListener(v -> {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            userRef.child("status").setValue("banned");
+            finish();
         });
         btnBack.setOnClickListener(v->finish());
     }
@@ -101,6 +98,7 @@ public class UserProfileManagement extends AppCompatActivity {
                         imgAvatar.setImageResource(R.drawable.girl);
                     }
                 }
+                orderHistoryList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.child("order").getChildren())
                 {
                     OrderHistory orderHistory = dataSnapshot.getValue(OrderHistory.class);

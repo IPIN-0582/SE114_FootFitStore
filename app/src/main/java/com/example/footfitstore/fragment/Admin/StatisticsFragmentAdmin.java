@@ -462,7 +462,7 @@ public class StatisticsFragmentAdmin extends Fragment {
                     TopUser topUser = new TopUser(firstName, lastName, email, totalTransaction,  imageUrl, gender);
                     tempList.add(topUser);
                 }
-                topUserList.sort((o1, o2) -> Double.compare(o2.getTotalTransaction(), o1.getTotalTransaction()));
+                tempList.sort((o1, o2) -> Double.compare(o2.getTotalTransaction(), o1.getTotalTransaction()));
                 if (tempList.size() > 3) {
                     tempList = tempList.subList(0, 3);
                 }
