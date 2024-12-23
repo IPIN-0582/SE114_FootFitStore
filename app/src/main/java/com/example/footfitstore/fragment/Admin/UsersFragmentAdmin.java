@@ -198,7 +198,6 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
 
                     userList.add(user);
 
-                    // Increment counters based on user status
                     totalUsers++;
                     if ("active".equalsIgnoreCase(status)) {
                         activeUsers++;
@@ -209,7 +208,6 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
 
                 userAdapter.notifyDataSetChanged();
 
-                // Update UI elements with the counts
 
 
                 totalUserText.setText(String.valueOf(totalUsers));
@@ -219,7 +217,7 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle database error
+
             }
         });
     }

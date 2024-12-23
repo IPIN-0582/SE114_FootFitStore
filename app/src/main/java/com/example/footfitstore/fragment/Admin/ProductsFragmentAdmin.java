@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.footfitstore.R;
-import com.example.footfitstore.Utils.CreateAlertDialog;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.Admin.MainActivity_Admin;
 import com.example.footfitstore.adapter.AdminSideAdapter.MinimizeCategoryAdapter;
 import com.example.footfitstore.adapter.AdminSideAdapter.ShoeProductAdapter;
@@ -100,8 +100,13 @@ public class ProductsFragmentAdmin extends Fragment {
     private void uploadShoe() {
         if (edt_Title.getText().toString().isEmpty() || edt_Description.getText().toString().isEmpty() || edt_Price.getText().toString().isEmpty() || !"hasImage".equals(imgView.getTag()))
         {
-            CreateAlertDialog createAlertDialog = new CreateAlertDialog(requireContext());
-            createAlertDialog.createDialog("Please fill all information");
+            new CustomDialog(requireContext())
+                    .setTitle("Failed")
+                    .setMessage("Please Fill All Information.")
+                    .setIcon(R.drawable.error)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
             return;
         }
 

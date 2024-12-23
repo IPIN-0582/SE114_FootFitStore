@@ -77,7 +77,6 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 searchResultsAdapter.notifyDataSetChanged();
 
-                // Hiển thị/Ẩn thông báo không có kết quả
                 if (searchResultsList.isEmpty()) {
                     noResultsTextView.setVisibility(View.VISIBLE);
                 } else {

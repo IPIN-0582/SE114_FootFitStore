@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.model.CartRating;
 import com.example.footfitstore.model.OrderHistory;
 import com.google.firebase.auth.FirebaseAuth;
@@ -113,7 +113,13 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                             {
                                 if (cart.getRating() == 0)
                                 {
-                                    Toast.makeText(v.getContext(), "Please rate these product",Toast.LENGTH_SHORT).show();
+                                    new CustomDialog(v.getContext())
+                                            .setTitle("Failed")
+                                            .setMessage("Please Select A Size.")
+                                            .setIcon(R.drawable.error)
+                                            .setPositiveButton("OK", null)
+                                            .hideNegativeButton()
+                                            .show();
                                     return;
                                 }
                                 String productKey = cart.getProductId() + "_" + cart.getSize();

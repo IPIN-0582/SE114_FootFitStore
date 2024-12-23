@@ -67,11 +67,11 @@ public class NotificationsFragment extends Fragment {
                 notificationList.get(position).setRead(true);
                 adapter.notifyDataSetChanged();
                 Intent intent = new Intent(getContext(), ProductDetailActivity.class);
-                intent.putExtra("productId", notificationList.get(position).getProductId()); // Truyền productId vào Intent
+                intent.putExtra("productId", notificationList.get(position).getProductId());
                 getContext().startActivity(intent);
             }
         });
-        getNotifications(notificationList, adapter); // Fetch your notifications
+        getNotifications(notificationList, adapter);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

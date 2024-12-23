@@ -49,13 +49,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         String category = categoryList.get(position);
         holder.categoryTextView.setText(category);
 
-        // Change background and text color based on selection
         if (position == selectedPosition) {
             holder.categoryTextView.setBackground(ContextCompat.getDrawable(context, R.drawable.selected_background));
-            holder.categoryTextView.setTextColor(ContextCompat.getColor(context, android.R.color.white)); // Set text color to white
+            holder.categoryTextView.setTextColor(ContextCompat.getColor(context, android.R.color.white));
         } else {
             holder.categoryTextView.setBackground(ContextCompat.getDrawable(context, R.drawable.unselected_background));
-            holder.categoryTextView.setTextColor(ContextCompat.getColor(context, R.color.black2B2B2B)); // Default text color
+            holder.categoryTextView.setTextColor(ContextCompat.getColor(context, R.color.black2B2B2B));
         }
 
         if (listener != null){

@@ -17,8 +17,8 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.SizeViewHolder
 
     private final List<String> sizeList;
     private final Context context;
-    private int selectedPosition = -1;  // Biến lưu vị trí kích cỡ được chọn
-    private OnSizeSelectedListener sizeSelectedListener;  // Lắng nghe sự kiện chọn kích cỡ
+    private int selectedPosition = -1;
+    private OnSizeSelectedListener sizeSelectedListener;
 
     public SizeAdapter(Context context, List<String> sizeList) {
         this.context = context;
@@ -37,25 +37,23 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.SizeViewHolder
         String size = sizeList.get(position);
         holder.tvSize.setText(size);
 
-        // Kiểm tra nếu vị trí đang được chọn thì đổi màu nền và màu chữ
         if (selectedPosition == position) {
-            holder.itemView.setBackgroundResource(R.drawable.size_seleted_background);  // Nền của thẻ đã chọn
-            holder.tvSize.setTextColor(context.getResources().getColor(android.R.color.white));  // Đổi màu chữ thành trắng
+            holder.itemView.setBackgroundResource(R.drawable.size_seleted_background);
+            holder.tvSize.setTextColor(context.getResources().getColor(android.R.color.white));
         } else {
-            holder.itemView.setBackgroundResource(R.drawable.size_background);  // Nền của thẻ chưa chọn
-            holder.tvSize.setTextColor(context.getResources().getColor(android.R.color.black));  // Đổi màu chữ thành đen
+            holder.itemView.setBackgroundResource(R.drawable.size_background);
+            holder.tvSize.setTextColor(context.getResources().getColor(android.R.color.black));
         }
 
-        // Xử lý sự kiện khi chọn kích cỡ
         holder.itemView.setOnClickListener(v -> {
-            int adapterPosition = holder.getAdapterPosition();  // Lấy vị trí hiện tại của holder
+            int adapterPosition = holder.getAdapterPosition();
 
-            if (adapterPosition != RecyclerView.NO_POSITION) {  // Đảm bảo rằng vị trí hợp lệ
+            if (adapterPosition != RecyclerView.NO_POSITION) {
                 selectedPosition = adapterPosition;
-                notifyDataSetChanged();  // Cập nhật lại RecyclerView
+                notifyDataSetChanged();
 
                 if (sizeSelectedListener != null) {
-                    sizeSelectedListener.onSizeSelected(sizeList.get(adapterPosition));  // Gửi kích cỡ được chọn ra ngoài
+                    sizeSelectedListener.onSizeSelected(sizeList.get(adapterPosition));
                 }
             }
         });
@@ -66,7 +64,6 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.SizeViewHolder
         return sizeList.size();
     }
 
-    // ViewHolder để ánh xạ TextView hiển thị kích cỡ
     public static class SizeViewHolder extends RecyclerView.ViewHolder {
         TextView tvSize;
 
@@ -76,7 +73,6 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.SizeViewHolder
         }
     }
 
-    // Interface để lắng nghe khi người dùng chọn kích cỡ
     public interface OnSizeSelectedListener {
         void onSizeSelected(String size);
     }

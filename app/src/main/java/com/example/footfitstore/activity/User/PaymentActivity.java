@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,6 +25,7 @@ import com.example.footfitstore.Api.payos.CreateOrderResponseLink;
 import com.example.footfitstore.Api.payos.MinimalizeShoeDescription;
 import com.example.footfitstore.Api.zalopay.CreateOrder;
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.Utils.OrderIdGenerator;
 import com.example.footfitstore.adapter.UserSideAdapter.PaymentAdapter;
 import com.example.footfitstore.model.Cart;
@@ -181,7 +181,13 @@ public class PaymentActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(PaymentActivity.this,"Vui long chon phuong thuc thanh toan",Toast.LENGTH_SHORT).show();
+                    new CustomDialog(PaymentActivity.this)
+                            .setTitle("Failed")
+                            .setMessage("Please Select A Payment Method.")
+                            .setIcon(R.drawable.error)
+                            .setPositiveButton("OK", null)
+                            .hideNegativeButton()
+                            .show();
                 }
             }
         });
@@ -190,7 +196,7 @@ public class PaymentActivity extends AppCompatActivity {
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
-        // ZaloPay SDK Init
+
         ZaloPaySDK.init(553, Environment.SANDBOX);
         launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -227,8 +233,13 @@ public class PaymentActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-            // Xử lý lỗi khi không thể truy cập dữ liệu
-                Toast.makeText(PaymentActivity.this, "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                new CustomDialog(PaymentActivity.this)
+                        .setTitle("Failed")
+                        .setMessage("Failed To Fetch Data.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         });
     }
@@ -245,7 +256,13 @@ public class PaymentActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(PaymentActivity.this, "Failed to load cart data", Toast.LENGTH_SHORT).show();
+                new CustomDialog(PaymentActivity.this)
+                        .setTitle("Failed")
+                        .setMessage("Failed To Load Cart Data.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         });
     }
@@ -350,8 +367,6 @@ public class PaymentActivity extends AppCompatActivity {
         final String CANCEL_URL = "http://cancelpayment.com";
         final String RETURN_URL = "http://successpayment.com";
         final String ORDER_ID_EXIST_ERR_CODE = "231";
-
-        btnCheckout.setEnabled(false); // Disable pay button to prevent multiple payments
 
         List<MinimalizeShoeDescription> movieDescription = new ArrayList<>();
         for (Cart cart: finalCart)

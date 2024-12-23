@@ -22,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.footfitstore.R;
-import com.example.footfitstore.Utils.CreateAlertDialog;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.Admin.MainActivity_Admin;
 import com.example.footfitstore.adapter.BannerAdapter;
 import com.example.footfitstore.adapter.CategoryAdapter;
@@ -79,8 +79,13 @@ public class CategoriesAndBannersFragment extends Fragment {
         btnAddCategory.setOnClickListener(v->{
             if (editText.getText().toString().isEmpty())
             {
-                CreateAlertDialog createAlertDialog= new CreateAlertDialog(requireContext());
-                createAlertDialog.createDialog("Please fill all information");
+                new CustomDialog(requireContext())
+                        .setTitle("Failed")
+                        .setMessage("Please Fill All Information.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
             else
             {

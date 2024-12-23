@@ -9,12 +9,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
+import com.example.footfitstore.activity.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,12 +46,8 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
-        // Khởi tạo Firebase Auth và Database
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        // Khởi tạo các view
         etFirstName = findViewById(R.id.et_first_name);
         etLastName = findViewById(R.id.et_last_name);
         etAddress = findViewById(R.id.et_address);
@@ -62,18 +59,29 @@ public class EditProfileActivity extends AppCompatActivity {
         btnDone = findViewById(R.id.btn_done);
         imgProfilePicture = findViewById(R.id.img_profile_picture);
 
-        // Trở về trang Profile
         btnBack.setOnClickListener(view -> finish());
 
-        // Load dữ liệu từ DB
         setValueActivity();
 
-        // Sự kiện nhấn nút "Done"
         btnDone.setOnClickListener(v -> {
-            saveUserProfile();
-        });
+            new CustomDialog(EditProfileActivity.this)
+                    .setTitle("Warning")
+                    .setMessage("Are You Sure To Change Your Profile?")
+                    .setIcon(R.drawable.warning)
+                    .setPositiveButton("OK", new CustomDialog.OnDialogClickListener() {
+                        @Override
+                        public void onPositiveClick() {
+                            saveUserProfile();
+                        }
 
-        // Sự kiện chọn ảnh cho avatar
+                        @Override
+                        public void onNegativeClick() {
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
         btnEditAvatar.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -86,7 +94,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private void setValueActivity() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            new CustomDialog(EditProfileActivity.this)
+                    .setTitle("Load Information Failed")
+                    .setMessage("User hasn't logged in")
+                    .setIcon(R.drawable.error)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
             finish();
             return;
         }
@@ -125,7 +139,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditProfileActivity.this, "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                new CustomDialog(EditProfileActivity.this)
+                        .setTitle("Failed")
+                        .setMessage("Failed To Fetch Data.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         });
     }
@@ -170,11 +190,41 @@ public class EditProfileActivity extends AppCompatActivity {
                     mDatabase.child("Users").child(user.getUid()).updateChildren(userProfile)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(EditProfileActivity.this, "Avatar updated successfully", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    new CustomDialog(EditProfileActivity.this)
+                                            .setTitle("Success")
+                                            .setMessage("Successfully Update Profile.")
+                                            .setIcon(R.drawable.congrat)
+                                            .setPositiveButton("OK", new CustomDialog.OnDialogClickListener() {
+                                                @Override
+                                                public void onPositiveClick() {
+                                                    finish();
+                                                }
+
+                                                @Override
+                                                public void onNegativeClick() {
+
+                                                }
+                                            })
+                                            .hideNegativeButton()
+                                            .show();
                                 } else {
-                                    Toast.makeText(EditProfileActivity.this, "Failed to update avatar", Toast.LENGTH_SHORT).show();
-                                }
+                                    new CustomDialog(EditProfileActivity.this)
+                                            .setTitle("Success")
+                                            .setMessage("Successfully Update Profile.")
+                                            .setIcon(R.drawable.congrat)
+                                            .setPositiveButton("OK", new CustomDialog.OnDialogClickListener() {
+                                                @Override
+                                                public void onPositiveClick() {
+                                                    finish();
+                                                }
+
+                                                @Override
+                                                public void onNegativeClick() {
+
+                                                }
+                                            })
+                                            .hideNegativeButton()
+                                            .show();                           }
                             });
                 }
 
@@ -189,10 +239,31 @@ public class EditProfileActivity extends AppCompatActivity {
             mDatabase.child("Users").child(uid).updateChildren(userProfile)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(EditProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-                            finish();
+                            new CustomDialog(EditProfileActivity.this)
+                                    .setTitle("Success")
+                                    .setMessage("Successfully Update Profile.")
+                                    .setIcon(R.drawable.congrat)
+                                    .setPositiveButton("OK", new CustomDialog.OnDialogClickListener() {
+                                        @Override
+                                        public void onPositiveClick() {
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onNegativeClick() {
+
+                                        }
+                                    })
+                                    .hideNegativeButton()
+                                    .show();
                         } else {
-                            Toast.makeText(EditProfileActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                            new CustomDialog(EditProfileActivity.this)
+                                    .setTitle("Failed")
+                                    .setMessage("Failed To Update Profile.")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
                         }
                     });
         }
@@ -223,10 +294,22 @@ public class EditProfileActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         progressDialog.dismiss();
                         callback.failure("Failed to update avatar");
-                        Toast.makeText(EditProfileActivity.this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
+                        new CustomDialog(EditProfileActivity.this)
+                                .setTitle("Failed")
+                                .setMessage("Failed To Upload Image.")
+                                .setIcon(R.drawable.error)
+                                .setPositiveButton("OK", null)
+                                .hideNegativeButton()
+                                .show();
                     });
             } else {
-                Toast.makeText(this, "No avatar selected", Toast.LENGTH_SHORT).show();
+                new CustomDialog(EditProfileActivity.this)
+                        .setTitle("Failed")
+                        .setMessage("No Avatar Selected.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         }
     }

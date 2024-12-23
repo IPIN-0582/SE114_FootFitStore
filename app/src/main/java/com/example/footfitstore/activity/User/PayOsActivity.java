@@ -1,13 +1,12 @@
 package com.example.footfitstore.activity.User;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +15,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 
 public class PayOsActivity extends AppCompatActivity {
     private WebView payOsScreen;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,13 @@ public class PayOsActivity extends AppCompatActivity {
         final String CANCEL_URL = intent.getStringExtra("cancelUrl");
         final String SUCCESS_URL = intent.getStringExtra("successUrl");
         if (CHECKOUT_URL == null || CANCEL_URL == null || SUCCESS_URL == null) {
-            Toast.makeText(PayOsActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
+            new CustomDialog(PayOsActivity.this)
+                    .setTitle("Failed")
+                    .setMessage("There's Something Wrong. Try again later.")
+                    .setIcon(R.drawable.error)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show();
             return;
         }
 
@@ -48,7 +55,6 @@ public class PayOsActivity extends AppCompatActivity {
         payOsScreen.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                Log.d("PayOsActivity", "onPageStarted: " + url);
                 if (url.contains(SUCCESS_URL)) {
                     success();
                 } else if (url.contains(CANCEL_URL)) {
@@ -59,7 +65,6 @@ public class PayOsActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
-                Log.d("PayOsActivity", "shouldOverrideUrlLoading: " + url);
                 if (url.contains(SUCCESS_URL)) {
                     success();
                     return true;

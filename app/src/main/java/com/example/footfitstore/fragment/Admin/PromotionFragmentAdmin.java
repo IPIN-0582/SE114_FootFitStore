@@ -19,7 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.footfitstore.R;
-import com.example.footfitstore.Utils.CreateAlertDialog;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.Admin.MainActivity_Admin;
 import com.example.footfitstore.adapter.AdminSideAdapter.MinimizeShoeAdapter;
 import com.example.footfitstore.adapter.AdminSideAdapter.NotificationAdminAdapter;
@@ -75,10 +75,12 @@ public class PromotionFragmentAdmin extends Fragment {
         recyclerView = view.findViewById(R.id.promotionList);
         btnSubmit = view.findViewById(R.id.submit_button);
         btnDeleteNotification = view.findViewById(R.id.btnDeleteNotification);
-        btnDeleteNotification.setOnClickListener(v->{
-            deleteNotification(notificationAdminList);
-        });
-        CreateAlertDialog alertDialog = new CreateAlertDialog(getContext());
+        btnDeleteNotification.setOnClickListener(v-> deleteNotification(notificationAdminList));
+        CustomDialog customDialog = new CustomDialog(requireContext())
+                .setTitle("Failed")
+                .setIcon(R.drawable.error)
+                .setPositiveButton("OK", null)
+                .hideNegativeButton();
         btnBack.setOnClickListener(v -> {
             UsersFragmentAdmin usersFragmentAdmin = new UsersFragmentAdmin();
             getParentFragmentManager().beginTransaction()
@@ -122,7 +124,8 @@ public class PromotionFragmentAdmin extends Fragment {
         btnSubmit.setOnClickListener(v -> {
             if (promotionValue == 0)
             {
-                alertDialog.createDialog("Please Select a promotion value");
+                customDialog.setMessage("Please Select A Promotion Value");
+                customDialog.show();
                 return;
             }
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -139,11 +142,12 @@ public class PromotionFragmentAdmin extends Fragment {
             {
                 if (today.after(start) || today.after(end) || start.after(end))
                 {
-                    alertDialog.createDialog("Invalid Date");
+                    customDialog.setMessage("Invalid Date");
+                    customDialog.show();
                     return;
                 }
             }
-            checkExistPromotion(alertDialog, startPromoDate, exists -> {
+            checkExistPromotion(customDialog, startPromoDate, exists -> {
                 if (!exists) {
                     String outputStartDate, outputEndDate;
                     SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.getDefault());
@@ -264,7 +268,7 @@ public class PromotionFragmentAdmin extends Fragment {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
-    private void checkExistPromotion(CreateAlertDialog alertDialog, String startPromoDate, PromotionCheckCallback callback)
+    private void checkExistPromotion(CustomDialog alertDialog, String startPromoDate, PromotionCheckCallback callback)
     {
         String outputStartDate;
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.getDefault());
@@ -298,7 +302,8 @@ public class PromotionFragmentAdmin extends Fragment {
                     }
                     if (end != null && (Objects.requireNonNull(startFinal).before(end) || Objects.requireNonNull(startFinal).equals(end)))
                     {
-                        alertDialog.createDialog("Promotion's already exists");
+                        alertDialog.setMessage("Promotion's already exists");
+                        alertDialog.show();
                         exists = true;
                     }
                 }
