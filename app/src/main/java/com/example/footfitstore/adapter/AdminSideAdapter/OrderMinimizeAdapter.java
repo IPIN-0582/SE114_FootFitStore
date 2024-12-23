@@ -12,16 +12,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
 import com.example.footfitstore.model.OrderHistory;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdapter.OrderMinimizeViewHolder> {
     Context context;
     List<OrderHistory> orderHistoryList;
-
-    public OrderMinimizeAdapter(Context context, List<OrderHistory> orderHistoryList) {
+    private String userId;
+    public OrderMinimizeAdapter(Context context, List<OrderHistory> orderHistoryList, String userId) {
         this.context = context;
         this.orderHistoryList = orderHistoryList;
+        this.userId = userId;
     }
 
     @NonNull
@@ -42,6 +49,10 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
         {
             holder.btnSubmit.setVisibility(View.GONE);
         }
+        holder.btnSubmit.setOnClickListener(v->{
+            updateStatus(orderHistory.getOrderTime());
+            holder.btnSubmit.setVisibility(View.GONE);
+        });
     }
 
     @Override
@@ -60,5 +71,29 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
             txtStatus = itemView.findViewById(R.id.txt_status);
             btnSubmit = itemView.findViewById(R.id.btnSubmit);
         }
+    }
+    private void updateStatus(String orderTime)
+    {
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("order");
+        orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    String orderId = dataSnapshot.getKey();
+                    if (dataSnapshot.child("orderTime").getValue(String.class).equals(orderTime))
+                    {
+                        assert orderId != null;
+                        orderRef.child(orderId).child("orderStatus").setValue("ARRIVED");
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
