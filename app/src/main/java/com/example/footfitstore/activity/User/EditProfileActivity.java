@@ -97,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String firstName = dataSnapshot.child("firstName").getValue(String.class) != null ? dataSnapshot.child("firstName").getValue(String.class) : "";
                 String lastName = dataSnapshot.child("lastName").getValue(String.class) != null ? dataSnapshot.child("lastName").getValue(String.class) : "";
-                // Lấy dữ liệu và gán vào các trường
+                int gender = dataSnapshot.child("gender").getValue(Integer.class) != null ? dataSnapshot.child("gender").getValue(Integer.class) : 0;
                 String fullName = firstName + " " + lastName;
                 tvFullName.setText(fullName);
                 etFirstName.setText(dataSnapshot.child("firstName").getValue(String.class));
@@ -111,6 +111,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 String avatarUrl = dataSnapshot.child("avatarUrl").getValue(String.class);
                 if (avatarUrl != null) {
                     Picasso.get().load(avatarUrl).into(imgProfilePicture);
+                }
+                else
+                {
+                    if (gender == 0) {
+                        imgProfilePicture.setImageResource(R.drawable.boy);
+                    }
+                    else {
+                        imgProfilePicture.setImageResource(R.drawable.girl);
+                    }
                 }
             }
 

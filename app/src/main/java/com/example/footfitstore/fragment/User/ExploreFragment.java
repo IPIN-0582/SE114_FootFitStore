@@ -265,9 +265,19 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                     String firstName = snapshot.child("firstName").getValue(String.class) != null ? snapshot.child("firstName").getValue(String.class) : "";
                     String lastName = snapshot.child("lastName").getValue(String.class) != null ? snapshot.child("lastName").getValue(String.class) : "";
                     headerTextView.setText(firstName+" "+lastName);
+                    int gender = snapshot.child("gender").getValue(Integer.class) != null ? snapshot.child("gender").getValue(Integer.class) : 0;
                     String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
                     if (avatarUrl != null) {
                         Picasso.get().load(avatarUrl).into(imgHeader);
+                    }
+                    else
+                    {
+                        if (gender == 0) {
+                            imgHeader.setImageResource(R.drawable.boy);
+                        }
+                        else {
+                            imgHeader.setImageResource(R.drawable.girl);
+                        }
                     }
                 }
 

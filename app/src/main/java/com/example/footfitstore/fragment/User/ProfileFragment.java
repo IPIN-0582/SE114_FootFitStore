@@ -102,15 +102,19 @@ public class ProfileFragment extends Fragment {
                     String usernameTextview = (dataSnapshot.child("firstName").getValue(String.class) != null ? dataSnapshot.child("firstName").getValue(String.class) : "")
                             + " " + (dataSnapshot.child("lastName").getValue(String.class) != null ? dataSnapshot.child("lastName").getValue(String.class) : "");
                     etUsername.setText(usernameTextview);
-
+                    int gender = dataSnapshot.child("gender").getValue(Integer.class) != null ? dataSnapshot.child("gender").getValue(Integer.class) : 0;
                     // Lấy URL ảnh đại diện từ Database
                     String avatarUrl = dataSnapshot.child("avatarUrl").getValue(String.class);
                     if (avatarUrl != null) {
-                        // Sử dụng Picasso để tải ảnh từ URL
-                        Picasso.get().load(avatarUrl).placeholder(R.drawable.onboard1).into(imgProfilePicture);
-                    } else {
-                        // Hiển thị ảnh mặc định nếu không có URL
-                        imgProfilePicture.setImageResource(R.drawable.onboard1);
+                        Picasso.get().load(avatarUrl).into(imgProfilePicture);
+                    } else
+                    {
+                        if (gender == 0) {
+                            imgProfilePicture.setImageResource(R.drawable.boy);
+                        }
+                        else {
+                            imgProfilePicture.setImageResource(R.drawable.girl);
+                        }
                     }
                 }
 
