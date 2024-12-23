@@ -33,6 +33,10 @@
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
             <!-- Product Category -->
             <TextView
                 android:id="@+id/tvCategory"
@@ -43,12 +47,18 @@
                 android:textColor="@color/black2B2B2B"
                 android:textSize="20sp" />
 
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
             <!-- Cart Button -->
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="40dp"
+                android:src="@drawable/ic_heart"
+                android:background="@drawable/circle_background"
+                android:scaleType="centerInside"
+                android:layout_marginEnd="10dp" />
+
+
             <ImageButton
                 android:id="@+id/btnCart"
                 android:layout_width="wrap_content"
@@ -73,8 +83,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Nike Air Max 270 Essential"
-            android:textColor="@color/black2B2B2B"
-            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <!-- Product Price -->
@@ -86,25 +96,14 @@
             android:orientation="horizontal">
 
             <RatingBar
+                android:layout_marginTop="5dp"
                 android:id="@+id/ratingProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:isIndicator="true"
+                style="?android:attr/ratingBarStyleIndicator"
                 android:numStars="5"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                android:stepSize="0.1" />
-
-            <TextView
-                android:id="@+id/txt_rating"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins"
-                android:paddingStart="10dp"
-                android:paddingTop="10dp"
-                android:text="TextView"
-                android:textSize="20dp" />
+                android:stepSize="0.1"
+                android:isIndicator="true" />
         </LinearLayout>
 
         <!-- Product Price -->
@@ -127,14 +126,6 @@
                 android:visibility="gone" />
 
             <!-- Giá mới -->
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Price"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
         </LinearLayout>
 
         <!-- Product Description -->
@@ -146,13 +137,23 @@
             android:textSize="18dp"
             android:text="The Max Air 270 Unit Delivers Unrivaled, All-Day Comfort. The Sleek, Running-Inspired Design Roots You To Everything Nike..." />
 
+        <TextView
+            android:id="@+id/tvSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="18dp"
+            android:text="Size"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
         <!-- Product Size Selection -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSizes"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="70dp"
             android:orientation="horizontal"
-            android:padding="8dp"
+            android:padding="5dp"
             tools:listitem="@layout/item_size"/>
 
 
@@ -166,22 +167,25 @@
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout2">
 
         <!-- Favorite Button -->
-        <ImageButton
-            android:id="@+id/btnFavorite"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:baselineAligned="false"
-            android:src="@drawable/ic_heart"
-            android:backgroundTint="@color/whiteF7F7F9"
-            android:layout_marginStart="40dp"/>
 
         <!-- Add to Cart Button -->
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$50.00"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginStart="40dp"/>
+
         <Button
             android:id="@+id/btnAddToCart"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginStart="70dp"
+            android:layout_marginStart="40dp"
             android:background="@drawable/bg_btn_secondary"
             android:drawableRight="@drawable/ic_cart"
             android:text="Add To Cart"

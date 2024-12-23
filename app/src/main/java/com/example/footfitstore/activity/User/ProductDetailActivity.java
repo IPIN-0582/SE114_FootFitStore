@@ -39,7 +39,7 @@ import java.util.Map;
 public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView ivProductImage;
-    private TextView tvProductName, tvCategory, tvPrice, tvDescription, tvRating, tvOriginalPrice;
+    private TextView tvProductName, tvCategory, tvPrice, tvDescription, tvOriginalPrice;
     private ImageButton btnFavorite;
     private ImageButton btnCart;
     private ImageButton btnBack;
@@ -73,7 +73,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         recyclerViewSizes = findViewById(R.id.recyclerViewSizes);
         ratingBar = findViewById(R.id.ratingProduct);
-        tvRating = findViewById(R.id.txt_rating);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -161,7 +160,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                     tvDescription.setText(description);
                     tvCategory.setText(category+"'s Shoes");
                     ratingBar.setRating((float)productRating);
-                    tvRating.setText(ratingBar.getRating()+"");
                     Picasso.get().load(imageUrl).into(ivProductImage);
                     DataSnapshot promotionSnapshot = dataSnapshot.child("promotion");
                     if (promotionSnapshot.exists()) {

@@ -15,3 +15,4 @@
 local.properties
 /app/src/main/asset/.env.template
 .idea/deploymentTargetSelector.xml
+/app/google-services.json
