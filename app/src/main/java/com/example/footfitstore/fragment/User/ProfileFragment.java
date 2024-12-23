@@ -99,8 +99,8 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Lấy tên và hiển thị
-                    String usernameTextview = dataSnapshot.child("firstName").getValue(String.class)
-                            + " " + dataSnapshot.child("lastName").getValue(String.class);
+                    String usernameTextview = (dataSnapshot.child("firstName").getValue(String.class) != null ? dataSnapshot.child("firstName").getValue(String.class) : "")
+                            + " " + (dataSnapshot.child("lastName").getValue(String.class) != null ? dataSnapshot.child("lastName").getValue(String.class) : "");
                     etUsername.setText(usernameTextview);
 
                     // Lấy URL ảnh đại diện từ Database

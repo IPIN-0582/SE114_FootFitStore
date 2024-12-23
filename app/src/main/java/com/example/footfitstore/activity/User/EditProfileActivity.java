@@ -40,7 +40,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-
+    private boolean isAvatarChanged;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +71,6 @@ public class EditProfileActivity extends AppCompatActivity {
         // Sự kiện nhấn nút "Done"
         btnDone.setOnClickListener(v -> {
             saveUserProfile();
-            finish();  // Đóng EditProfileActivity
         });
 
         // Sự kiện chọn ảnh cho avatar
@@ -80,6 +79,7 @@ public class EditProfileActivity extends AppCompatActivity {
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Avatar"), PICK_IMAGE_REQUEST);
+            isAvatarChanged = true;
         });
     }
 
@@ -95,9 +95,10 @@ public class EditProfileActivity extends AppCompatActivity {
         mDatabase.child("Users").child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String firstName = dataSnapshot.child("firstName").getValue(String.class) != null ? dataSnapshot.child("firstName").getValue(String.class) : "";
+                String lastName = dataSnapshot.child("lastName").getValue(String.class) != null ? dataSnapshot.child("lastName").getValue(String.class) : "";
                 // Lấy dữ liệu và gán vào các trường
-                String fullName = dataSnapshot.child("firstName").getValue(String.class)
-                        + " " + dataSnapshot.child("lastName").getValue(String.class);
+                String fullName = firstName + " " + lastName;
                 tvFullName.setText(fullName);
                 etFirstName.setText(dataSnapshot.child("firstName").getValue(String.class));
                 etLastName.setText(dataSnapshot.child("lastName").getValue(String.class));
@@ -143,7 +144,6 @@ public class EditProfileActivity extends AppCompatActivity {
             etMobileNumber.setError("Mobile Number is required");
             return;
         }
-
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             String uid = user.getUid();
@@ -153,15 +153,40 @@ public class EditProfileActivity extends AppCompatActivity {
             userProfile.put("address", address);
             userProfile.put("mobileNumber", mobileNumber);
             userProfile.put("gender", gender);
+        if (isAvatarChanged) {
+            uploadAvatar(user.getUid(), new uploadImageCallback() {
+                @Override
+                public void success(String imageUrl) {
+                    userProfile.put("avatarUrl", imageUrl);
+                    mDatabase.child("Users").child(user.getUid()).updateChildren(userProfile)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(EditProfileActivity.this, "Avatar updated successfully", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(EditProfileActivity.this, "Failed to update avatar", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
 
+                @Override
+                public void failure(String errorMessage) {
+
+                }
+            });
+        }
+        else
+        {
             mDatabase.child("Users").child(uid).updateChildren(userProfile)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(EditProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                            finish();
                         } else {
                             Toast.makeText(EditProfileActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
                         }
                     });
+        }
         }
     }
 
@@ -171,41 +196,33 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             avatarUri = data.getData();
             imgProfilePicture.setImageURI(avatarUri);
-
-            FirebaseUser user = mAuth.getCurrentUser();
-            if (user != null) {
-                uploadAvatar(user.getUid());
-            }
         }
     }
 
-    private void uploadAvatar(String uid) {
-        if (avatarUri != null) {
-            ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Uploading avatar...");
-            progressDialog.show();
-
-            StorageReference storageRef = FirebaseStorage.getInstance().getReference("avatars/" + uid + ".jpg");
-            storageRef.putFile(avatarUri)
+    private void uploadAvatar(String uid,uploadImageCallback callback)
+    {
+        {
+            if (avatarUri != null) {
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Uploading avatar...");
+                progressDialog.show();
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference("avatars/" + uid + ".jpg");
+                storageRef.putFile(avatarUri)
                     .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String avatarUrl = uri.toString();
-                        mDatabase.child("Users").child(uid).child("avatarUrl").setValue(avatarUrl)
-                                .addOnCompleteListener(task -> {
-                                    progressDialog.dismiss();
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(EditProfileActivity.this, "Avatar updated successfully", Toast.LENGTH_SHORT).show();
-                                        Picasso.get().load(avatarUrl).into(imgProfilePicture);
-                                    } else {
-                                        Toast.makeText(EditProfileActivity.this, "Failed to update avatar", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        callback.success(uri.toString());
                     }))
                     .addOnFailureListener(e -> {
                         progressDialog.dismiss();
+                        callback.failure("Failed to update avatar");
                         Toast.makeText(EditProfileActivity.this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
                     });
-        } else {
-            Toast.makeText(this, "No avatar selected", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No avatar selected", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+    public interface uploadImageCallback {
+        void success(String imageUrl);
+        void failure(String errorMessage);
     }
 }

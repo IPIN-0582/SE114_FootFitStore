@@ -92,7 +92,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/users"
-                            android:tint="@color/blue0D6EFD" />
+                            app:tint="@color/blue0D6EFD" />
 
                         <TextView
                             android:id="@+id/total_user"
@@ -145,7 +145,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/users"
-                            android:tint="@color/green" />
+                            app:tint="@color/green" />
 
                         <TextView
                             android:id="@+id/active_user"
@@ -198,7 +198,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/users"
-                            android:tint="@color/redF87265" />
+                            app:tint="@color/redF87265" />
 
                         <TextView
                             android:id="@+id/banned_user"

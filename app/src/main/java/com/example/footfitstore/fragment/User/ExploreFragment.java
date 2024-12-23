@@ -262,8 +262,8 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String firstName = snapshot.child("firstName").getValue(String.class);
-                    String lastName = snapshot.child("lastName").getValue(String.class);
+                    String firstName = snapshot.child("firstName").getValue(String.class) != null ? snapshot.child("firstName").getValue(String.class) : "";
+                    String lastName = snapshot.child("lastName").getValue(String.class) != null ? snapshot.child("lastName").getValue(String.class) : "";
                     headerTextView.setText(firstName+" "+lastName);
                     String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
                     if (avatarUrl != null) {
