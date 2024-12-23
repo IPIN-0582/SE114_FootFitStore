@@ -68,23 +68,23 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
                 if (dataSnapshot.exists()) {
                     Promotion promotion = dataSnapshot.getValue(Promotion.class);
                     if (promotion != null && isPromotionActive(promotion,orderDate)) {
-                        // Áp dụng giá khuyến mãi
+
                         double discount = promotion.getDiscount();
                         double discountedPrice = cartRating.getPrice() * (1 - discount / 100);
 
-                        // Hiển thị giá gốc với gạch ngang và giá khuyến mãi
+
                         holder.tvProductOriginalPrice.setText("$" + String.format("%.2f", cartRating.getPrice()));
                         holder.tvProductOriginalPrice.setPaintFlags(holder.tvProductOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         holder.tvProductOriginalPrice.setVisibility(View.VISIBLE);
 
                         holder.tvProductPrice.setText("$" + String.format("%.2f", discountedPrice));
                     } else {
-                        // Nếu không có khuyến mãi, chỉ hiển thị giá gốc
+
                         holder.tvProductOriginalPrice.setVisibility(View.GONE);
                         holder.tvProductPrice.setText("$" + String.format("%.2f", cartRating.getPrice()));
                     }
                 } else {
-                    // Nếu không có khuyến mãi, chỉ hiển thị giá gốc
+
                     holder.tvProductOriginalPrice.setVisibility(View.GONE);
                     holder.tvProductPrice.setText("$" + String.format("%.2f", cartRating.getPrice()));
                 }
@@ -102,7 +102,6 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
             }
         });
 
-        // Restore rating value if exists
         holder.ratingBar.setRating((float) cartRating.getRating());
         loadImageFromFirebase(cartRating.getProductId(), holder.ivProductImage);
     }
@@ -140,14 +139,12 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     String imageUrl = dataSnapshot.getValue(String.class);
-                    // Sử dụng Picasso hoặc Glide để tải ảnh
-                    Picasso.get().load(imageUrl).into(imageView);  // Dùng Picasso
+                    Picasso.get().load(imageUrl).into(imageView);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Xử lý lỗi nếu có
             }
         });
     }

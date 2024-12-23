@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.User.MainActivity;
 import com.example.footfitstore.adapter.UserSideAdapter.ShoeAdapter;
 import com.example.footfitstore.adapter.UserSideAdapter.SizeAdapter;
@@ -69,7 +69,13 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
             public void onClick(View v) {
                 if (selectedSize==null)
                 {
-                    Toast.makeText(getContext(), "Please select a size", Toast.LENGTH_SHORT).show();
+                    new CustomDialog(requireContext())
+                            .setTitle("Failed")
+                            .setMessage("Please Select A Size.")
+                            .setIcon(R.drawable.error)
+                            .setPositiveButton("OK", null)
+                            .hideNegativeButton()
+                            .show();
                 }
                 else {
                     addToCart();
@@ -91,45 +97,37 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         favouriteShoesRecyclerView.setLayoutManager(gridLayoutManager);
 
-        // Dùng cùng một adapter cho cả hai RecyclerView nhưng với cờ viewType khác nhau
         favouriteShoeAdapter = new ShoeAdapter(getContext(), null, favouriteshoeList, "all",this,this);
         favouriteShoesRecyclerView.setAdapter(favouriteShoeAdapter);
 
         btnBack.setOnClickListener(v -> {
-            // Chuyển đổi sang ExploreFragment
             ExploreFragment exploreFragment = new  ExploreFragment();
 
-            // Sử dụng FragmentManager để thay thế fragment hiện tại bằng ExploreFragment
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_frame, exploreFragment)  // R.id.main_frame là ID của FrameLayout trong MainActivity
-                    .addToBackStack(null)  // Nếu muốn cho phép quay lại
+                    .replace(R.id.main_frame, exploreFragment)
+                    .addToBackStack(null)
                     .commit();
 
-            // Cập nhật BottomNavigationView
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);  // Cập nhật trạng thái bottom nav
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);
             }
         });
 
         btnCart.setOnClickListener(v -> {
-            // Chuyển đổi sang CartFragment
             CartFragment cartFragment = new CartFragment();
 
-            // Sử dụng FragmentManager để thay thế fragment hiện tại bằng CartFragment
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_frame, cartFragment)  // R.id.main_frame là ID của FrameLayout trong MainActivity
-                    .addToBackStack(null)  // Nếu muốn cho phép quay lại
+                    .replace(R.id.main_frame, cartFragment)
+                    .addToBackStack(null)
                     .commit();
 
-            // Cập nhật BottomNavigationView
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_cart);  // Cập nhật trạng thái bottom nav
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_cart);
             }
         });
 
         allshoesReference = FirebaseDatabase.getInstance().getReference("Shoes");
 
-        // Lấy dữ liệu từ Firebase
         loadDataFromFirebase();
         return view;
     }
@@ -137,16 +135,13 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
     @Override
     public void onResume() {
         super.onResume();
-        loadDataFromFirebase();  // Tải lại dữ liệu để cập nhật trạng thái yêu thích mới nhất
+        loadDataFromFirebase();
     }
 
 
     private void loadDataFromFirebase() {
-        // Lấy UID của người dùng hiện tại
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            // Người dùng chưa đăng nhập, không cần tải dữ liệu yêu thích
-            Log.e("FavouriteFragment", "Người dùng chưa đăng nhập.");
             return;
         }
 
@@ -168,13 +163,10 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
                     favouriteProductIds.add(productId);
                 }
 
-                // Sau khi có danh sách yêu thích, tải danh sách giày
                 loadShoesData(favouriteProductIds);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Lỗi khi lấy dữ liệu yêu thích", error.toException());
-                // Trong trường hợp lỗi, vẫn tải danh sách giày mà không có thông tin yêu thích
                 loadShoesData(new HashSet<>());
             }
         });
@@ -182,32 +174,25 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
 
     private void loadShoesData(Set<String> favouriteProductIds) {
         if (favouriteProductIds.isEmpty()) {
-            Log.e("Firebase", "Không có sản phẩm yêu thích nào.");
             return;
         }
         allshoesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange (@NonNull DataSnapshot snapshot){
                 favouriteshoeList.clear();
-                int favouriteCount = 0;
                 for (DataSnapshot shoeSnapshot : snapshot.getChildren()) {
                     Shoe shoe = shoeSnapshot.getValue(Shoe.class);
-                    // Chỉ thêm các sản phẩm thuộc danh sách yêu thích
                     if (shoe != null && favouriteProductIds.contains(shoeSnapshot.getKey())) {
                         shoe.setProductId(shoeSnapshot.getKey());
                         shoe.setFavourite(true);
                         favouriteshoeList.add(shoe);
-                        favouriteCount++;
                     }
                 }
-                Log.d("COUNT:", "favourite shoe:"+favouriteCount);
-                // Thông báo rằng dữ liệu đã thay đổi sau khi tất cả sản phẩm đã được xử lý
                 favouriteShoeAdapter.notifyDataSetChanged();
         }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Lỗi khi lấy dữ liệu giày", error.toException());
             }
         });
     }
@@ -219,20 +204,24 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     productName = dataSnapshot.child("title").getValue(String.class);
-                    String description = dataSnapshot.child("description").getValue(String.class);
                     price = dataSnapshot.child("price").getValue(Double.class);
-                    // Tải kích cỡ giày từ Firebase
                     List<String> sizes = new ArrayList<>();
                     for (DataSnapshot sizeSnapshot : dataSnapshot.child("size").getChildren()) {
                         sizes.add(sizeSnapshot.getValue(String.class));
                     }
-                    setupSizeRecyclerView(sizes);  // Hiển thị các kích cỡ vào RecyclerView
+                    setupSizeRecyclerView(sizes);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load product data", Toast.LENGTH_SHORT).show();
+                new CustomDialog(requireContext())
+                        .setTitle("Failed")
+                        .setMessage("Failed To Load Product Data.")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         });
     }
@@ -243,21 +232,29 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
         sizeAdapter.setOnSizeSelectedListener(size -> selectedSize = size);
     }
     private void addToCart() {
-        // Tạo khóa mới cho sản phẩm trong giỏ hàng dựa trên productId và size
         String cartKey = productId + "_" + selectedSize;
 
-        // Kiểm tra xem sản phẩm với kích cỡ đã có trong giỏ hàng chưa
         userCartRef.child(cartKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
                     int currentQuantity = dataSnapshot.child("quantity").getValue(Integer.class);
                     userCartRef.child(cartKey).child("quantity").setValue(currentQuantity + 1)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Increased quantity in cart", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update cart", Toast.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> new CustomDialog(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Successfully Add To Cart")
+                                    .setIcon(R.drawable.congrat)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show())
+                            .addOnFailureListener(e -> new CustomDialog(requireContext())
+                                    .setTitle("Failed")
+                                    .setMessage("Failed From Add To Cart")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show());
                 } else {
-                    // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới với số lượng là 1
                     Map<String, Object> cartItem = new HashMap<>();
                     cartItem.put("productId", productId);
                     cartItem.put("productName", productName);
@@ -266,14 +263,32 @@ public class FavouriteFragment extends Fragment implements ShoeAdapter.BottomShe
                     cartItem.put("size", selectedSize);
 
                     userCartRef.child(cartKey).setValue(cartItem)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Added to cart", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> new CustomDialog(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Successfully Add To Cart")
+                                    .setIcon(R.drawable.congrat)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show())
+                            .addOnFailureListener(e -> new CustomDialog(requireContext())
+                                    .setTitle("Failed")
+                                    .setMessage("Failed From Add To Cart")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to check cart status", Toast.LENGTH_SHORT).show();
+                new CustomDialog(requireContext())
+                        .setTitle("Failed")
+                        .setMessage("Failed From Fetch Data")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         });
     }

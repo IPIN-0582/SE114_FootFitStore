@@ -34,33 +34,29 @@ public class MainActivity extends AppCompatActivity {
         mainFrame = findViewById(R.id.main_frame);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
 
-                if (itemId == R.id.nav_explore) {
-                    setFragment(new ExploreFragment());
-                    return true;
-                } else if (itemId == R.id.nav_favourite) {
-                    setFragment(new FavouriteFragment());
-                    return true;
-                } else if (itemId == R.id.nav_cart) {
-                    setFragment(new CartFragment());
-                    return true;
-                } else if (itemId == R.id.nav_notifications) {
-                      setFragment(new NotificationsFragment());
-                      return true;
-                } else if (itemId == R.id.nav_profile) {
-                    setFragment(new ProfileFragment());
-                    return true;
-                } else {
-                    return false;
-                }
+            if (itemId == R.id.nav_explore) {
+                setFragment(new ExploreFragment());
+                return true;
+            } else if (itemId == R.id.nav_favourite) {
+                setFragment(new FavouriteFragment());
+                return true;
+            } else if (itemId == R.id.nav_cart) {
+                setFragment(new CartFragment());
+                return true;
+            } else if (itemId == R.id.nav_notifications) {
+                  setFragment(new NotificationsFragment());
+                  return true;
+            } else if (itemId == R.id.nav_profile) {
+                setFragment(new ProfileFragment());
+                return true;
+            } else {
+                return false;
             }
         });
 
-        // Kiểm tra intent để mở fragment cụ thể nếu cần
         Intent intent = getIntent();
         if (intent != null) {
             String openFragment = intent.getStringExtra("openFragment");
@@ -71,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
                 setFragment(new ProfileFragment());
                 bottomNavigationView.setSelectedItemId(R.id.nav_profile);
             } else {
-                setFragment(new ExploreFragment());  // Mặc định là ExploreFragment
+                setFragment(new ExploreFragment());
             }
         } else {
-            setFragment(new ExploreFragment());  // Mặc định là ExploreFragment nếu không có intent
+            setFragment(new ExploreFragment());
         }
     }
 

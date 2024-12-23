@@ -2,23 +2,18 @@ package com.example.footfitstore.fragment.User;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -26,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.Utils.OnBackPressedListener;
 import com.example.footfitstore.activity.LoginActivity;
 import com.example.footfitstore.activity.User.MainActivity;
@@ -65,7 +61,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     private CategoryAdapter categoryAdapter;
     private List<String> categoryList = new ArrayList<>(), bannerList = new ArrayList<>();
     private List<Shoe> popularshoeList = new ArrayList<>(), allshoesList = new ArrayList<>();
-    private DatabaseReference userCartRef, bannerReference, allshoesReference;
+    private DatabaseReference userCartRef, bannerReference, allShoesReference;
     private String selectedSize, productId, productName;
     private double price;
     private String selectedCategory="";
@@ -76,20 +72,13 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Khởi tạo giao diện của fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
-        // Khởi tạo các thành phần UI và adapter
         initializeViews(view);
         initializeAdapters();
         loadDataFromFirebase();
         loadCategoriesFromFirebase();
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(navigationView);
-            }
-        });
+        btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(navigationView));
         View headerView = navigationView.getHeaderView(0);
         headerTextView = headerView.findViewById(R.id.txt_displayName);
         imgHeader = headerView.findViewById(R.id.avatar);
@@ -98,88 +87,73 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(getActivity(),drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.navi_cart)
-                {
-                    openCartFragment();
-                }
-                else if (item.getItemId() == R.id.navi_favourite)
-                {
-                    /*getParentFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame, new FavouriteFragment())
-                            .addToBackStack(null)
-                            .commit();*/
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_favourite);
-                    }
-                }
-                else if (item.getItemId() == R.id.navi_order)
-                {
-                    Intent intent = new Intent(getActivity(), OrderHistoryActivity.class);
-                    startActivity(intent);
-                }
-                else if (item.getItemId() == R.id.navi_profile)
-                {
-                    /*getParentFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame, new ProfileFragment())
-                            .addToBackStack(null)
-                            .commit();*/
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_profile);
-                    }
-                }
-                else if (item.getItemId() == R.id.navi_log_out)
-                {
-                    FirebaseAuth auth = FirebaseAuth.getInstance();
-                    auth.signOut();
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    if (getActivity() instanceof MainActivity)
-                    {
-                        getActivity().finish();
-                    }
-                }
-                else if (item.getItemId() == R.id.navi_notification)
-                {
-                    /*getParentFragmentManager().beginTransaction()
-                            .replace(R.id.main_frame, new NotificationsFragment())
-                            .addToBackStack(null)
-                            .commit();*/
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_notifications);
-                    }
-                }
-                drawerLayout.closeDrawer(GravityCompat.START);
-                drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-                    @Override
-                    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-                    }
-
-                    @Override
-                    public void onDrawerOpened(@NonNull View drawerView) {
-
-                    }
-
-                    @Override
-                    public void onDrawerClosed(@NonNull View drawerView) {
-                        navigationView.getMenu().getItem(0).setChecked(true);
-                    }
-
-                    @Override
-                    public void onDrawerStateChanged(int newState) {
-
-                    }
-                });
-                return true;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navi_cart)
+            {
+                openCartFragment();
             }
+            else if (item.getItemId() == R.id.navi_favourite)
+            {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_favourite);
+                }
+            }
+            else if (item.getItemId() == R.id.navi_order)
+            {
+                Intent intent = new Intent(getActivity(), OrderHistoryActivity.class);
+                startActivity(intent);
+            }
+            else if (item.getItemId() == R.id.navi_profile)
+            {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_profile);
+                }
+            }
+            else if (item.getItemId() == R.id.navi_log_out)
+            {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                if (getActivity() instanceof MainActivity)
+                {
+                    getActivity().finish();
+                }
+            }
+            else if (item.getItemId() == R.id.navi_notification)
+            {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_notifications);
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.START);
+            drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+                @Override
+                public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+                }
+
+                @Override
+                public void onDrawerOpened(@NonNull View drawerView) {
+
+                }
+
+                @Override
+                public void onDrawerClosed(@NonNull View drawerView) {
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                }
+
+                @Override
+                public void onDrawerStateChanged(int newState) {
+
+                }
+            });
+            return true;
         });
-        // Xử lý khi nhấn vào nút giỏ hàng
+
         btnCart.setOnClickListener(v -> openCartFragment());
-        // Xử lý khi nhấn vào thanh tìm kiếm
+
         searchEditText.setOnTouchListener((v,motionEvent) ->{
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 Intent intent = new Intent(getContext(), SearchActivity.class);
@@ -206,10 +180,9 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     @Override
     public void onResume() {
         super.onResume();
-        loadDataFromFirebase(); // Tải lại dữ liệu khi fragment được tiếp tục hoạt động
+        loadDataFromFirebase();
     }
 
-    // Hàm khởi tạo các thành phần UI
     private void initializeViews(View view) {
         txtSeeAllPopular = view.findViewById(R.id.seeAllPopular);
         btnMenu=view.findViewById(R.id.btnMenu);
@@ -222,14 +195,12 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         drawerLayout=view.findViewById(R.id.explore_nav);
         navigationView=view.findViewById(R.id.nav_view);
 
-        // Thiết lập layout cho các RecyclerView
         popularShoesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         allShoesRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         bannerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
-    // Hàm khởi tạo các adapter cho RecyclerView
     private void initializeAdapters() {
         popularShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "popular", this, this);
         allShoeAdapter = new ShoeAdapter(getContext(), popularshoeList, allshoesList, "all", this, this);
@@ -242,18 +213,15 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
             }
         });
 
-        // Thiết lập adapter cho các RecyclerView
         popularShoesRecyclerView.setAdapter(popularShoeAdapter);
         allShoesRecyclerView.setAdapter(allShoeAdapter);
         bannerRecyclerView.setAdapter(bannerAdapter);
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
 
-    // Hàm tải dữ liệu từ Firebase
     private void loadDataFromFirebase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user != null ? user.getUid() : null;
-        // Lấy dữ liệu giỏ hàng và yêu thích của người dùng nếu đã đăng nhập
         if (uid != null) {
             userCartRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("cart");
             DatabaseReference userFavouriteRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("favourite");
@@ -262,12 +230,22 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String firstName = snapshot.child("firstName").getValue(String.class);
-                    String lastName = snapshot.child("lastName").getValue(String.class);
+                    String firstName = snapshot.child("firstName").getValue(String.class) != null ? snapshot.child("firstName").getValue(String.class) : "";
+                    String lastName = snapshot.child("lastName").getValue(String.class) != null ? snapshot.child("lastName").getValue(String.class) : "";
                     headerTextView.setText(firstName+" "+lastName);
+                    int gender = snapshot.child("gender").getValue(Integer.class) != null ? snapshot.child("gender").getValue(Integer.class) : 0;
                     String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
                     if (avatarUrl != null) {
                         Picasso.get().load(avatarUrl).into(imgHeader);
+                    }
+                    else
+                    {
+                        if (gender == 0) {
+                            imgHeader.setImageResource(R.drawable.boy);
+                        }
+                        else {
+                            imgHeader.setImageResource(R.drawable.girl);
+                        }
                     }
                 }
 
@@ -279,14 +257,11 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         } else {
             loadShoesData(new HashSet<>());
         }
-
-        // Lấy dữ liệu banner từ Firebase
         bannerReference = FirebaseDatabase.getInstance().getReference("BannerEvent");
-        allshoesReference = FirebaseDatabase.getInstance().getReference("Shoes");
+        allShoesReference = FirebaseDatabase.getInstance().getReference("Shoes");
         bannerReference.addValueEventListener(getBannerEventListener());
     }
 
-    // Lắng nghe sự kiện tải dữ liệu yêu thích của người dùng từ Firebase
     private ValueEventListener getFavouriteEventListener() {
         return new ValueEventListener() {
             @Override
@@ -297,11 +272,12 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 loadShoesData(favouriteProductIds);
             }
-            @Override public void onCancelled(@NonNull DatabaseError error) { Log.e("Firebase", "Không thể tải danh sách yêu thích", error.toException()); }
+            @Override public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         };
     }
 
-    // Lắng nghe sự kiện tải dữ liệu banner từ Firebase
     private ValueEventListener getBannerEventListener() {
         return new ValueEventListener() {
             @Override
@@ -313,13 +289,14 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 bannerAdapter.notifyDataSetChanged();
             }
-            @Override public void onCancelled(@NonNull DatabaseError error) { Log.e("Firebase", "Không thể tải danh sách banner", error.toException()); }
+            @Override public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         };
     }
 
-    // Hàm tải dữ liệu giày từ Firebase và kiểm tra giày nào được yêu thích
     private void loadShoesData(Set<String> favouriteProductIds) {
-        allshoesReference.addValueEventListener(new ValueEventListener() {
+        allShoesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 allshoesList.clear();
@@ -336,11 +313,12 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 popularShoeAdapter.notifyDataSetChanged();
                 allShoeAdapter.notifyDataSetChanged();
             }
-            @Override public void onCancelled(@NonNull DatabaseError error) { Log.e("Firebase", "Không thể tải danh sách giày", error.toException()); }
+            @Override public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
     }
 
-    // Mở fragment giỏ hàng khi nhấn vào nút giỏ hàng
     private void openCartFragment() {
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.main_frame, new CartFragment())
@@ -351,7 +329,6 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         }
     }
 
-    // Hàm tải dữ liệu danh mục từ Firebase
     private void loadCategoriesFromFirebase() {
         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
         categoryRef.addValueEventListener(new ValueEventListener() {
@@ -364,17 +341,21 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                 }
                 categoryAdapter.notifyDataSetChanged();
             }
-            @Override public void onCancelled(@NonNull DatabaseError error) { Toast.makeText(getContext(), "Không thể tải danh mục.", Toast.LENGTH_SHORT).show(); }
+            @Override public void onCancelled(@NonNull DatabaseError error) { new CustomDialog(requireContext())
+                    .setTitle("Failed")
+                    .setMessage("Failed To Load Categories")
+                    .setIcon(R.drawable.error)
+                    .setPositiveButton("OK", null)
+                    .hideNegativeButton()
+                    .show(); }
         });
     }
 
-    // Hiển thị hộp thoại chọn kích cỡ giày
     @Override
     public void showBottomSheetDialog(Shoe shoe) {
         productId = shoe.getProductId();
         price = shoe.getPrice();
         productName = shoe.getTitle();
-
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_size_pick, null);
         setupSizeRecyclerView(dialogView, shoe.getProductId(), shoe.getSize());
@@ -390,7 +371,6 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         bottomSheetDialog.show();
     }
 
-    // Thiết lập RecyclerView để chọn kích cỡ giày
     private void setupSizeRecyclerView(View dialogView, String productId, List<String> productSize) {
         RecyclerView recyclerView = dialogView.findViewById(R.id.size);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -399,7 +379,6 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         sizeAdapter.setOnSizeSelectedListener(size -> selectedSize = size);
     }
 
-    // Hàm thêm sản phẩm vào giỏ hàng
     private void addToCart() {
         String cartKey = productId + "_" + selectedSize;
         userCartRef.child(cartKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -409,7 +388,13 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                     Integer currentQuantity = dataSnapshot.child("quantity").getValue(Integer.class);
                     if (currentQuantity != null) {
                         userCartRef.child(cartKey).child("quantity").setValue(currentQuantity + 1)
-                                .addOnSuccessListener(aVoid -> showDialog())
+                                .addOnSuccessListener(aVoid -> new CustomDialog(requireContext())
+                                        .setTitle("Success")
+                                        .setMessage("Successfully Add To Cart")
+                                        .setIcon(R.drawable.congrat)
+                                        .setPositiveButton("OK", null)
+                                        .hideNegativeButton()
+                                        .show())
                                 .addOnFailureListener(e -> showToast("Failed to update cart"));
                     }
                 } else {
@@ -420,44 +405,37 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
                     cartItem.put("quantity", 1);
                     cartItem.put("size", selectedSize);
                     userCartRef.child(cartKey).setValue(cartItem)
-                            .addOnSuccessListener(aVoid -> showDialog())
+                            .addOnSuccessListener(aVoid -> new CustomDialog(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Successfully Add To Cart")
+                                    .setIcon(R.drawable.congrat)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show())
                             .addOnFailureListener(e -> showToast("Failed to add to cart"));
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                showToast("Không thể kiểm tra trạng thái giỏ hàng");
+                showToast("Cannot Check The Cart Status");
             }
         });
     }
 
-    // Hàm tiện ích để hiển thị Toast nếu Context không phải là null
     private void showToast(String message) {
-        if (getContext() != null) {
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        }
+        new CustomDialog(requireContext())
+                .setTitle("Failed")
+                .setMessage(message)
+                .setIcon(R.drawable.error)
+                .setPositiveButton("OK", null)
+                .hideNegativeButton()
+                .show();
     }
 
-    // Hàm cập nhật dữ liệu của các adapter
     public void updateAdapters() {
         popularShoeAdapter.notifyDataSetChanged();
         allShoeAdapter.notifyDataSetChanged();
-    }
-    private void showDialog()
-    {
-        if (getActivity() != null)
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialog);
-            final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_to_cart, null);
-            builder.setView(customLayout);
-            Button positiveButton = customLayout.findViewById(R.id.back_to_shopping);
-            AlertDialog alertDialog = builder.create();
-            positiveButton.setOnClickListener(v -> {
-                alertDialog.dismiss();
-            });
-            alertDialog.show();
-        }
     }
     private void ensureFavouriteStatusOnItem()
     {
@@ -481,7 +459,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
     }
     private void loadProductByCategory(Set<String> favouriteProductIds)
     {
-        allshoesReference.addValueEventListener(new ValueEventListener() {
+        allShoesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!selectedCategory.isEmpty())

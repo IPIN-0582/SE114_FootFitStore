@@ -16,7 +16,7 @@ public class CustomDialog {
     private TextView titleView, messageView;
     private ImageView iconView;
     private Button btnOk, btnCancel;
-    private Context context;
+    private final Context context;
 
     public interface OnDialogClickListener {
         void onPositiveClick();
@@ -34,19 +34,16 @@ public class CustomDialog {
         dialog.setContentView(R.layout.dialog_custom);
         dialog.setCancelable(false);
 
-        // Đặt nền trong suốt
         Window window = dialog.getWindow();
         if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            // Set kích thước dialog
             WindowManager.LayoutParams params = new WindowManager.LayoutParams();
             params.copyFrom(window.getAttributes());
             params.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
             window.setAttributes(params);
         }
 
-        // Khởi tạo các view
         titleView = dialog.findViewById(R.id.dialogTitle);
         messageView = dialog.findViewById(R.id.dialogMessage);
         iconView = dialog.findViewById(R.id.dialogIcon);

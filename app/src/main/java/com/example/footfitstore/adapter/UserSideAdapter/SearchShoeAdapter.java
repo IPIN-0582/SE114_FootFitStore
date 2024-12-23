@@ -39,17 +39,14 @@ public class SearchShoeAdapter extends RecyclerView.Adapter<SearchShoeAdapter.Se
     public void onBindViewHolder(@NonNull SearchShoeViewHolder holder, int position) {
         Shoe shoe = shoeList.get(position);
 
-        // Gán dữ liệu vào các View
         holder.tvShoeName.setText(shoe.getTitle());
         holder.tvShoePrice.setText("$" + shoe.getPrice());
 
-        // Tải ảnh sản phẩm từ Firebase hoặc URL
         Picasso.get().load(shoe.getPicUrl().get(0)).into(holder.ivShoeImage);
 
         holder.itemView.setOnClickListener(v -> {
-            // Tạo Intent để điều hướng đến ProductDetailActivity
             Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.putExtra("productId", shoe.getProductId()); // Truyền productId vào Intent
+            intent.putExtra("productId", shoe.getProductId());
             context.startActivity(intent);
         });
     }

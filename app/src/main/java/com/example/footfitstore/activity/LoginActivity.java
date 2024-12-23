@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private EditText emailLogin, passwordLogin;
     private Button btnLogin;
-    //private SignInButton btnGoogleSignIn;
     private TextView tvRegister,tvRecovery;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -49,18 +48,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // Configure Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // Đảm bảo bạn có giá trị đúng cho web_client_id
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Initialize views
         emailLogin = findViewById(R.id.emailLogin);
         passwordLogin = findViewById(R.id.passwordLogin);
         btnLogin = findViewById(R.id.btnLogin);
@@ -68,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
         tvRegister = findViewById(R.id.tvRegister);
         tvRecovery = findViewById(R.id.tvRecovery);
 
-        // Button listeners
         btnLogin.setOnClickListener(v -> loginUser());
         btnGoogleSignIn.setOnClickListener(v -> signInWithGoogle());
 
@@ -89,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...)
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -243,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void addUser(FirebaseUser user, String uid, DatabaseReference databaseReference)
     {
-        User user1 = new User(user.getEmail()); // Tạo đối tượng người dùng
+        User user1 = new User(user.getEmail());
         databaseReference.child(uid).setValue(user1);
         databaseReference.child(uid).child("role").setValue("user");
     }

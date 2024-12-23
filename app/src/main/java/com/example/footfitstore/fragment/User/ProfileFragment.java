@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.User.EditProfileActivity;
 import com.example.footfitstore.activity.User.MainActivity;
 import com.example.footfitstore.activity.User.ResetPasswordActivity;
@@ -26,8 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import android.widget.Toast;
-
 public class ProfileFragment extends Fragment {
 
     private FirebaseAuth mAuth;
@@ -38,14 +37,11 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Initialize Firebase Auth and Database reference
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Find views
         etUsername = view.findViewById(R.id.et_name);
         etEmail = view.findViewById(R.id.et_email);
         recoveryPassword = view.findViewById(R.id.tv_recovery_password);
@@ -55,7 +51,6 @@ public class ProfileFragment extends Fragment {
 
         initializeComponent();
 
-        // Set click listeners
         btnEditProfile.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), EditProfileActivity.class));
         });
@@ -65,18 +60,15 @@ public class ProfileFragment extends Fragment {
         });
 
         btnBack.setOnClickListener(v -> {
-            // Chuyển đổi sang ExploreFragment
             ExploreFragment exploreFragment = new  ExploreFragment();
 
-            // Sử dụng FragmentManager để thay thế fragment hiện tại bằng ExploreFragment
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_frame, exploreFragment)  // R.id.main_frame là ID của FrameLayout trong MainActivity
-                    .addToBackStack(null)  // Nếu muốn cho phép quay lại
+                    .replace(R.id.main_frame, exploreFragment)
+                    .addToBackStack(null)
                     .commit();
 
-            // Cập nhật BottomNavigationView
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);  // Cập nhật trạng thái bottom nav
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);
             }
         });
         return view;
@@ -84,7 +76,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initializeComponent(); // Gọi lại hàm này để làm mới dữ liệu
+        initializeComponent();
     }
 
     private void initializeComponent() {
@@ -94,30 +86,36 @@ public class ProfileFragment extends Fragment {
             etEmail.setText(user.getEmail());
             String userUid = user.getUid();
 
-            // Lấy và hiển thị ảnh đại diện từ Firebase Database
             mDatabase.child("Users").child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Lấy tên và hiển thị
-                    String usernameTextview = dataSnapshot.child("firstName").getValue(String.class)
-                            + " " + dataSnapshot.child("lastName").getValue(String.class);
+                    String usernameTextview = (dataSnapshot.child("firstName").getValue(String.class) != null ? dataSnapshot.child("firstName").getValue(String.class) : "")
+                            + " " + (dataSnapshot.child("lastName").getValue(String.class) != null ? dataSnapshot.child("lastName").getValue(String.class) : "");
                     etUsername.setText(usernameTextview);
-
-                    // Lấy URL ảnh đại diện từ Database
+                    int gender = dataSnapshot.child("gender").getValue(Integer.class) != null ? dataSnapshot.child("gender").getValue(Integer.class) : 0;
                     String avatarUrl = dataSnapshot.child("avatarUrl").getValue(String.class);
                     if (avatarUrl != null) {
-                        // Sử dụng Picasso để tải ảnh từ URL
-                        Picasso.get().load(avatarUrl).placeholder(R.drawable.onboard1).into(imgProfilePicture);
-                    } else {
-                        // Hiển thị ảnh mặc định nếu không có URL
-                        imgProfilePicture.setImageResource(R.drawable.onboard1);
+                        Picasso.get().load(avatarUrl).into(imgProfilePicture);
+                    } else
+                    {
+                        if (gender == 0) {
+                            imgProfilePicture.setImageResource(R.drawable.boy);
+                        }
+                        else {
+                            imgProfilePicture.setImageResource(R.drawable.girl);
+                        }
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Xử lý lỗi khi không thể truy cập dữ liệu
-                    Toast.makeText(getActivity(), "Lỗi khi lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                    new CustomDialog(requireContext())
+                            .setTitle("Failed")
+                            .setMessage("Failed From Fetch Data")
+                            .setIcon(R.drawable.error)
+                            .setPositiveButton("OK", null)
+                            .hideNegativeButton()
+                            .show();
                 }
             });
         }

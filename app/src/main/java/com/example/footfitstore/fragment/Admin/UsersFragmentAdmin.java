@@ -51,6 +51,9 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
     NavigationView navigationView;
     TextView headerTextView;
     CircleImageView imgHeader;
+    TextView totalUserText;
+    TextView activeUserText;
+    TextView bannedUserText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,7 +62,9 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
         recyclerView = view.findViewById(R.id.recycler_users);
         drawerLayout=view.findViewById(R.id.explore_nav);
         navigationView=view.findViewById(R.id.nav_view);
-
+        totalUserText = view.findViewById(R.id.total_user);
+        activeUserText = view.findViewById(R.id.active_user);
+        bannedUserText = view.findViewById(R.id.banned_user);
         btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(navigationView));
         View headerView = navigationView.getHeaderView(0);
         headerTextView = headerView.findViewById(R.id.txt_displayName);
@@ -160,7 +165,6 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
     }
 
     private void loadUser() {
-        userList.clear();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -194,7 +198,6 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
 
                     userList.add(user);
 
-                    // Increment counters based on user status
                     totalUsers++;
                     if ("active".equalsIgnoreCase(status)) {
                         activeUsers++;
@@ -205,10 +208,7 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
 
                 userAdapter.notifyDataSetChanged();
 
-                // Update UI elements with the counts
-                TextView totalUserText = getView().findViewById(R.id.total_user);
-                TextView activeUserText = getView().findViewById(R.id.active_user);
-                TextView bannedUserText = getView().findViewById(R.id.banned_user);
+
 
                 totalUserText.setText(String.valueOf(totalUsers));
                 activeUserText.setText(String.valueOf(activeUsers));
@@ -217,7 +217,7 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle database error
+
             }
         });
     }
@@ -230,8 +230,8 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String firstName = snapshot.child("firstName").getValue(String.class);
-                    String lastName = snapshot.child("lastName").getValue(String.class);
+                    String firstName = snapshot.child("firstName").getValue(String.class) != null ? snapshot.child("firstName").getValue(String.class) : "";
+                    String lastName = snapshot.child("lastName").getValue(String.class) != null ? snapshot.child("lastName").getValue(String.class) : "";
                     headerTextView.setText(firstName+" "+lastName);
                     String avatarUrl = snapshot.child("avatarUrl").getValue(String.class);
                     if (avatarUrl != null) {

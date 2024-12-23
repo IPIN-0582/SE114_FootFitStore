@@ -3,11 +3,9 @@ package com.example.footfitstore.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,10 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class RegisterActivity extends AppCompatActivity {
     private EditText usernameRegister, emailRegister, passwordRegister;
-    private Button btnRegister;
-    private TextView tvLogin;
     private FirebaseAuth mAuth;
 
     private DatabaseReference databaseReference;
@@ -37,19 +35,17 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users"); // Firebase Realtime Database
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         emailRegister = findViewById(R.id.emailRegister);
         usernameRegister = findViewById(R.id.usernameRegister);
         passwordRegister = findViewById(R.id.passwordRegister);
-        btnRegister = findViewById(R.id.btnRegister);
-        tvLogin = findViewById(R.id.tvLogin);
+        Button btnRegister = findViewById(R.id.btnRegister);
+        TextView tvLogin = findViewById(R.id.tvLogin);
 
         btnRegister.setOnClickListener(v -> registerUser());
 
-        tvLogin.setOnClickListener(v -> {
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-        });
+        tvLogin.setOnClickListener(v -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
     }
 
     private void registerUser() {
@@ -79,8 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (firebaseUser != null) {
 
                             String uid = firebaseUser.getUid();
-                            // Lưu thông tin người dùng vào Firebase Realtime Database
-                            User user = new User(email); // Tạo đối tượng người dùng
+                            User user = new User(email);
                             databaseReference.child(uid).setValue(user)
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
@@ -109,9 +104,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                     else {
-                        // Xử lý các lỗi khi đăng ký
                         try {
-                            throw task.getException();
+                            throw Objects.requireNonNull(task.getException());
                         } catch (FirebaseAuthWeakPasswordException e) {
                             new CustomDialog(RegisterActivity.this)
                                     .setTitle("Register Failed")
@@ -138,12 +132,15 @@ public class RegisterActivity extends AppCompatActivity {
                                     .hideNegativeButton()
                                     .show();
                         } catch (Exception e) {
-                            Log.e("RegisterActivity", e.getMessage());
-                            Toast.makeText(RegisterActivity.this, "Register Failed", Toast.LENGTH_SHORT).show();
+                            new CustomDialog(RegisterActivity.this)
+                                    .setTitle("Failed")
+                                    .setMessage("Registering Failed .")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
                         }
                     }
-
-
                 });
     }
 }

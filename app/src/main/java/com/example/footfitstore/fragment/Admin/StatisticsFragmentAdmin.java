@@ -95,8 +95,6 @@ public class StatisticsFragmentAdmin extends Fragment {
                         getDataByMonthAndYear(selectedMonth, selectedYear1);
                     }
                 });
-            } else {
-                Toast.makeText(requireContext(),".",Toast.LENGTH_SHORT).show();
             }
         });
         monthSpinner.setAdapter(monthAdapter);
@@ -212,13 +210,13 @@ public class StatisticsFragmentAdmin extends Fragment {
                 }
                 monthAdapter.notifyDataSetChanged();
                 if (onCompleteListener != null) {
-                    onCompleteListener.onComplete(null); // Báo hiệu hoàn tất
+                    onCompleteListener.onComplete(null);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 if (onCompleteListener != null) {
-                    onCompleteListener.onComplete(null); // Gọi callback để tiếp tục luồng xử lý
+                    onCompleteListener.onComplete(null);
                 }
 
             }
@@ -331,14 +329,14 @@ public class StatisticsFragmentAdmin extends Fragment {
                     priceList.add(0d);
                 }
                 if (onCompleteListener != null) {
-                    onCompleteListener.onComplete(null); // Gọi callback khi hoàn thành
+                    onCompleteListener.onComplete(null);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 if (onCompleteListener != null) {
-                    onCompleteListener.onComplete(null); // Vẫn gọi callback để tránh bị treo
+                    onCompleteListener.onComplete(null);
                 }
             }
         });
@@ -391,11 +389,11 @@ public class StatisticsFragmentAdmin extends Fragment {
                 yAxis.setAxisLineWidth(2f);
                 yAxis.setAxisLineColor(Color.BLACK);
                 yAxis.setLabelCount(10);
-                yAxis.setTextSize(18f); // Tăng kích thước chữ trên trục Y
-                yAxis.setDrawGridLines(false); // Loại bỏ grid lines trên trục Y
+                yAxis.setTextSize(18f);
+                yAxis.setDrawGridLines(false);
 
                 YAxis yAxisRight = barChart.getAxisRight();
-                yAxisRight.setDrawGridLines(false); // Loại bỏ grid lines trên trục Y bên phải
+                yAxisRight.setDrawGridLines(false);
 
                 List<String> monthList = new ArrayList<>();
                 for (Pair<String, Double> pair : monthsList) {
@@ -404,7 +402,7 @@ public class StatisticsFragmentAdmin extends Fragment {
 
                 BarDataSet dataSet = new BarDataSet(barEntries, "Months");
                 dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                dataSet.setValueTextSize(16f); // Tăng kích thước chữ trên các giá trị thanh
+                dataSet.setValueTextSize(16f);
 
                 BarData barData = new BarData(dataSet);
                 barChart.setData(barData);
@@ -420,8 +418,8 @@ public class StatisticsFragmentAdmin extends Fragment {
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setGranularity(1f);
                 xAxis.setGranularityEnabled(true);
-                xAxis.setTextSize(18f); // Tăng kích thước chữ trên trục X
-                xAxis.setDrawGridLines(false); // Loại bỏ grid lines trên trục X
+                xAxis.setTextSize(18f);
+                xAxis.setDrawGridLines(false);
 
             }
 

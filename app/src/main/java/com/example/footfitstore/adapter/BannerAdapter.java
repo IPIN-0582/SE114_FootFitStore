@@ -29,7 +29,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
     public void onBindViewHolder(@NonNull BannerViewHolder holder, int position) {
         String imageUrl = bannerList.get(position);
 
-        // Tải ảnh trực tiếp từ URL
         Picasso.get().load(imageUrl).into(holder.bannerImageView);
     }
 

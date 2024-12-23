@@ -64,7 +64,6 @@
         android:layout_height="100dp"
         android:layout_marginTop="70dp"
         android:contentDescription="Profile Picture"
-        android:src="@drawable/onboard1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.Utils.CustomDialog;
 import com.example.footfitstore.activity.User.MainActivity;
 import com.example.footfitstore.activity.User.PaymentActivity;
 import com.example.footfitstore.adapter.UserSideAdapter.CartAdapter;
@@ -43,33 +43,28 @@ import java.util.Map;
 
 public class CartFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
     private TextView tvTotalPrice;
-    private Button btnCheckout;
-    private ImageButton btnBack;
     private FirebaseUser currentUser;
     private DatabaseReference userCartRef;
-    private List<Cart> cartList = new ArrayList<>();
+    private final List<Cart> cartList = new ArrayList<>();
     private double totalPrice = 0;
     private Boolean isInit=false;
-
+    private String userAddress, userPhone;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-        // Initialize views
-        recyclerView = view.findViewById(R.id.recycler_view_cart);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_cart);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
-        btnCheckout = view.findViewById(R.id.checkout_button);
-        btnBack = view.findViewById(R.id.btnBack);
-        // Set up RecyclerView
+        Button btnCheckout = view.findViewById(R.id.checkout_button);
+        ImageButton btnBack = view.findViewById(R.id.btnBack);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        // Get current user
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userCartRef = FirebaseDatabase.getInstance()
@@ -77,75 +72,70 @@ public class CartFragment extends Fragment {
                     .child(currentUser.getUid())
                     .child("cart");
 
-            // Load cart data from Firebase
             loadCartData();
+            loadInfo();
         }
-        cartAdapter = new CartAdapter(cartList, getContext(), new CartAdapter.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(int position, boolean isChecked) {
-                Cart item = cartList.get(position);
+        cartAdapter = new CartAdapter(cartList, getContext(), (position, isChecked) -> {
+            Cart item = cartList.get(position);
 
-                // Lấy dữ liệu khuyến mãi từ Firebase để tính toán
-                DatabaseReference productRef = FirebaseDatabase.getInstance()
-                        .getReference("Shoes")
-                        .child(item.getProductId())
-                        .child("promotion");
+            DatabaseReference productRef = FirebaseDatabase.getInstance()
+                    .getReference("Shoes")
+                    .child(item.getProductId())
+                    .child("promotion");
 
-                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        double itemPrice = item.getPrice(); // Giá gốc
-                        if (dataSnapshot.exists()) {
-                            Promotion promotion = dataSnapshot.getValue(Promotion.class);
-                            if (promotion != null && isPromotionActive(promotion)) {
-                                double discount = promotion.getDiscount();
-                                itemPrice = itemPrice * (1 - discount / 100); // Áp dụng giảm giá
-                            }
+            productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    double itemPrice = item.getPrice();
+                    if (dataSnapshot.exists()) {
+                        Promotion promotion = dataSnapshot.getValue(Promotion.class);
+                        if (promotion != null && isPromotionActive(promotion)) {
+                            double discount = promotion.getDiscount();
+                            itemPrice = itemPrice * (1 - discount / 100);
                         }
-
-                        // Cập nhật totalPrice khi sản phẩm được chọn hoặc bỏ chọn
-                        if (isChecked) {
-                            totalPrice += itemPrice * item.getQuantity();
-                        } else {
-                            totalPrice -= itemPrice * item.getQuantity();
-                        }
-
-                        // Hiển thị giá trị tổng
-                        tvTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "Failed to load promotion data", Toast.LENGTH_SHORT).show();
+                    if (isChecked) {
+                        totalPrice += itemPrice * item.getQuantity();
+                    } else {
+                        totalPrice -= itemPrice * item.getQuantity();
                     }
-                });
-            }
-        }, new CartAdapter.OnQuantityChangeListener() {
-            @Override
-            public void onQuantityChanged(double price, int totalQuantity) {
-                totalPrice = price;
-                tvTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
-            }
+
+                    tvTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }, (price, totalQuantity) -> {
+            totalPrice = price;
+            tvTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice));
         });
         recyclerView.setAdapter(cartAdapter);
         btnBack.setOnClickListener(v -> {
-            // Chuyển đổi sang ExploreFragment
             ExploreFragment exploreFragment = new  ExploreFragment();
-
-            // Sử dụng FragmentManager để thay thế fragment hiện tại bằng ExploreFragment
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.main_frame, exploreFragment)  // R.id.main_frame là ID của FrameLayout trong MainActivity
-                    .addToBackStack(null)  // Nếu muốn cho phép quay lại
+                    .replace(R.id.main_frame, exploreFragment)
+                    .addToBackStack(null)
                     .commit();
 
-            // Cập nhật BottomNavigationView
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);  // Cập nhật trạng thái bottom nav
+                ((MainActivity) getActivity()).setSelectedNavItem(R.id.nav_explore);
             }
         });
 
-        // Handle checkout button click
         btnCheckout.setOnClickListener(v -> {
+            if (userAddress == null || userPhone == null) {
+                new CustomDialog(requireContext())
+                        .setTitle("Failed")
+                        .setMessage("Please Complete Your Profile")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
+                return;
+            }
             List<Boolean> selectedList = cartAdapter.getSelectedList();
             boolean check = true;
             for (int i=0;i<selectedList.size();i++)
@@ -153,7 +143,13 @@ public class CartFragment extends Fragment {
                 if (selectedList.get(i)) check=false;
             }
             if (check) {
-                Toast.makeText(getContext(), "Your cart is empty", Toast.LENGTH_SHORT).show();
+                new CustomDialog(requireContext())
+                        .setTitle("Failed")
+                        .setMessage("Your Cart Is Empty")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
              else {
                Intent intent = new Intent(getActivity(), PaymentActivity.class);
@@ -208,19 +204,43 @@ public class CartFragment extends Fragment {
                     cartAdapter.setSelectedList(myList);
                     isInit=true;
                 }
-                // Update UI
                 cartAdapter.notifyDataSetChanged();
-                //cartAdapter.calculateTotal();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to load cart data", Toast.LENGTH_SHORT).show();
+                new CustomDialog(requireContext())
+                        .setTitle("Failed")
+                        .setMessage("Failed To Load Cart Data")
+                        .setIcon(R.drawable.error)
+                        .setPositiveButton("OK", null)
+                        .hideNegativeButton()
+                        .show();
             }
         });
     }
+    private void loadInfo()
+    {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child("address").exists())
+                {
+                    userAddress = dataSnapshot.child("address").getValue(String.class);
+                }
+                if (dataSnapshot.child("mobileNumber").exists())
+                {
+                    userPhone = dataSnapshot.child("mobileNumber").getValue(String.class);
+                }
+            }
 
-    // Kiểm tra ngày khuyến mãi
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     private boolean isPromotionActive(Promotion promotion) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -230,7 +250,6 @@ public class CartFragment extends Fragment {
             today = resetTime(today);
             return (today.after(startDate)||today.equals(startDate)) && (today.before(endDate) || today.equals(endDate));
         } catch (ParseException e) {
-            e.printStackTrace();
             return false;
         }
     }
