@@ -140,6 +140,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             holder.recyclerView.setAdapter(cartAdapter);
             holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         }
+        else
+        {
+            holder.btnReviewOrder.setVisibility(View.GONE);
+        }
     }
 
     @Override
