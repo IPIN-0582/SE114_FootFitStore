@@ -73,6 +73,23 @@ public class OrderHistoryActivity extends AppCompatActivity {
                     }
                     orderHistory.setCartList(cartList);
                     paymentHistoryList.add(orderHistory);
+                    if (dataSnapshot.child("review").exists()) {
+                        List<CartRating> cartRatingList = new ArrayList<>();
+                        for (DataSnapshot cartSnapshot : dataSnapshot.child("review").getChildren()) {
+                            String key = cartSnapshot.getKey();
+                            assert key != null;
+                            if (key.equals( "order_review")) {
+                                String review = cartSnapshot.getValue(String.class);
+                                orderHistory.setReview(review);
+                            }
+                            else
+                            {
+                                CartRating cartRating = cartSnapshot.getValue(CartRating.class);
+                                cartRatingList.add(cartRating);
+                            }
+                            orderHistory.setCartList(cartRatingList);
+                        }
+                    }
                 }
                 setupSizeRecyclerView(paymentHistoryList);
             }
