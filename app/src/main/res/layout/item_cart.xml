@@ -16,6 +16,7 @@
 
         <!-- Item Image -->
         <CheckBox
+            android:buttonTint="@color/blue0D6EFD"
             android:id="@+id/cb_selected"
             android:layout_width="30dp"
             android:layout_height="30dp"

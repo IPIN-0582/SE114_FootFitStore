@@ -8,11 +8,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footfitstore.R;
+import com.example.footfitstore.adapter.UserSideAdapter.CartRatingAdapter;
 import com.example.footfitstore.model.OrderHistory;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ import java.util.List;
 public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdapter.OrderMinimizeViewHolder> {
     Context context;
     List<OrderHistory> orderHistoryList;
+    CartRatingAdapter cartRatingAdapter;
     private String userId;
     public OrderMinimizeAdapter(Context context, List<OrderHistory> orderHistoryList, String userId) {
         this.context = context;
@@ -53,6 +55,19 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
             updateStatus(orderHistory.getOrderTime());
             holder.btnSubmit.setVisibility(View.GONE);
         });
+        if (!orderHistory.getReview().isEmpty())
+        {
+            cartRatingAdapter = new CartRatingAdapter(context, orderHistory.getCartList(), true, orderHistory.getOrderTime(),false);
+            holder.recycler.setAdapter(cartRatingAdapter);
+            holder.recycler.setLayoutManager(new LinearLayoutManager(context));
+            holder.txtReview.setText(orderHistory.getReview());
+        }
+        else
+        {
+            holder.itemLabel.setVisibility(View.GONE);
+            holder.txtReview.setVisibility(View.GONE);
+            holder.reviewLabel.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -61,7 +76,8 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
     }
 
     static class OrderMinimizeViewHolder extends RecyclerView.ViewHolder{
-        TextView txtDate, txtMethod, txtStatus, txtTransaction;
+        TextView txtDate, txtMethod, txtStatus, txtTransaction, txtReview, reviewLabel, itemLabel;
+        RecyclerView recycler;
         Button btnSubmit;
         public OrderMinimizeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +86,10 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
             txtTransaction = itemView.findViewById(R.id.txt_transaction);
             txtStatus = itemView.findViewById(R.id.txt_status);
             btnSubmit = itemView.findViewById(R.id.btnSubmit);
+            txtReview = itemView.findViewById(R.id.reviewTxt);
+            reviewLabel = itemView.findViewById(R.id.reviewLabel);
+            recycler = itemView.findViewById(R.id.rvOrderItems);
+            itemLabel = itemView.findViewById(R.id.itemLabel);
         }
     }
     private void updateStatus(String orderTime)
