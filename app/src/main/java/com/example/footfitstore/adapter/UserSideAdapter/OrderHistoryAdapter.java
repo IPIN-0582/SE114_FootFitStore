@@ -48,7 +48,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         List<CartRating> singleCartList = orderHistoryList.get(position).getCartList();
         holder.txtDate.setText(orderHistoryList.get(position).getOrderTime());
         holder.txtStatus.setText(orderHistoryList.get(position).getOrderStatus());
-        CartRatingAdapter cartAdapter=new CartRatingAdapter(context, singleCartList,false,orderHistoryList.get(position).getOrderTime());
+        CartRatingAdapter cartAdapter=new CartRatingAdapter(context, singleCartList,false,orderHistoryList.get(position).getOrderTime(),false);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.recyclerView.setAdapter(cartAdapter);
         if (orderHistoryList.get(position).getOrderStatus().equals("SUCCESS"))
@@ -73,73 +73,67 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         {
             holder.btnReviewOrder.setBackgroundResource(R.drawable.button_shape);
             int newPos=position;
-            holder.btnReviewOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialog dialog = new Dialog(v.getContext());
-                    dialog.setContentView(R.layout.dialog_review);
+            holder.btnReviewOrder.setOnClickListener(v -> {
+                Dialog dialog = new Dialog(v.getContext());
+                dialog.setContentView(R.layout.dialog_review);
 
-                    if (dialog.getWindow() != null) {
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    }
-
-                    Button button = dialog.findViewById(R.id.btnSubmitRating);
-                    EditText editText=dialog.findViewById(R.id.edtFeedback);
-                    RecyclerView recyclerView = dialog.findViewById(R.id.recyclerRating);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
-                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    List<CartRating> newRatingList = new ArrayList<>();
-                    for (CartRating cart:singleCartList)
-                    {
-                        CartRating cartRating=new CartRating();
-                        cartRating.setProductName(cart.getProductName());
-                        cartRating.setPrice(cart.getPrice());
-                        cartRating.setProductId(cart.getProductId());
-                        cartRating.setQuantity(cart.getQuantity());
-                        cartRating.setSize(cart.getSize());
-                        newRatingList.add(cartRating);
-                    }
-                    CartRatingAdapter cartRatingAdapter=new CartRatingAdapter(v.getContext(), newRatingList,true,orderHistoryList.get(newPos).getOrderTime());
-                    recyclerView.setAdapter(cartRatingAdapter);
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DatabaseReference cartRef = FirebaseDatabase.getInstance()
-                                    .getReference("Users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .child("order")
-                                    .child("order_"+newPos).child("review");
-                            for (CartRating cart:newRatingList)
-                            {
-                                if (cart.getRating() == 0)
-                                {
-                                    new CustomDialog(v.getContext())
-                                            .setTitle("Failed")
-                                            .setMessage("Please Select A Size.")
-                                            .setIcon(R.drawable.error)
-                                            .setPositiveButton("OK", null)
-                                            .hideNegativeButton()
-                                            .show();
-                                    return;
-                                }
-                                String productKey = cart.getProductId() + "_" + cart.getSize();
-                                Map<String, Object> cartItem = new HashMap<>();
-                                cartItem.put("price",cart.getPrice());
-                                cartItem.put("productId",cart.getProductId());
-                                cartItem.put("productName",cart.getProductName());
-                                cartItem.put("quantity",cart.getQuantity());
-                                cartItem.put("size",cart.getSize());
-                                cartItem.put("rating",cart.getRating());
-                                cartRef.child(productKey).setValue(cartItem);
-                            }
-                            String comment = editText.getText().toString();
-                            cartRef.child("order_review").setValue(comment);
-                            changeStatus(newPos);
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 }
+
+                Button button = dialog.findViewById(R.id.btnSubmitRating);
+                EditText editText=dialog.findViewById(R.id.edtFeedback);
+                RecyclerView recyclerView = dialog.findViewById(R.id.recyclerRating);
+                recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                List<CartRating> newRatingList = new ArrayList<>();
+                for (CartRating cart:singleCartList)
+                {
+                    CartRating cartRating=new CartRating();
+                    cartRating.setProductName(cart.getProductName());
+                    cartRating.setPrice(cart.getPrice());
+                    cartRating.setProductId(cart.getProductId());
+                    cartRating.setQuantity(cart.getQuantity());
+                    cartRating.setSize(cart.getSize());
+                    newRatingList.add(cartRating);
+                }
+                CartRatingAdapter cartRatingAdapter=new CartRatingAdapter(v.getContext(), newRatingList,true,orderHistoryList.get(newPos).getOrderTime(),true);
+                recyclerView.setAdapter(cartRatingAdapter);
+                button.setOnClickListener(v1 -> {
+                    DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                            .getReference("Users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("order")
+                            .child("order_"+newPos).child("review");
+                    for (CartRating cart:newRatingList)
+                    {
+                        if (cart.getRating() == 0)
+                        {
+                            new CustomDialog(v1.getContext())
+                                    .setTitle("Failed")
+                                    .setMessage("Please Select A Size.")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
+                            return;
+                        }
+                        String productKey = cart.getProductId() + "_" + cart.getSize();
+                        Map<String, Object> cartItem = new HashMap<>();
+                        cartItem.put("price",cart.getPrice());
+                        cartItem.put("productId",cart.getProductId());
+                        cartItem.put("productName",cart.getProductName());
+                        cartItem.put("quantity",cart.getQuantity());
+                        cartItem.put("size",cart.getSize());
+                        cartItem.put("rating",cart.getRating());
+                        cartRef.child(productKey).setValue(cartItem);
+                    }
+                    String comment = editText.getText().toString();
+                    cartRef.child("order_review").setValue(comment);
+                    changeStatus(newPos);
+                    dialog.dismiss();
+                });
+                dialog.show();
             });
         }
         else

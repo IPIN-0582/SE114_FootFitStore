@@ -2,6 +2,7 @@ package com.example.footfitstore.fragment.Admin;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -109,7 +110,9 @@ public class ProductsFragmentAdmin extends Fragment {
                     .show();
             return;
         }
-
+        ProgressDialog progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setMessage("Uploading product...");
+        progressDialog.show();
         Shoe shoe = new Shoe();
         shoe.setTitle(edt_Title.getText().toString());
         shoe.setCategory(selectedCategory);
@@ -133,13 +136,30 @@ public class ProductsFragmentAdmin extends Fragment {
                 StorageReference storageRef = FirebaseStorage.getInstance().getReference(productId+".png");
                 storageRef.putFile(avatarUri)
                         .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            progressDialog.dismiss();
                             String avatarUrl = uri.toString();
                             url.add(avatarUrl);
                             shoe.setProductId(productId);
                             shoe.setPicUrl(url);
                             shoeRef.child(productId).setValue(shoe);
+                            new CustomDialog(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Successfully uploaded")
+                                    .setIcon(R.drawable.congrat)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
                         }))
-                        .addOnFailureListener(e -> Log.d("Yup, something's wrong", "Yup"));
+                        .addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            new CustomDialog(requireContext())
+                                    .setTitle("Failed")
+                                    .setMessage("Upload failed")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
+                        });
 
             }
             @Override
@@ -155,7 +175,7 @@ public class ProductsFragmentAdmin extends Fragment {
 
     private void getDataFromFirebase() {
         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
-        categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        categoryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren())

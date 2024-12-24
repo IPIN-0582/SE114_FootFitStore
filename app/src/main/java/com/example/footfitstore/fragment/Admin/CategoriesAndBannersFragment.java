@@ -2,6 +2,7 @@ package com.example.footfitstore.fragment.Admin;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -164,6 +165,9 @@ public class CategoriesAndBannersFragment extends Fragment {
     }
     private void uploadImageFirebase()
     {
+        ProgressDialog progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setMessage("Uploading banner image...");
+        progressDialog.show();
         Banner banner = new Banner();
         DatabaseReference bannerReference = FirebaseDatabase.getInstance().getReference("BannerEvent");
         bannerReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -177,11 +181,28 @@ public class CategoriesAndBannersFragment extends Fragment {
                 long finalCount = count;
                 storageRef.putFile(avatarUri)
                         .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            progressDialog.dismiss();
                             String avatarUrl = uri.toString();
                             banner.setUrl(avatarUrl);
                             bannerReference.child(String.valueOf(finalCount)).setValue(banner);
+                            new CustomDialog(requireContext())
+                                    .setTitle("Success")
+                                    .setMessage("Successfully uploaded")
+                                    .setIcon(R.drawable.congrat)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
                         }))
-                        .addOnFailureListener(e -> Log.d("Yup, something's wrong", "Yup"));
+                        .addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            new CustomDialog(requireContext())
+                                    .setTitle("Failed")
+                                    .setMessage("Upload failed")
+                                    .setIcon(R.drawable.error)
+                                    .setPositiveButton("OK", null)
+                                    .hideNegativeButton()
+                                    .show();
+                        });
 
             }
 

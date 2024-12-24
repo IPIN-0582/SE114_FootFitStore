@@ -8,7 +8,7 @@ public class OrderHistory {
     String orderStatus;
     String paymentMethod;
     Double transaction;
-
+    String review = "";
     public String getOrderTime() {
         return orderTime;
     }
@@ -47,5 +47,13 @@ public class OrderHistory {
 
     public void setTransaction(Double transaction) {
         this.transaction = transaction;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
     }
 }

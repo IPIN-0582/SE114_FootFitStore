@@ -98,7 +98,7 @@ public class NotificationsFragment extends Fragment {
                             Date parsedEndDate = sdf.parse(endDate);
                             Date today = new Date();
                             today = resetTime(today);
-                            if (parsedStartDate != null && parsedEndDate != null && (parsedStartDate.before(today) || parsedEndDate.equals(today))
+                            if (parsedStartDate != null && parsedEndDate != null && (parsedStartDate.before(today) || parsedStartDate.equals(today))
                                     && (parsedEndDate.after(today) || parsedEndDate.equals(today))) {
                                 checkReadStatus(productId, endDate, isRead -> {
                                     Notification newNoti = new Notification();

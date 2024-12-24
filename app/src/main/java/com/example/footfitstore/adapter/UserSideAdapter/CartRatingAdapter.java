@@ -34,11 +34,13 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
     private List<CartRating> cartRatings;
     private boolean displayRatingBar;
     private String orderDate;
-    public CartRatingAdapter(Context context, List<CartRating> cartRatings, boolean displayRatingBar, String OrderDate) {
+    boolean isAllowRating;
+    public CartRatingAdapter(Context context, List<CartRating> cartRatings, boolean displayRatingBar, String OrderDate, boolean isAllowRating) {
         this.context = context;
         this.cartRatings = cartRatings;
         this.displayRatingBar = displayRatingBar;
         this.orderDate = OrderDate;
+        this.isAllowRating = isAllowRating;
     }
 
     @NonNull
@@ -68,23 +70,17 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
                 if (dataSnapshot.exists()) {
                     Promotion promotion = dataSnapshot.getValue(Promotion.class);
                     if (promotion != null && isPromotionActive(promotion,orderDate)) {
-
                         double discount = promotion.getDiscount();
                         double discountedPrice = cartRating.getPrice() * (1 - discount / 100);
-
-
                         holder.tvProductOriginalPrice.setText("$" + String.format("%.2f", cartRating.getPrice()));
                         holder.tvProductOriginalPrice.setPaintFlags(holder.tvProductOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         holder.tvProductOriginalPrice.setVisibility(View.VISIBLE);
-
                         holder.tvProductPrice.setText("$" + String.format("%.2f", discountedPrice));
                     } else {
-
                         holder.tvProductOriginalPrice.setVisibility(View.GONE);
                         holder.tvProductPrice.setText("$" + String.format("%.2f", cartRating.getPrice()));
                     }
                 } else {
-
                     holder.tvProductOriginalPrice.setVisibility(View.GONE);
                     holder.tvProductPrice.setText("$" + String.format("%.2f", cartRating.getPrice()));
                 }
@@ -96,6 +92,9 @@ public class CartRatingAdapter extends RecyclerView.Adapter<CartRatingAdapter.Ca
             }
         });
         holder.tvProductPrice.setText("$" + cartRating.getPrice());
+        if (!isAllowRating) {
+            holder.ratingBar.setIsIndicator(true);
+        }
         holder.ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             if (fromUser) {
                 cartRating.setRating(rating);

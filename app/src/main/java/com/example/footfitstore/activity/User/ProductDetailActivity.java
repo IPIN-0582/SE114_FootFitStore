@@ -39,7 +39,7 @@ import java.util.Map;
 public class ProductDetailActivity extends AppCompatActivity {
 
     private ImageView ivProductImage;
-    private TextView tvProductName, tvCategory, tvPrice, tvDescription, tvOriginalPrice;
+    private TextView tvProductName, tvCategory, tvPrice, tvDescription;
     private ImageButton btnFavorite;
     private ImageButton btnCart;
     private ImageButton btnBack;
@@ -65,7 +65,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvProductName = findViewById(R.id.tvProductName);
         tvCategory = findViewById(R.id.tvCategory);
         tvPrice = findViewById(R.id.tvPrice);
-        tvOriginalPrice =findViewById(R.id.tvOriginalPrice);
         tvDescription = findViewById(R.id.tvDescription);
         btnFavorite = findViewById(R.id.btnFavorite);
         btnAddToCart = findViewById(R.id.btnAddToCart);
@@ -169,19 +168,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                         if (isPromotionActive(startDate, endDate)) {
                             double finalPrice = price * (1 - discount / 100.0);
-                            tvOriginalPrice.setText("$" + String.format("%.2f", price));
-                            tvOriginalPrice.setVisibility(View.VISIBLE);
-                            tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                             tvPrice.setText("$" + String.format("%.2f", finalPrice));
                         } else {
-                            tvOriginalPrice.setVisibility(View.GONE);
                             tvPrice.setText("$" + String.format("%.2f", price));
                         }
                     } else {
-                        tvOriginalPrice.setVisibility(View.GONE);
                         tvPrice.setText("$" + String.format("%.2f", price));
                     }
-
                     List<String> sizes = new ArrayList<>();
                     for (DataSnapshot sizeSnapshot : dataSnapshot.child("size").getChildren()) {
                         sizes.add(sizeSnapshot.getValue(String.class));

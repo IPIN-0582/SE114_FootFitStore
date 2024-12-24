@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.459"
+        app:layout_constraintHorizontal_bias="0.43"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.95">
@@ -113,6 +113,7 @@
         android:textSize="12sp" />
     </LinearLayout>
     <RatingBar
+        android:theme="@style/RatingBar"
         android:id="@+id/ratingBar"
         android:layout_width="235dp"
         android:layout_height="50dp"
