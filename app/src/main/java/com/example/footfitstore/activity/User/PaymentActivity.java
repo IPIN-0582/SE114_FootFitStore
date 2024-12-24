@@ -153,7 +153,7 @@ public class PaymentActivity extends AppCompatActivity {
                 {
                     paymentMethod = "ZaloPay Sandbox";
                     CreateOrder orderApi = new CreateOrder();
-                    String totalString = String.format("%.0f", finalprice);
+                    String totalString = String.format("%.0f", finalprice*10000);
                     try {
                         JSONObject data = orderApi.createOrder(totalString);
                         String code = data.getString("returncode");
@@ -378,7 +378,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         int orderId = OrderIdGenerator.generateOrderId();
 
-        CreateOrderLink data = new CreateOrderLink(orderId, 2000, "Shoe Order Payment",
+        CreateOrderLink data = new CreateOrderLink(orderId, 2352, "Shoe Order Payment",
                 movieDescription, CANCEL_URL, RETURN_URL, expiredAt);
 
         Dotenv dotenv = Dotenv.configure().directory("/assets").filename("env").load();
