@@ -52,6 +52,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         }
         return false;
     }
+    private TextView txtShoeCategory;
     private TextView txtSeeAllPopular;
     private RecyclerView popularShoesRecyclerView, bannerRecyclerView, allShoesRecyclerView, categoryRecyclerView;
     private ImageButton btnCart,btnMenu;
@@ -185,6 +186,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
 
     private void initializeViews(View view) {
         txtSeeAllPopular = view.findViewById(R.id.seeAllPopular);
+        txtShoeCategory  = view.findViewById(R.id.popularShoesLabel);
         btnMenu=view.findViewById(R.id.btnMenu);
         btnCart = view.findViewById(R.id.btnCart);
         popularShoesRecyclerView = view.findViewById(R.id.popularShoesRecyclerView);
@@ -209,6 +211,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
             @Override
             public void onCategoryClick(String categoryName) {
                 selectedCategory=categoryName;
+                txtShoeCategory.setText(categoryName+" ");
                 ensureFavouriteStatusOnItem();
             }
         });
@@ -446,10 +449,13 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Set<String> favouriteProductIds = new HashSet<>();
-                for (DataSnapshot favSnapshot : snapshot.getChildren()) {
-                    favouriteProductIds.add(favSnapshot.getKey());
-                    loadProductByCategory(favouriteProductIds);
+                if (snapshot.exists())
+                {
+                    for (DataSnapshot favSnapshot : snapshot.getChildren()) {
+                        favouriteProductIds.add(favSnapshot.getKey());
+                    }
                 }
+                loadProductByCategory(favouriteProductIds);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -494,6 +500,7 @@ public class ExploreFragment extends Fragment implements ShoeAdapter.BottomSheet
         DatabaseReference userFavouriteRef = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("favourite");
         userFavouriteRef.addListenerForSingleValueEvent(getFavouriteEventListener());
         selectedCategory="";
+        txtShoeCategory.setText("Popular ");
         categoryAdapter.setDefaultSelectedPosition();
         categoryAdapter.notifyDataSetChanged();
     }
