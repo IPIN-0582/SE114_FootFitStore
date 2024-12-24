@@ -8,7 +8,7 @@ public class OrderHistory {
     String orderStatus;
     String paymentMethod;
     Double transaction;
-    String review = "";
+    String review ;
     public String getOrderTime() {
         return orderTime;
     }

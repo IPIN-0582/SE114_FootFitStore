@@ -55,7 +55,7 @@ public class OrderMinimizeAdapter extends RecyclerView.Adapter<OrderMinimizeAdap
             updateStatus(orderHistory.getOrderTime());
             holder.btnSubmit.setVisibility(View.GONE);
         });
-        if (!orderHistory.getReview().isEmpty())
+        if (orderHistory.getReview()!=null)
         {
             cartRatingAdapter = new CartRatingAdapter(context, orderHistory.getCartList(), true, orderHistory.getOrderTime(),false);
             holder.recycler.setAdapter(cartRatingAdapter);

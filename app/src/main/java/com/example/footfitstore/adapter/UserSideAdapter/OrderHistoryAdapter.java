@@ -56,17 +56,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             holder.btnReviewOrder.setBackgroundResource(R.drawable.button_shape_cancel);
             holder.btnReviewOrder.setText("Cancel Order");
             int newPos=position;
-            holder.btnReviewOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatabaseReference cartRef = FirebaseDatabase.getInstance()
-                            .getReference("Users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("order")
-                            .child("order_"+newPos).child("orderStatus");
-                    cartRef.setValue("CANCELLED");
-                    orderHistoryList.get(newPos).setOrderStatus("CANCELLED");
-                }
+            holder.btnReviewOrder.setOnClickListener(v -> {
+                DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                        .getReference("Users")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("order")
+                        .child("order_"+newPos).child("orderStatus");
+                cartRef.setValue("CANCELLED");
+                orderHistoryList.get(newPos).setOrderStatus("CANCELLED");
             });
         }
         else if (orderHistoryList.get(position).getOrderStatus().equals("ARRIVED"))
@@ -136,9 +133,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 dialog.show();
             });
         }
-        else
+        else if (orderHistoryList.get(position).getOrderStatus().equals("REVIEWED"))
         {
             holder.btnReviewOrder.setVisibility(View.GONE);
+            cartAdapter=new CartRatingAdapter(context, singleCartList,true,orderHistoryList.get(position).getOrderTime(),false);
+            holder.recyclerView.setAdapter(cartAdapter);
+            holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         }
     }
 
