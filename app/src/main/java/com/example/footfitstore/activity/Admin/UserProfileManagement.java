@@ -65,7 +65,7 @@ public class UserProfileManagement extends AppCompatActivity {
 
     private void getDataFromDb(String userId) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-        userRef.addValueEventListener(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String address = snapshot.child("address").getValue(String.class);

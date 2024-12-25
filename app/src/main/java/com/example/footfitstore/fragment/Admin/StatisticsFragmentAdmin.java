@@ -320,7 +320,7 @@ public class StatisticsFragmentAdmin extends Fragment {
     private void getTitleList(OnCompleteListener<Void> onCompleteListener)
     {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Shoes");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot shoeSnapShot : snapshot.getChildren())
@@ -344,11 +344,12 @@ public class StatisticsFragmentAdmin extends Fragment {
     private void getDataForBarChart(String selectedYear2)
     {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<BarEntry> barEntries = new ArrayList<>();
                 List<Pair<String, Double>> monthsList = new ArrayList<>();
+                double newTotal = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     DataSnapshot ordersSnapshot = dataSnapshot.child("order");
                     for (DataSnapshot orderSnapshot : ordersSnapshot.getChildren()) {
@@ -365,7 +366,7 @@ public class StatisticsFragmentAdmin extends Fragment {
                                 for (int i = 0; i < monthsList.size(); i++) {
                                     Pair<String, Double> pair = monthsList.get(i);
                                     if (pair.first.equals(month)) {
-                                        double newTotal = pair.second + transactionValue;
+                                        newTotal = pair.second + transactionValue;
                                         monthsList.set(i, new Pair<>(month, newTotal));
                                         found = true;
                                         break;
@@ -385,7 +386,7 @@ public class StatisticsFragmentAdmin extends Fragment {
                 }
                 YAxis yAxis = barChart.getAxisLeft();
                 yAxis.setAxisMinimum(0f);
-                yAxis.setAxisMaximum(1000f);
+                yAxis.setAxisMaximum((float)newTotal+500);
                 yAxis.setAxisLineWidth(2f);
                 yAxis.setAxisLineColor(Color.BLACK);
                 yAxis.setLabelCount(10);
