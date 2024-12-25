@@ -108,7 +108,6 @@
             android:layout_height="100dp"
             android:layout_marginTop="60dp"
             android:contentDescription="Profile Picture"
-            android:src="@drawable/onboard1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -119,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Emmanuel Oyiboke"
+            android:text=""
             android:textColor="@color/black2B2B2B"
             android:textSize="23sp"
             android:textStyle="bold"

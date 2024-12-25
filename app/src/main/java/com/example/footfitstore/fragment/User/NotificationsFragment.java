@@ -80,9 +80,10 @@ public class NotificationsFragment extends Fragment {
     private void getNotifications(List<Notification> notificationList, NotificationAdapter adapter)
     {
         DatabaseReference shoeReference = FirebaseDatabase.getInstance().getReference().child("Shoes");
-        shoeReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        shoeReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                notificationList.clear();
                 for (DataSnapshot dataSnapshot: snapshot.getChildren())
                 {
                     if (dataSnapshot.child("promotion").exists())
@@ -107,8 +108,10 @@ public class NotificationsFragment extends Fragment {
                                     newNoti.setImgUrl(imgUrl);
                                     newNoti.setEndDate(endDate);
                                     newNoti.setRead(isRead);
-                                    notificationList.add(newNoti);
-                                    adapter.notifyDataSetChanged();
+                                    if (!notificationList.contains(newNoti)) {
+                                        notificationList.add(newNoti);
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 });
                             }
                         }

@@ -164,9 +164,15 @@ public class UsersFragmentAdmin extends Fragment implements OnBackPressedListene
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadUser();
+    }
+
     private void loadUser() {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-        userRef.addValueEventListener(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userList.clear();

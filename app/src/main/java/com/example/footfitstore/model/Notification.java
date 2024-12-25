@@ -1,5 +1,7 @@
 package com.example.footfitstore.model;
 
+import java.util.Objects;
+
 public class Notification {
     private String productId;
     private String description;
@@ -44,5 +46,15 @@ public class Notification {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return Objects.equals(productId, that.productId) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(imgUrl, that.imgUrl) &&
+                Objects.equals(endDate, that.endDate);
     }
 }
